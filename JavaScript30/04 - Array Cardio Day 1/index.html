@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+
+<script>
+  const inventors = [
+    { first: "Albert", last: "Einstein", year: 1879, passed: 1955 },
+    { first: "Isaac", last: "Newton", year: 1643, passed: 1727 },
+    { first: "Galileo", last: "Galilei", year: 1564, passed: 1642 },
+    { first: "Marie", last: "Curie", year: 1867, passed: 1934 },
+    { first: "Johannes", last: "Kepler", year: 1571, passed: 1630 },
+    { first: "Nicolaus", last: "Copernicus", year: 1473, passed: 1543 },
+    { first: "Max", last: "Planck", year: 1858, passed: 1947 },
+    { first: "Katherine", last: "Blodgett", year: 1898, passed: 1979 },
+    { first: "Ada", last: "Lovelace", year: 1815, passed: 1852 },
+    { first: "Sarah E.", last: "Goode", year: 1855, passed: 1905 },
+    { first: "Lise", last: "Meitner", year: 1878, passed: 1968 },
+    { first: "Hanna", last: "Hammarström", year: 1829, passed: 1909 },
+  ];
+
+  inventors.forEach((el) => {
+    el.years = el.passed - el.year;
+  });
+
+  const people = [
+    "Beck, Glenn",
+    "Becker, Carl",
+    "Beckett, Samuel",
+    "Beddoes, Mick",
+    "Beecher, Henry",
+    "Beethoven, Ludwig",
+    "Begin, Menachem",
+    "Belloc, Hilaire",
+    "Bellow, Saul",
+    "Benchley, Robert",
+    "Benenson, Peter",
+    "Ben-Gurion, David",
+    "Benjamin, Walter",
+    "Benn, Tony",
+    "Bennington, Chester",
+    "Benson, Leana",
+    "Bent, Silas",
+    "Bentsen, Lloyd",
+    "Berger, Ric",
+    "Bergman, Ingmar",
+    "Berio, Luciano",
+    "Berle, Milton",
+    "Berlin, Irving",
+    "Berne, Eric",
+    "Bernhard, Sandra",
+    "Berra, Yogi",
+    "Berry, Halle",
+    "Berry, Wendell",
+    "Bethea, Erin",
+    "Bevan, Aneurin",
+    "Bevel, Ken",
+    "Biden, Joseph",
+    "Bierce, Ambrose",
+    "Biko, Steve",
+    "Billings, Josh",
+    "Biondo, Frank",
+    "Birrell, Augustine",
+    "Black, Elk",
+    "Blair, Robert",
+    "Blair, Tony",
+    "Blake, William",
+  ];
+</script>
+
+<script>
+  /**
+   * 1. Filter the list of inventors for those who were born in the 1500's.
+   * 翻譯: 篩選列表中在 1500 年間出生的發明家.
+   *
+   * Array.prototype.filter(), 將返回 true 的 el 組成新的陣列.
+   */
+
+  const firstQuestionArr = inventors.filter((el) => {
+    return el.year >= 1500 && el.year < 1600 ? true : false;
+  });
+
+  console.table("篩選列表中在 1500 年間出生的發明家");
+  console.table(firstQuestionArr);
+</script>
+
+<script>
+  /**
+   * 2. Give us an array of the inventors' first and last names.
+   * 翻譯: 將發明家的姓名組成一個新陣列.
+   *
+   * Array.prototype.map(), 將 el 修改後組成新的陣列返回.
+   */
+
+  const SecondQuestionArr = inventors.map((el) => el.first + " " + el.last);
+
+  console.table("將發明家的姓名組成一個新陣列");
+  console.table(SecondQuestionArr);
+</script>
+
+<script>
+  /**
+   * 3. Sort the inventors by birthdate, oldest to youngest.
+   *
+   * 翻譯: 依照發明家的出生早到晚排序.
+   *
+   * Array.prototype.sort(), 排序陣列.
+   */
+
+  const ThirdQuestionArr = inventors.slice(0);
+
+  // a - b, 代表由小排到大.
+  // b - a, 代表由大排到小.
+  ThirdQuestionArr.sort((a, b) => a.year - b.year);
+
+  console.table("依照發明家的出生早到晚排序");
+  console.table(ThirdQuestionArr);
+</script>
+
+<script>
+  /**
+   * 4. How many years did all the inventors live?
+   *
+   * 翻譯: 所有發明家的年齡總合.
+   *
+   * Array.prototype.reduce(), 將陣列的值總和.
+   */
+
+  const FourthQuestionNum = inventors.reduce((total, el) => {
+    let live = el.passed - el.year;
+    return total + live;
+  }, 0);
+
+  console.log("所有發明家的年齡總合");
+  console.log(FourthQuestionNum);
+</script>
+
+<script>
+  /**
+   * 5. Sort the inventors by years lived.
+   *
+   * 翻譯: 所有發明家生活時間排序.
+   */
+
+  const FifthQuestionArr = inventors.slice(0);
+
+  FifthQuestionArr.sort((a, b) => {
+    let aLive = a.passed - a.year;
+    let bLive = b.passed - b.year;
+    return aLive - bLive;
+  });
+
+  console.table("所有發明家生活時間排序");
+  console.table(FifthQuestionArr);
+</script>
+
+<script>
+  /**
+   * 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name.
+   *
+   * 翻譯:
+   */
+
+  // const SixthQuestionArr = inventors.slice(0);
+</script>
+
+<script>
+  /**
+   * 7. Sort the people alphabetically by last name
+   *
+   * 翻譯: 按照英文姓的排序.
+   */
+
+  const SeventhQuestionArr = people.slice(0);
+
+  SeventhQuestionArr.sort((a, b) => {
+    let [aFirst, aLast] = a.split(", ");
+    let [bFirst, bLast] = b.split(", ");
+
+    // console.log(aLast, bLast);
+
+    return aLast > bLast ? 1 : aLast < bLast ? -1 : 0;
+  });
+
+  console.log("按照英文姓的排序");
+  console.table(SeventhQuestionArr);
+
+  const strTest = "0, 1, 2, 3, 4, 5";
+  const [one, two, ...other] = strTest.split(", ");
+
+  console.log("解構賦值");
+  console.log(one, two, other);
+</script>
+
+<script>
+  /**
+   * 8. Sum up the instances of each of these.
+   *
+   * 翻譯: 繼算內容重覆次數並做成 json 格式.
+   */
+
+  const EighthQuestionArr = [
+    "car",
+    "car",
+    "truck",
+    "truck",
+    "bike",
+    "walk",
+    "car",
+    "van",
+    "bike",
+    "walk",
+    "car",
+    "van",
+    "car",
+    "truck",
+  ];
+
+  let answer = EighthQuestionArr.reduce((obj, content) => {
+    obj[content] ? (obj[content] += 1) : (obj[content] = 1);
+    return obj;
+  }, {});
+
+  console.table("繼算內容重覆次數並做成 json 格式");
+  console.table(answer);
+</script>

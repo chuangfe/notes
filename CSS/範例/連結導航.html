@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>連結導航</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    
+    ul, li {
+      list-style: none;
+    }
+    
+    a {
+      color: #000;
+      text-decoration-line: none;
+    }
+    
+    .clearFloat:after {
+      clear: both;
+      content: ".";
+      display: block;
+      height: 0;
+      visibility: hidden;
+    }
+    
+    body {
+      font-style: normal;
+      font-size: 13px;
+      font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+    }
+
+    #box {
+      margin: 40px auto 0;
+      width: 635px;
+      border: 1px solid #d6d6d6;
+    }
+    
+    #tab {
+      font-size: 1.3rem;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    
+    #tab li {
+      float: left;
+      width: 16%;
+    }
+
+    #tab li:hover a {
+      font-weight: 700;
+      background-color: #fff;
+      border-top-color: #7300ff;
+      color: #7300ff;
+    }
+    
+    #tab a {
+      display: inline-block;
+      padding: 8px 0 7px;
+      width: 100%;
+      border-top: 3px solid transparent;
+    }
+
+    #tab span {
+      display: inline-block;
+      width: 100%;
+      border-left: 1px solid #d6d6d6;
+    }
+
+    #tab li:nth-of-type(1) span {
+      border-left: none;
+    }
+
+    /* ----- ----- ----- ----- */
+
+    #Story {
+      width: 633px;
+      height: 224px;
+      position: relative;
+    }
+
+    #Story .Item {
+      position: absolute;
+      padding: 20px;
+      width: 100%;
+      height: 100%;
+      font-size: 1.6rem;
+      display: none;
+    }
+
+    #Focus:target {
+      display: block;
+    }
+
+    #Movement:target {
+      display: block;
+    }
+
+    #Entertainment:target {
+      display: block;
+    }
+
+    #Fun:target {
+      display: block;
+    }
+
+    #Live:target {
+      display: block;
+    }
+
+    #VideoAndMusic:target {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <ul id="tab" class="clearFloat">
+      <li>
+        <a href="#Focus">
+          <span>焦點</span>
+        </a>
+      </li>
+      <li>
+        <a href="#Movement">
+          <span>運動</span>
+        </a>
+      </li>
+      <li>
+        <a href="#Entertainment">
+          <span>娛樂</span>
+        </a>
+      </li>
+      <li>
+        <a href="#Fun">
+          <span>FUN</span>
+        </a>
+      </li>
+      <li>
+        <a href="#Live">
+          <span>生活</span>
+        </a>
+      </li>
+      <li>
+        <a href="#VideoAndMusic">
+          <span>影音</span>
+        </a>
+      </li>
+    </ul>
+    <div id="Story">
+      <div id="Focus" class="Item">焦點</div>
+      <div id="Movement" class="Item">運動</div>
+      <div id="Entertainment" class="Item">娛樂</div>
+      <div id="Fun" class="Item">FUN</div>
+      <div id="Live" class="Item">生活</div>
+      <div id="VideoAndMusic" class="Item">影音</div>
+    </div>
+  </div>
+</body>
+</html>

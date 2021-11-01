@@ -1,0 +1,8 @@
+// 待補充, 不知道這個檔案的用途
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "octref.vetur",
+    "teamchilla.blueprint"
+  ]
+}

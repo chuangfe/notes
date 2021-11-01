@@ -1,0 +1,5 @@
+/* 所有元素都加上參考線. */
+
+* {
+  outline: 1px solid red;
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>component-example</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.css"
+    />
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      .card {
+        margin-bottom: 20px;
+      }
+
+      .form-row {
+        width: 50%;
+      }
+
+      label {
+        color: transparent;
+        user-select: none;
+        padding-left: 0.5rem;
+      }
+
+      textarea {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <list-component v-bind:news="list"></list-component>
+      <!-- update 假事件, updateHandler 事件函式 -->
+      <create-component v-on:update="updateHandler"></create-component>
+    </div>
+
+    <template id="list-template">
+      <div>
+        <div class="card" v-for="(value, key) in news">
+          <h5 class="card-header">{{ value.name }}</h5>
+          <div class="card-body">
+            <h4 class="card-title">{{ value.content }}</h4>
+            <p class="card-text">{{ value.date | dateFilter }}</p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="create-template">
+      <div>
+        <form v-on:submit.prevent="submit">
+          <div class="form-row">
+            <div class="form-group col-md-7">
+              <textarea id="inputEmail4" v-model="content"></textarea>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="inputPassword4">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputPassword4"
+                placeholder="Name"
+                v-model="name"
+              />
+            </div>
+            <div class="form-group col-md-2">
+              <label class="hide">Submit</label>
+              <button type="submit" class="btn btn-primary" v-on:on="submit">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/zh-tw.js"></script>
+    <script>
+      // 案例，組件化功能，父子組件串聯資料，並從子組件修改父組件的資料
+
+      // 自定過濾器
+      // 將 new Date() 改為 moment.js zh-tw 自定格式
+      Vue.filter("dateFilter", (date, arg) => {
+        return moment(date).format("YYYY-MM-DD, HH:mm:ss , dddd a");
+      });
+
+      // list 組件，需要 vm 父組件傳遞 list 資料
+      Vue.component("list-component", {
+        template: "#list-template",
+        props: ["news"],
+      });
+
+      /**
+       * create 組件，需要 vm 父組件傳遞 updateHandler 方法，方變修改 vm 父組件的
+       * list 資料
+       */
+      Vue.component("create-component", {
+        template: "#create-template",
+        data: function () {
+          return {
+            content: "",
+            name: "",
+          };
+        },
+        methods: {
+          submit: function () {
+            this.$emit("update", {
+              name: this.name,
+              content: this.content,
+              date: new Date(),
+            });
+
+            this.name = this.content = "";
+          },
+        },
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          list: [
+            {
+              name: "中時電子報",
+              content: "雨勢升級！北北基豪雨特報 桃宜花9縣市防大雨",
+              date: new Date(),
+            },
+            {
+              name: "udn 聯合新聞報",
+              content: "改變日本動畫的京阿尼遭縱火 動畫協會擬伸援",
+              date: new Date(),
+            },
+            { name: "風傳媒", content: "阿波羅登月50周年", date: new Date() },
+          ],
+        },
+        methods: {
+          updateHandler: function (news) {
+            this.list.push(news);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

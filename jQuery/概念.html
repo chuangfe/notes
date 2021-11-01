@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>概念-入門</title>
+</head>
+
+<body>
+
+  <button id="btn1">按鈕</button>
+
+  <script src="./jquery-3.3.1.js"></script>
+  <script>
+    // scope 範圍、作用域
+    // IIFES 立即執行函式表達式
+    (function ($, jQuery) {
+      "use strict";
+
+      // on(Event, 事件委託, Event Function);
+      $('#btn1').on('click mouseenter', function () {
+        console.log('Alex');
+      });
+
+    })($, jQuery);
+
+    // Over Load 多載(超載、超負荷)，根據實參的類型(型別:String、Number、Function、...)，函式執行的結果不同
+    // 使用 typeof 關鍵字判斷參數，配合 if 執行不同的函式
+
+    // DOMContentLoadEd JS document 事件，DOM 樹讀取完成，link、img、video、...讀取之前
+    // jQuery 使用 DOMContentLoadEd 事件，並且配合 document.readyState 的屬性值進行判斷
+    // document.readyState 的屬性值為網頁當前的讀取狀態
+
+    // jQuery Animate(styleObj, optionObj)
+    // optionObj attr
+    // duration 持續時間，控制動畫的時間
+    // easing 緩解、減輕，針對 styleObj 所有樣式的動畫曲線
+    // specialEasing 可以依照 styleObj 的樣式各別單獨設置動畫曲線
+    // 有更多屬性
+  </script>
+</body>
+
+</html>

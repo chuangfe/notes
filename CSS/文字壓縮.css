@@ -1,0 +1,7 @@
+/* 文字換行, 並壓縮成 ... 符號 */
+
+p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

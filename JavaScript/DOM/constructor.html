@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="div"></div>
+  </body>
+</html>
+<script>
+  // DOM.constructor
+  // 返回該元素的建構函式
+  // 可用於判斷元素的類形，例如元素是 div、ul、span ... 等等
+
+  let div = document.querySelector("#div");
+
+  console.log(div.constructor); // HTMLDivElement
+  console.log(div.constructor === HTMLDivElement); // true
+</script>

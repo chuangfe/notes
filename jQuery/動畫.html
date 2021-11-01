@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible"
+        content="ie=edge">
+  <title>入門-動畫</title>
+  <style>
+    #rect {
+      width: 100px;
+      height: 100px;
+      background-color: orange;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="rect"></div>
+
+  <script src="./jquery-3.3.1.js"></script>
+  <script>
+    (function ($) {
+
+      // let rect = document.querySelector('#rect');
+
+      // function clickHandler() {
+      //   for (let i = 0; i < 100; i = i + 1) {
+      //     setTimeout(() => {
+      //       this.style.left = i * 5 + 'px';
+      //     }, i * 10);
+      //   };
+      // };
+
+      // rect.addEventListener('click', clickHandler);
+
+      // ----- ----- ----- ----- ----- ----- ----- -----
+
+      let $rect = $('#rect');
+
+      $rect.on('click', function () {
+        $rect.animate({
+          'top': '500',
+          'left': '800'
+        }, {
+          // duration 持續時間
+          'duration': 1000,
+
+          // easing 所有動畫的線性
+          // specialEasing 個別設置動畫線性
+          'specialEasing': {
+            'top': 'linear',
+            'left': 'swing',
+          }
+        });
+      });
+
+    })($);
+  </script>
+</body>
+
+</html>

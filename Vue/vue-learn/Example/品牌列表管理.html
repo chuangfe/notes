@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>品牌列表管理</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.css"
+      integrity="sha512-Mg1KlCCytTmTBaDGnima6U63W48qG1y/PnRdYNj3nPQh3H6PVumcrKViACYJy58uQexRUrBqoADGz2p4CdmvYQ=="
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      #create .btn {
+        margin: 0 30px 0 10px;
+      }
+
+      #list tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="create">
+        <form class="form-inline mb-2" v-on:submit.prevent="create">
+          <div class="form-group mb-2">
+            <input
+              type="text"
+              class="form-control"
+              id="inputPassword2"
+              placeholder="Create"
+              v-model.trim="name"
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary mb-2"
+            v-on:click="create"
+          >
+            Create
+          </button>
+          <div class="form-group mb-2">
+            <input
+              type="text"
+              class="form-control"
+              id="inputPassword2"
+              placeholder="Search"
+              v-model.trim="keywords"
+              v-vm-focus
+              v-vm-color="'red'"
+              v-vm-font-weight="700"
+            />
+          </div>
+        </form>
+      </div>
+
+      <table id="list" class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Ctime</td>
+            <td>Operation</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(value, key, i) in filterList" v-bind:key="value.id">
+            <th scope="row">{{ value.id }}</th>
+            <td>{{ value.name }}</td>
+            <td>
+              {{ value.ctime }} ---- {{ value.ctime | dateFilter }} ---- {{
+              value.ctime | vmDateFilter }}
+            </td>
+            <td>
+              <a href="javascript:;" v-on:click="remove(value.id)">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/zh-tw.js"></script>
+    <script>
+      (function () {
+        // 自定全局過濾器
+        // Vue 提供過濾器，但是只能用在 {{}} 和 v-bind 中使用
+        // 定義過濾器 Vue.filter('過濾器名稱', 回調函式)
+        // 使用方式 {{name | nameFilter(arg) | 可以多次調用}} 代表會將 name 傳給 nameFilter 函式，並使用 nameFilter 的返回值
+        Vue.filter("dateFilter", (date, arg) => {
+          // 可以再接收參數 -> arg -> {{nameFilter(arg)}}
+          return moment(date).format("YYYY-MM-DD, HH:mm:ss , dddd a");
+        });
+        // 自定全局指令
+        // <input type="text" v-focus>
+        Vue.directive("focus", {
+          // 每個函式第一個參數，固定是 el 是被綁定該指令的元素，該 el 是原生的 js 物件
+          // 每當指令綁定到元素上時，執行 bind 函式，只執行一次
+          // 該生命週期是在繪製頁面前，故 focus 無效
+          // el.style 有效
+          // el 屬性設置可以在這裡
+          bind: function (el) {
+            // el.focus();
+            // console.log("bind");
+          },
+          // 元素插入到 DOM 中時，才執行 inserted 函式，只執行一次
+          // 該生命週期是在繪製頁面後
+          // js 行為操作最好在這裡設置
+          inserted: function (el) {
+            el.focus();
+            console.log("global-inserted");
+          },
+          // 當 VNode 更新時觸發 update 函式，可能會執行多次
+          update: function (el) {},
+          componentUpdated: function () {},
+          unbind: function () {},
+        });
+
+        let vm = new Vue({
+          el: "#app",
+          data: {
+            list: [
+              { id: 1, name: "Vue", ctime: new Date() },
+              { id: 2, name: "JavaScript", ctime: new Date() },
+              { id: 3, name: "CSS3", ctime: new Date() },
+            ],
+            name: "",
+            keywords: "",
+          },
+          computed: {
+            filterList: function () {
+              if (!this.keywords) return this.list;
+
+              return this.list.filter((item) => {
+                let keywords = this.keywords.toUpperCase();
+                let name = item.name.toUpperCase();
+                if (name.indexOf(keywords) !== -1) return true;
+              });
+            },
+          },
+          methods: {
+            create: function () {
+              if (!this.name) return false;
+              let id = this.list.length
+                ? this.list[this.list.length - 1].id + 1
+                : 0;
+              let item = { id: id, name: this.name, ctime: new Date() };
+              this.list.push(item);
+              this.name = "";
+            },
+            remove: function (id) {
+              // arr.some 對陣列迴圈，只要函式內返回 true 就會停止迴圈
+              // this.list.some((item, i) => {
+              //   if (item.id === id) {
+              //     this.list.splice(i, 1);
+              //     return true;
+              //   }
+              // });
+              // arr.findIndex 對陣列迴圈，只要函式內返回 true 就會停止迴圈，並返回目標的編號
+              let index = this.list.findIndex((item) => {
+                if (item.id === id) return true;
+              });
+              this.list.splice(index, 1);
+            },
+          },
+          // vm 實體管理的自定過濾器，使用方式與上方全局相同
+          filters: {
+            vmDateFilter: function (date) {
+              return moment(date).format("YYYY-MM-DD, HH:mm:ss , dddd a ~~~~~");
+            },
+          },
+          // vm 實體管理的自定指令，使用方式與上方全局相同
+          directives: {
+            // // <input type="text" v-vmfocus>
+            "vm-focus": {
+              inserted: function (el) {
+                el.focus();
+                console.log("vm-inserted");
+              },
+            },
+            "vm-color": {
+              bind: function (el, binding, vnode, oldvnode) {
+                // console.log(el, binding, vnode, oldvnode);
+                // el 綁定指令的元素
+                // ----- ----- ----- ----- ----- ----- -----
+                // binding 指令相關的屬性
+                // name 指令的名稱
+                // value 經過計算的指令屬性
+                el.style.color = binding.value;
+                // expression 不經過計算的指令屬性
+                // arg 指令的參數，例如 v-bind:id 中的 id
+                // modifiers 指令的修飾符物件，例如 v-model.trim 中的 trim 可能會顯示 { trim: true }
+                // ----- ----- ----- ----- ----- ----- -----
+              },
+            },
+            // 自定指令的簡寫方式
+            // 該指令的函式，設置在 bind 與 update
+            // 無法設置 inserted 與 componentUpdated 與 unbind
+            // "vm-font-weight": (el, binding) => {
+            //   el.style.fontWeight = 900;
+            // },
+            "vm-font-weight": function (el, binding) {
+              el.style.fontWeight = binding.value;
+            },
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

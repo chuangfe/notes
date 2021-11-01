@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.css"
+      integrity="sha512-Mg1KlCCytTmTBaDGnima6U63W48qG1y/PnRdYNj3nPQh3H6PVumcrKViACYJy58uQexRUrBqoADGz2p4CdmvYQ=="
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      #create .btn {
+        margin: 0 30px 0 10px;
+      }
+
+      #list tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+
+      .form-check-input {
+        margin-left: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 輸入框 -->
+      <create-component
+        @input-name="nameHandler"
+        @input-keywords="keywordsHandler"
+        @submit-create="createHandler"
+      ></create-component>
+      <!-- 列表 -->
+      <table id="list" class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Ctime</td>
+            <td>Status</td>
+            <td>Operation</td>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- alex 拆列表模組化時, 使用拆單項列表, 再使用 v-for 跑 component, 而
+            不是直接模組化全部跑完的 component, 因為 list 有其他互動的功能在其他組
+            件(create-component), 所以原則上 list 資料還是來自父組件, 子組件只負責
+            少部分的功能(remove), 和繪製頁面, 若要子組件與子組件需要用其他方式(bus, 
+            vuex) 等等, 這種統一式資料集中管理比較能完成專案.
+            某些 dom 有限制子 dom 的種類時, 使用 is 指令, 選擇對應的 component. -->
+          <!-- 有嘗試使用在 component 跑 v-for, 目前只有 v-model="status" 無法避免
+            子模組直接修改父模組的資料  -->
+          <tr
+            is="list-item-component"
+            v-for="(value, key, i) in filterList"
+            :key="value.id"
+            :item="value"
+            @checked="checkedHandler"
+            @remove="removeHandler"
+          ></tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
+<template id="create-template">
+  <div id="create">
+    <form class="form-inline mb-2" @submit.prevent="$emit('submit-create')">
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Name"
+          v-model.trim="name"
+          @input="$emit('input-name', name)"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Create</button>
+      <div class="form-group mb-2">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search"
+          v-model.trim="keywords"
+          @input="$emit('input-keywords', keywords)"
+        />
+      </div>
+    </form>
+  </div>
+</template>
+
+<template id="list-item-template">
+  <tr>
+    <th scope="row">{{ item.id }}</th>
+    <td>{{ item.name }}</td>
+    <td>{{ item.ctime }}</td>
+    <td>
+      <input class="form-check-input" type="checkbox" v-model="status" />
+    </td>
+    <td>
+      <a href="javascript:;" v-on:click="$emit('remove', item)">Delete</a>
+    </td>
+  </tr>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/zh-tw.js"></script>
+<script>
+  /**
+   * 使用 .sync 修飾符, 將父組件的 data 給與 子組件, 子組件使用 props 接收, 並在
+   * data 裡重新賦值, 最在 event function 使用 $emit(update:props, data) 將子
+   * 組件的 data 值 update 給父組件的 data 值
+   */
+  Vue.component("create-component", {
+    template: "#create-template",
+    data: function () {
+      return { name: "", keywords: "" };
+    },
+  });
+
+  Vue.component("list-item-component", {
+    template: "#list-item-template",
+    props: ["item"],
+    computed: {
+      // 當 item 有 checkbox 時, 這樣去通知父組件, 並請父組件 checkedHandler 修改
+      status: {
+        get: function () {
+          return this.item.status;
+        },
+        set: function (value) {
+          this.$emit("checked", this.item, value);
+        },
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      name: "",
+      keywords: "",
+      list: [
+        { id: 1, name: "Vue", ctime: moment().format("llll"), status: false },
+        {
+          id: 2,
+          name: "JavaScript",
+          ctime: moment().format("llll"),
+          status: false,
+        },
+        { id: 3, name: "CSS3", ctime: moment().format("llll"), status: false },
+      ],
+    },
+    computed: {
+      filterList: function () {
+        if (!this.keywords) return this.list;
+        return this.list.filter((item) => {
+          let keywords = this.keywords.toUpperCase();
+          let name = item.name.toUpperCase();
+          if (name.indexOf(keywords) !== -1) return true;
+        });
+      },
+    },
+    methods: {
+      nameHandler: function (name) {
+        this.name = name;
+      },
+      keywordsHandler: function (keywords) {
+        this.keywords = keywords;
+      },
+      createHandler: function () {
+        if (!this.name) return false;
+        this.list.push({
+          id: this.list ? this.list[this.list.length - 1].id + 1 : 1,
+          name: this.name,
+          ctime: moment().format("llll"),
+          status: false,
+        });
+      },
+      removeHandler: function (item) {
+        this.list.splice(this.list.indexOf(item), 1);
+      },
+      checkedHandler: function (item, value) {
+        item.status = value;
+      },
+    },
+  });
+</script>

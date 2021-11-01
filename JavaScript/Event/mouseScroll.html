@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style></style>
+  </head>
+
+  <body>
+    <img
+      src="https://static.pexels.com/photos/261628/pexels-photo-261628.jpeg"
+    />
+  </body>
+</html>
+<script>
+  // Mouse Scroll 滑鼠滾輪事件
+  // mousewheel Chrome 使用
+  // DOMMouseScroll Fire Fox 使用
+
+  let mouseScrollHandler = function (e) {
+    console.log(e);
+  };
+
+  // Chrome
+  // 向下滾動一次
+  // wheelDeltaX: 0
+  // wheelDeltaY: -120
+  // wheelDelta: -120
+  document.addEventListener("mousewheel", mouseScrollHandler);
+
+  // Fire Fox
+  // 向下滾動一次
+  // detail: 3
+  document.addEventListener("DOMMouseScroll", mouseScrollHandler);
+</script>

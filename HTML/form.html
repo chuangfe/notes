@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Form</title>
+    <style>
+      html,
+      body,
+      form,
+      fieldset,
+      input,
+      br {
+        margin: 0;
+        padding: 0;
+      }
+
+      fieldset {
+        margin: 10px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="">
+      <!-- 將表單內容分組用的標籤 -->
+      <fieldset>
+        <!-- 分組表單的標題 -->
+        <legend>帳號資訊</legend>
+
+        *&nbsp;帳號:&nbsp;<input type="text" placeholder="請輸入帳號" />
+
+        <br />
+        <br />
+
+        *&nbsp;密碼:&nbsp;<input type="password" placeholder="請輸入密碼" />
+
+        <br />
+        <br />
+
+        性別&nbsp;
+        <!-- radio 單選框，用 name 屬性設定為一組 -->
+        <input type="radio" name="sex" checked="checked" id="man" />
+        <!-- label 標籤，配合選框使用 -->
+        <label for="man">男性</label>
+
+        <input type="radio" name="sex" id="women" />
+        <label for="women">女性</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>公司資訊</legend>
+
+        公司地址:
+        <!-- 下拉列表 -->
+        <select>
+          <option>請選擇縣市</option>
+          <option>台北市</option>
+        </select>
+
+        <select>
+          <option>請選擇鄉鎮市區</option>
+          <option>中山區</option>
+        </select>
+
+        <select>
+          <option>道路或街名或村里名稱</option>
+          <option>林森北路</option>
+        </select>
+
+        <select>
+          <option>道路號巷弄號碼</option>
+          <!-- optgroup 標籤，下拉選單內容分組 -->
+          <!-- label 屬性，分組的標題 -->
+          <optgroup label="100號以下">
+            <option>80號</option>
+          </optgroup>
+
+          <optgroup label="100號以上">
+            <option>150號</option>
+          </optgroup>
+        </select>
+
+        <br />
+        <br />
+
+        <!-- 多選框 -->
+        公司類型:
+        <!-- label 標籤，配合選框使用 -->
+        <input type="checkbox" name="class" id="cg" /><label for="cg">
+          科技</label
+        >
+        <input type="checkbox" name="class" id="sg" /><label for="sg">
+          商業</label
+        >
+        <input type="checkbox" name="class" id="gg" /><label for="gg">
+          製造</label
+        >
+
+        <br />
+        <br />
+
+        公司類型:&nbsp;
+        <!-- multiple 屬性，將下拉表單內容全部顯示，不好看 -->
+        <!-- <select multiple="multiple"></select> -->
+        <select>
+          <option>科技</option>
+          <option>商業</option>
+          <option>製造</option>
+        </select>
+
+        <br />
+        <br />
+
+        <!-- 文字輸入框 -->
+        公司介紹:&nbsp;
+        <textarea cols="30" rows="10"></textarea>
+
+        <br />
+        <br />
+
+        <!-- 上傳檔案 -->
+        營業執照:&nbsp;
+        <input type="file" />
+
+        <br />
+        <br />
+
+        <input type="submit" value="上傳" />
+        <button>上傳</button>
+      </fieldset>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <select id="select">
+      <option value="0">台北市</option>
+      <option value="1">新北市</option>
+      <option value="2">基隆市</option>
+      <option value="3">桃園市</option>
+    </select>
+  </body>
+</html>
+<script>
+  // select 事件
+  // 當 input 的內容被滑鼠反白選取時觸發
+
+  let input = document.querySelector("#input");
+
+  let inputHandler = function(e) {
+    console.log(e);
+
+    // selectionStart input 被選取的內容的起始位置
+    // selectionEnd input 被選取的內容的結束位置
+    console.log(input.selectionStart, input.selectionEnd);
+  };
+
+  input.addEventListener("select", inputHandler);
+
+  // ---------------------------------------------------------------------------
+
+  let select = document.querySelector("#select");
+
+  let selectHandler = function(e) {
+    // select.selectedIndex 代表 select 當前選擇的 option 元素索引編號
+    // 並非是 value
+    console.log(select.selectedIndex);
+
+    // selectedOptions
+    // 1. selectedOptions 是元素集合，偽陣列
+    // 2. selectedOptions 元素集合中，只有被選擇的 option 元素
+    // 3. 所以要獲取被選則的 option 元素，需要這樣使用 select.selectedOptions[0]
+    // 4. 故每次選擇 option 則 select.selectedOptions[0] 都會不一樣
+    console.log(select.selectedOptions, select.selectedOptions[0].textContent);
+  };
+
+  select.addEventListener("change", selectHandler);
+</script>

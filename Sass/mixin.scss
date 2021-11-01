@@ -1,0 +1,19 @@
+// mixin 使用方式
+
+// 設定方式
+// $size 必要值
+// $weight 必要值
+// $color 可選值
+@mixin font($size, $weight, $color: $black-100) {
+  font-family: $font-family-roboto;
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  height: 1em;
+  line-height: 1em;
+}
+
+// 使用方式
+h1 {
+  @include font($font-size-1, $font-weight-900);
+}

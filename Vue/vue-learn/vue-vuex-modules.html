@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charADD="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      p {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>Vuex Vm: {{$store.state.count}}</p>
+      <p>Module A: {{$store.state.a.count}}</p>
+      <p>Module A Getters: {{$store.getters['a/incrementCount']}}</p>
+      <p>Module B: {{$store.state.b.count}}</p>
+      <p>{{$store.state}}</p>
+
+      <hr />
+
+      <input type="button" value="Add" @click="clickHandler" />
+
+      <!-- vuex 實體使用在 namespaced: true 的模組時, 呼叫 commit dispatch 需要這
+        樣寫 commit('a/ADD_COUNT')", a 來自 vuex 實體的 modules 屬性 -->
+      <input
+        type="button"
+        value="Module A Mutations"
+        @click="$store.commit('a/ADD_COUNT' , { id: 3 })"
+      />
+
+      <input
+        type="button"
+        value="Module A Actions"
+        @click="$store.dispatch('a/INIT_TEST' , { id: 4 })"
+      />
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <input
+        type="button"
+        value="Module A Root Actions"
+        @click="$store.dispatch('INIT_TEST_MODULE_A', { id: 5 })"
+      />
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <input
+        type="button"
+        value="Root Add ModuleC"
+        @click="rootModuleAddHandler"
+      />
+
+      <input
+        type="button"
+        value="Module B Add Module C"
+        @click="moduleBAddHandler"
+      />
+
+      <input type="button" value="Log Module C" @click="logModuleC" />
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * modules, vuex 的模組化, 模組化包含 vuex vm 實體的屬性拆分檔案, 也包含 vm 的實
+   * 體子模組, 就像是 vue vm 的 component 的子 component, 可以拆分的很細.
+   *
+   * 假設 vuex 實體和多個模組內都有相同名稱的 mutations 或是 actions, 在 vuex 呼叫
+   * commit 和 dispatch 時, 所有人的函式都會一起觸發, 若要避免該情況發生, 則需要在
+   * 單獨的模組內設置 namespaced: true, 這樣就可以避免被別人呼叫而觸發.
+   *
+   * vuex 實體使用 namespaced: true 的模組時.
+   * mutations 寫法, $store.commit('a/ADD_COUNT')
+   * actions 寫法, $store.dispatch('a/INIT_TEST')
+   * getters 寫法, $store.getters['a/incrementCount']
+   *
+   * 其他模組要使用 namespaced: true 的模組時.
+   * mutations 寫法, $store.commit('a/ADD_COUNT', null, { root: true })
+   * actions 寫法, $store.dispatch('a/INIT_TEST', null, { root: true })
+   * getters 寫法, $store.getters['a/incrementCount']
+   *
+   * 補充, 如果是公用的 vuex module, 建議 namespaced 提供給使用者選擇是否需要.
+   */
+
+  /**
+   * 官網給的準則, 不限制, 但是推薦依照這個規則.
+   * 專案的資料, 因該集中到 store 的檔案中, 不應該放到 vue 檔案.
+   * 只能使用 mutations 修改 state 的資料.
+   * 同步請寫在 mutations.
+   * 資料邏輯運算請集中到 actions.
+   * 異步請寫在 actions.
+   */
+
+  const moduleA = {
+    // 將 moduleA 的 mutations actions 與其他人隔離, 這不影響自己物件內的寫法.
+    namespaced: true,
+
+    state: { count: 0 },
+
+    getters: {
+      // state, moduleA.state
+      // getters, moduleA.getters
+      // rootState, store.state, 可以拿到 store state 和其他模組的 state
+      // rootGetters, store.getters, 可以拿到 store getters 和其他模組的 getters
+      incrementCount(state, getters, rootState, rootGetters) {
+        return state.count + 1;
+      },
+    },
+
+    mutations: {
+      // state 是 moduleA.state
+      ADD_COUNT(state, payload) {
+        console.log("module a mutations", state, payload);
+        state.count += 3;
+      },
+    },
+
+    actions: {
+      // context vuex 實體和模組的集合, 可以拿到 vuex 實體和其他模組的屬性
+      // payload 外部傳的參數.
+      INIT_TEST(context, payload) {
+        console.log("module a actions", context, payload);
+      },
+
+      // 將 moduleA 的 actions 註冊到 vuex 實體(root)上.
+      INIT_TEST_MODULE_A: {
+        root: true,
+        handler(namespacedContext, payload) {
+          console.log("module a root actions", namespacedContext, payload);
+        },
+      },
+    },
+  };
+
+  const moduleB = {
+    state: { count: 0 },
+    mutations: {
+      ADD_COUNT(state, payload) {
+        state.count += 5;
+      },
+    },
+    actions: {
+      INIT_TEST(context, payload) {
+        console.log("module b actions", context, payload);
+
+        // 其他模組使用 namespaced: true 的模組時.
+        context.dispatch(
+          "a/INIT_TEST",
+          {
+            id: 1,
+            name: "Petter",
+          },
+          // 重點. 從 root 的角度, 尋找 moduleA 的 INIT_TEST.
+          { root: true }
+        );
+
+        // 如果 moduleA actions 是註冊 root 類型, 則可以直接使用.
+        context.dispatch("INIT_TEST_MODULE_A", {
+          id: 2,
+          name: "Alex",
+        });
+      },
+    },
+  };
+
+  const moduleC = {
+    // 如果你希望動態的 module 的資料不要保留紀錄, state 就需要是 function 類型.
+    // state: { val: "Module C Test", count: 0 },
+    state() {
+      // 利用 return
+      return {
+        val: "Module C Test",
+        count: 0,
+      };
+    },
+
+    mutations: {
+      LOG_MODULEC(state, payload) {
+        state.count++;
+        console.log("module c mutations");
+      },
+    },
+  };
+
+  const store = new Vuex.Store({
+    state: {
+      count: 0,
+    },
+    mutations: {
+      ADD_COUNT(state, payload) {
+        state.count++;
+      },
+    },
+    actions: {},
+    getters: {
+      // 在 vuex vm 實體 state === rootState, getters === rootGetters
+      vuexVmIncrementCount(state, getters, rootState, rootGetters) {},
+    },
+    modules: {
+      a: moduleA,
+      b: moduleB,
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    computed: {},
+    methods: {
+      clickHandler() {
+        // 由於 moduleA namespaced, 這裡只會執行 vuex 實體和 moduleB 的 ADD_COUNT.
+        this.$store.commit("ADD_COUNT");
+
+        // 由於 moduleA namespaced: true, 這裡只會執行 moduleB 的 INIT_TEST.
+        this.$store.dispatch("INIT_TEST", {
+          id: 0,
+          name: "Ian",
+        });
+      },
+
+      // 動態新增刪除 vuex vm modules, 通常用於釋放記憶體, 比較高階的用途.
+      rootModuleAddHandler() {
+        // 將 module c 註冊到 vuex vm 實體.
+        // 判斷 vuex vm 是否有 modules.c
+        if (this.$store.hasModule("c")) {
+          // 刪除, 只能刪除動態增加的模組.
+          this.$store.unregisterModule("c", moduleC);
+        } else {
+          // 新增
+          this.$store.registerModule("c", moduleC);
+        }
+      },
+      // 將 module c 註冊到 module b.
+      moduleBAddHandler() {
+        if (this.$store.hasModule(["b", "c"])) {
+          // 刪除
+          this.$store.unregisterModule(["b", "c"], moduleC);
+        } else {
+          // 新增
+          this.$store.registerModule(["b", "c"], moduleC);
+        }
+      },
+      logModuleC() {
+        /**
+         * 因為 moduleA 有設置 namespaced, 若 moduleC 在 moduleA 裡面, vuex root
+         * 要使用 moduleC LOG_MODULEC, 需要這樣寫
+         * this.$store.commit("a/LOG_MODULEC");
+         */
+        this.$store.commit("LOG_MODULEC");
+      },
+    },
+    store,
+  });
+</script>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-for</title>
+    <style>
+      body {
+        font-size: 24px;
+      }
+      span {
+        margin: 0px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h2>v-for array</h2>
+      <ul>
+        <li v-for="(value, index) in array">
+          <span>value: {{value}}</span>
+          <span>index: {{index}}</span>
+        </li>
+      </ul>
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <h2>v-for object</h2>
+      <ul>
+        <!-- key 綁值建議使用獨有屬性, 建議不要使用 index -->
+        <li v-for="(value, key, index) in object" :key="value.id">
+          <span>value: {{value}}</span>
+          <span>key: {{key}}</span>
+          <span>index: {{index}}</span>
+        </li>
+      </ul>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <h2>v-for array object</h2>
+      <ul>
+        <!-- key 綁值建議使用獨有屬性, 建議不要使用 index -->
+        <li v-for="(value, key, index) in users" :key="value.id">
+          <span>value: {{value}}</span>
+          <span>key: {{key}}</span>
+          <span>id: {{value.id}}</span>
+          <span>name: {{value.name}}</span>
+          <span>index: {{index}}</span>
+        </li>
+      </ul>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <h2>v-for 中 key 屬性的介紹</h2>
+      <p>key 屬性只能使用 string / number 類型</p>
+      <p>
+        key 在 v-for 中使用 v-bind:key 時綁定屬性，應該綁定每個物件都不同的屬性
+      </p>
+      <p>
+        使用地方：在循環組件時使用，或是動畫時使用，主要用於在於讓 vm
+        區別每個元素是不同的
+      </p>
+
+      <div>
+        <label>Id: <input type="text" v-model.number="id" /></label>
+        <label>Name: <input type="text" v-model="name" /></label>
+        <input type="button" value="添加" v-on:click="add" />
+      </div>
+
+      <ul>
+        <li v-for="(value, key, i) in object" v-bind:key="value.id">
+          <input type="checkbox" />
+          {{ value.id }} ---- {{ value.name }}
+        </li>
+      </ul>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      /**
+       * v-for 用於配合 data 的 array object 產生多個元素
+       * v-for v-if 盡量不要在一個 dom 上同時使用, 若有篩選需求請使用 v-show, 或是
+       * 對 data 篩選 computed methods 再使用 v-for 繪製頁面
+       * key 屬性綁定需要注意
+       */
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          /**
+           * 如果對 vue data array 使用以下方法, 可能會導致 data array 的原始資料
+           * 被改變, 故在做雙向資料時需要特別注意你使用的 array 方法
+           * push() pop() shift() unshift()
+           * splice()
+           * sort()
+           * reverse()
+           */
+          array: ["一", "二", "三", "四", "五", "六", "七", "八", "九"],
+          object: { id: 1, name: "小明", skill: "vue" },
+          users: [
+            { id: 1, name: "小明" },
+            { id: 2, name: "小紅" },
+            { id: 3, name: "小綠" },
+            { id: 4, name: "小藍" },
+          ],
+          id: "",
+          name: "",
+        },
+        methods: {
+          add: function () {
+            this.object.push({ id: this.id, name: this.name });
+            this.id = this.name = "";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

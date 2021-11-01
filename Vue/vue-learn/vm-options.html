@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vm-options</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <!-- .enter 事件有可能會在中文輸入法時選字就觸發事件, 可以搭配 
+        compositionstart compositionend 事件與 boolean 來確認狀態 -->
+      <input type="text" v-model="title" @keyup.enter="inputHandler" />
+      <p id="title">{{ title }}</p>
+      <p>{{ computedTitle }}</p>
+      <p>{{ computedObjectTitle }}</p>
+    </div>
+  </body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  // 重點：Vue 建構函式的可選參數
+  let vm = new Vue({
+    // vm 實體管理的 dom
+    el: "#app",
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的資料
+    data: {
+      title: "Vm Message",
+    },
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    /**
+     * vm 實體管理的計算後的屬性, 該物件的值必需是函式而且有返回值, 使用方式與
+     * data 類似, 在 html 中不可當作函式使用, Computed 會緩存結果, 即便多次在
+     * html 中使用也不會多次重新計算, 只有當 Computed 內部的 data 發生改變時才
+     * 會重新計算然後再次緩存, 可以參考 directives-on-keyup.html
+     * 通常若 data 變數需要較複雜的操作, 建議使用 computed
+     * 需要資料改變成別的資料時, 資料產生別的資料時
+     * 補充, 篩選 data 時需要特別注意, 使用的方法與需求, 是否會及需要改變 data
+     * 原本的內容, 例如 splice 與 slice 的差別
+     */
+    computed: {
+      computedTitle: function () {
+        // 當 this.title 值改變時，computedTitle 就會重新計算
+        return "Computed " + this.title;
+      },
+      computedObjectTitle: {
+        get: function () {
+          // 使用方式相當於函式時的寫法
+          // 盡量不要在這裡修改 vm data 的任何資料
+          return "ComputedObjectTitle " + this.title;
+        },
+        set: function (val) {
+          // 可以在這裡寫 this.xxx = val;
+          // 但是如果資料過於複雜, 不推薦在這裡往回寫, 因為可能會出錯誤
+          console.log("ComputedObjectTitle val ---", val);
+        },
+      },
+    },
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的函式, 使用方式與 data 類似, 可使用執行與非執行的方式
+    // 補充, input 驗正內容, 使用 input event + methods + 節流
+    methods: {
+      show: function () {
+        console.log(this.title);
+      },
+      inputHandler: function () {
+        console.log("input event");
+      },
+      resizeHandler: function () {},
+    },
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    /**
+     * vm 實體管理的監視, 通常用於監視 data, 所以鍵與 data 必需相同, 當對應的
+     * data 改變時, 對應的 watch function 就會執行, watch 不適合使用在單純的
+     * 資料處理、篩選 ... 等等, 例如: 某資料修改後, 需要用新資料打 api 呼叫函
+     * 式 同步函式 ... 等等, 這些情況可以使用, 需求為比較大的行為時而使用, 通
+     * 常 watch 的 key 會與 data 一樣, 用於對應名稱而監聽
+     * 補充, alex 使用方式當 data 修改後 computed 顯示畫面, watch 監視
+     * computed 執行其他因為 data 改變, 而需要執行的函式等等 ...
+     */
+    watch: {
+      title: function (newValue, oldValue) {
+        // 當 this.title 改變時，會執行這個函式
+      },
+      /**
+       * 可以參考 router.html
+       * 可以監視路由的改變，以此推論 instance-$.html 每種都可以監視
+       */
+      "$route.path": function (newValue, oldValue) {},
+      // watch 物件型別寫法
+      // route 有可能不會在第一次就觸發, 物件屬性可以強制觸發第一次監視
+      $route: {
+        // 第一次就監視
+        immediate: true,
+        handler(newVal, oldVal) {
+          this.filter = newVal.query.filter || "all";
+        },
+      },
+    },
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // 若 template 內容不夠完整, 預設會將 el 選取的 dom 整個取代
+    // template: "<span> template span tag </span>",
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的自定過濾器
+    // 請參考 vue-learn -> 品牌管理
+    filters: {},
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的自定指令
+    // 請參考 vue-learn -> 品牌管理
+    directives: {},
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的自定組件
+    // 請參考 global-component
+    components: {},
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // 生命週期, 無法用其他方式中斷或等待
+    // 實體創建 -> 讀取屬性 -> 繪製頁面 -> 更新資料 -> ... 各自的時間點都有函式
+    // 實體讀取屬性前
+    beforeCreate: function () {
+      console.log("beforeCreate", "-----", this.title); // undefined
+    },
+    // 實體讀取屬性後
+    created: function () {
+      console.log("created", "-----", this.title); // Vm Message
+    },
+    // 實體繪製頁面前
+    beforeMount: function () {
+      let title = document.querySelector("#title");
+      console.log("beforeMount", "-----", title.innerText); // {{ title }}
+    },
+    // 實體繪製頁面後
+    mounted: function () {
+      let title = document.querySelector("#title");
+      console.log("mounted", "-----", title.innerText); // Vm Message
+
+      // 如果有需求 vue 管理 template 以外的事件, 例如 window resize
+      // window.addEventListener('resize', this.resizeHandler);
+    },
+    // 實體數遽改變後，繪至頁面前
+    beforeUpdate: function () {
+      let title = document.querySelector("#title");
+      console.log("beforeUpdate", this.title, title.innerText);
+    },
+    // 實體數遽改變後，繪至頁面後
+    updated: function () {
+      let title = document.querySelector("#title");
+      console.log("updated", this.title, title.innerText);
+    },
+    activated: function () {},
+    deactivated: function () {},
+    // 實體被刪除後，實際刪除前
+    beforeDestroy: function () {
+      // 如果有需求 vue 管理 template 以外的事件, 例如 window resize
+      // window.removeEventListener('resize', this.resizeHandler);
+    },
+    // 實體被刪除後，實際刪除後
+    destroyed: function () {},
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // vm 實體管理的 vue-router 的實體
+    router: {},
+  });
+
+  console.log("console.log vm.title --- ", vm.title);
+</script>

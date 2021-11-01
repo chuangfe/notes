@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .router-link-exact-active {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>Id: <input type="number" v-model="uid" /></p>
+      <p>Name: <input type="text" v-model="name" /></p>
+      <router-link :to="getPath">Index</router-link>
+      <hr />
+      <router-view></router-view>
+      <hr />
+      <!-- router-view 外面 也可以使用 index component -->
+      <index :uid="uid" :name="name"></index>
+    </div>
+  </body>
+</html>
+
+<template id="index-template">
+  <div>
+    <h3>Index</h3>
+    <!-- <p>Route Uid: {{$route.params.uid}}</p>
+    <p>Route Name: {{$route.params.name}}</p> -->
+    <p>This Props Uid: {{this.uid}}</p>
+    <p>This Props Name: {{this.name}}</p>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /**
+   * routes props 屬性
+   * 使用目的, 將 component 解耦合, 當 component 所需要的參數來源不再只限制於網址
+   * ($route) 時, 這個 component 就可以在任何地方使用.
+   *
+   * 優點
+   * 1. component 的 template 裡面不再需要使用 $route
+   * 2. 可以在 router-view 以外的地方, 正常的使用這個 component
+   *
+   * 使用方式
+   * 1. component 的 template 裡面不使用 $route
+   * 2. component 只使用 定義好的 props
+   * 3. routes 的 path 需要定義參數
+   * 4. routes 的 props 需要傳遞參數, 推薦使用函式類型
+   */
+
+  const Index = {
+    template: "#index-template",
+    // 定義參數
+    props: ["uid", "name"],
+  };
+
+  const router = new VueRouter({
+    routes: [
+      {
+        path: "/index/:uid/:name",
+        name: "index",
+        components: {
+          default: Index,
+        },
+        // 物件的屬性值, 通常傳的是靜態資料, 也可以傳 vuex 的資料
+        // props: {
+        //   default: {
+        //     uid: 1,
+        //     name: "Ian",
+        //   },
+        // },
+        // 函式屬性值, 預設參數是 route
+        props: {
+          default: (route) => {
+            return {
+              uid: route.params.uid,
+              name: route.params.name,
+            };
+          },
+        },
+      },
+    ],
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      uid: 1,
+      name: "Ian",
+    },
+    computed: {
+      getPath() {
+        return "/index/" + this.uid + "/" + this.name;
+      },
+    },
+    router,
+    components: { Index },
+  });
+</script>

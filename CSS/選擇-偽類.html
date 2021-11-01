@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>偽類</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      #a1 {
+        margin: 10px;
+        font-size: 36px;
+
+        /* 清除超連結底線 */
+        text-decoration-line: none;
+      }
+
+      /* ----- ----- ----- ----- */
+
+      #a1:link {
+        /* 默認 */
+        color: red;
+      }
+
+      #a1:visited {
+        /* 測試失敗 */
+        color: blue;
+      }
+
+      #a1:hover {
+        /* 滑鼠移動到上方時 */
+        color: orange;
+      }
+
+      #a1:active {
+        /* 滑鼠點擊未放開時 */
+        color: purple;
+      }
+
+      /* ----- ----- ----- ----- */
+
+      #input1 {
+        margin: 10px;
+        padding: 0 10px;
+        width: 300px;
+        height: 50px;
+        font-size: 24px;
+      }
+
+      #input1:focus {
+        width: 900px;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="a1" href="#">超連結</a>
+
+    <br />
+
+    <input id="input1" type="text" />
+
+    <script>
+      // 偽類選擇
+      // a:link 默認樣式
+      // a:visited 滑鼠點擊後並放開的樣式
+      // a:hover 滑鼠在元素上方的樣式
+      // a:active 滑鼠點擊但是放開前的樣式
+      // :focus 可獲取焦點的元素(input等)，獲取焦點時的樣式
+    </script>
+  </body>
+</html>

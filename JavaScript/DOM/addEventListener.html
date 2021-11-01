@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>addEventListener</title>
+  </head>
+  <body>
+    z<input type="button" value="按鈕" id="btn" />
+    <script>
+      // 元素事件監聽
+      // addEventListener('Event Type', Event Handler Function) 將元素綁定事件
+
+      let btn = document.querySelector("#btn");
+
+      let clickHandler = function() {
+        console.log("Click"); 
+      };
+
+      btn.addEventListener("click", clickHandler);
+
+      // 刪除元素事件監聽
+      // btn.removeEventListener('click', clickHandler, false);
+
+      // 補充 ------------------------------------------------------------------
+
+      // click 滑鼠左鍵點擊
+
+      // dblclick 滑鼠左鍵連續點擊
+
+      // mouseover 滑鼠進入，會觸發冒泡
+
+      // mouseout 滑鼠離開，會觸發冒泡
+
+      // mouseenter 滑鼠進入，不會觸發冒泡，推薦使用
+
+      // mouseleave 滑鼠離開，不會觸發冒泡，推薦使用
+
+      // mousedown 滑鼠按下
+
+      // mouseUp 滑鼠抬起
+
+      // mousemove 滑鼠移動
+
+      // 補充 ------------------------------------------------------------------
+
+      // 移動裝置拖曳使用
+
+      // touchstart
+
+      // touchmove 手指拖動時觸發
+
+      // touchend
+
+      // 補充，移動裝置手勢事件
+
+      // swipe 手指完成一件事情時觸發
+    </script>
+  </body>
+</html>

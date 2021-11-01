@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scoped CSS Variables and JS</title>
+    <style>
+      :root {
+        --basePadding: 10px;
+        --baseFilter: 10px;
+        --baseColor: #ffc600;
+      }
+
+      .ht {
+        color: var(--baseColor);
+      }
+
+      img {
+        padding: var(--basePadding);
+        filter: blur(var(--baseFilter));
+        background-color: var(--baseColor);
+      }
+
+      body {
+        text-align: center;
+        background: #193549;
+        color: white;
+        font-family: "helvetica neue", sans-serif;
+        font-weight: 100;
+        font-size: 50px;
+      }
+
+      .controls {
+        margin-bottom: 50px;
+      }
+
+      input {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Update CSS Variables with <span class="ht">JS</span></h2>
+
+    <div class="controls">
+      <label for="spacing">Spacing:</label>
+      <input
+        id="spacing"
+        type="range"
+        name="basePadding"
+        min="10"
+        max="200"
+        value="10"
+        data-sizing="px"
+      />
+
+      <label for="blur">Blur:</label>
+      <input
+        id="blur"
+        type="range"
+        name="baseFilter"
+        min="0"
+        max="25"
+        value="10"
+        data-sizing="px"
+      />
+
+      <label for="base">Base Color</label>
+      <input
+        id="base"
+        type="color"
+        name="baseColor"
+        value="#ffc600"
+        data-sizing=""
+      />
+    </div>
+
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
+  </body>
+</html>
+
+<script>
+  /**
+   * CSS Variables
+   *
+   * :root 代表 html tag.
+   *
+   * 在指定的 el 樣式設置, --varName: val;
+   *
+   * 補充, 若不是設置在 html 身上, 需要注意 var 的作用域.
+   */
+
+  const html = document.documentElement;
+  const inputs = document.querySelectorAll(".controls input");
+
+  function inputHandler() {
+    let key = "--" + this.name;
+    let val = this.value + this.dataset.sizing;
+
+    // 修改 html (:root), 的 css var, 需要使用 setProperty 函式.
+    html.style.setProperty(key, val);
+  }
+
+  inputs.forEach((el) => {
+    el.addEventListener("input", inputHandler);
+  });
+</script>

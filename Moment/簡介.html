@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>簡介</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/zh-tw.js'></script>
+<script>
+    // moment 主要用途
+    // 1. 顯示日期的格式
+    // 2. 日期與日期的差距
+    // 3. 日期時區的控制
+
+    // 電腦讀取的時間為 local time，代表當地的地區時間
+
+    // 前端與後端時間交流
+    // 1. 後端控制時間
+    // 2. 前端給 UTC 的時間
+
+    // moment 本身並不是實體，所以需要使用多個或修改 "moment 物件" 時請使用 clone 出新的 moment 物件
+</script>
+
+<script>
+  // moment(參數) 參數簡介
+  // 1. 無參數代表當前地區時間
+  // 2. 標準地區格式 2018-12-24T00:10:24+08:00
+  // 3. 標準 UTC 格式 2018-12-23T16:10:24Z
+  // 4. 毫秒 let nowMS = new Date().getTime();
+
+  // moment() 方法簡介
+  // 1. .format(); 將當前 moment 物件保存的時間取出
+  // 2. .utc 將當前 moment 物件保存的時間改為 UTC 時間
+
+  // 當前地區時間表準格式
+  // let m = moment();
+  // console.log(m.format());  // 2018-12-24T00:10:24+08:00
+
+  // 將當前地區時間改為 UTC 時間標準格式
+  // let m = moment();
+  // console.log(m.utc().format());  // 2018-12-23T16:17:07Z
+
+  // 將 UTC 時間標準格式改為地區時間標準格式
+  // let m = moment('2018-12-23T16:10:24Z');
+  // console.log(m.format());  // 2018-12-24T00:10:24+08:00
+
+  // 毫秒轉為地區時間標準格式
+  // let nowMS = new Date().getTime();
+  // let m = moment(nowMS);
+  // console.log(m.format());
+
+  // 機八毛格式時間轉為標準格式
+  // let m = moment('2018/12/24 16:10:00', 'YYYY-MM-DD HH:mm:ss');
+  // console.log(m.format());
+</script>
+
+<script>
+  // moment 本身並不是實體，所以需要使用多個或修改 "moment 物件" 時請使用 clone 出新的 moment 物件
+
+  // 現在地區時間的 moment 物件
+  // let m = moment();
+
+  // // 獲取當前台北地區時間
+  // let now = m.format(); // 2018-12-23T21:36:00+08:00
+
+  // // 將 moment 物件的台北地區時間轉為 UTC 時間
+  // let mUTC = m.clone().utc();
+
+  // let nowUTC = m.clone().utc().format(); // 2018-12-23T13:36:00Z
+
+  // // 獲取 moment 物件時間的小時
+  // console.log(now);
+  // console.log(m.hour());
+
+  // console.log(mUTC);
+  // console.log(mUTC.hour());
+</script>
+
+<script>
+  // 使用 moment 做時間中文化
+  // 需引入 https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/zh-tw.js
+
+  // let m = moment();
+
+  // let dateStr = m.format('[現在時間:] YYYY [年] MM [月] DD [日] dddd HH:mm:ss A');
+
+  // console.log(dateStr);
+</script>
+
+<script>
+  // // 指定過去時間至現在距離多久
+
+  // let m = moment('1992-07-24');
+
+  // let fromNow = m.fromNow(true)
+
+  // console.log(fromNow); // 26 年
+</script>
+
+<script>
+  // // 倒數計時
+  // // 自訂未來時間與現在的毫秒差別
+
+  // let now = moment();
+  // let end = moment('2018-12-24 01:30:00');
+
+  // // 差距時間，毫秒
+  // let ms = end.diff(now);
+
+  // console.log(ms);
+
+  // // 轉成 moment 物件
+  // let time = moment.duration(ms);
+
+  // let days = time.days();
+  // let hours = time.hours();
+  // let minutes = time.minutes();
+  // let seconds = time.seconds();
+
+  // console.log(`${days} 天 ${hours} 小時 ${minutes} 分鐘 ${seconds} 秒鐘`);
+</script>
+
+<script>
+  // 當前時間這個月有幾天
+  // moment().daysInMonth()
+
+  // 將 moment 轉回 Date 物件
+  // moment().toDate();
+
+  // 將當前本地時間轉為 UTC 時間字串
+  // moment().toJSON();
+
+  // 將當前本地時間轉物件格式
+  // moment().toObject();
+</script>
+
+<script>
+  // isBefore
+  // 當前時間是否在 isBefore(時間) 之前，是 = true 否 = false
+
+  // let m = moment();
+
+  // let b = m.isBefore('2018-12-24 00:00:00');
+
+  // console.log(b);
+
+  // isAfter 當前時間是否在 isBefore(時間) 之後，使用同上
+  // isBetween 當前時間是否在 isBetween(時間, 時間) 之間，使用同上
+</script>

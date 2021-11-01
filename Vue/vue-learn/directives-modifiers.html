@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-modifiers</title>
+    <style>
+      #app {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <button v-on:click.stop.prevent="show">按鈕</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // modifiers 修飾符，通常加在指令身上, 可以串聯
+      // 例如 v-on:click.stop.prevent
+
+      // 阻止事件冒泡
+      // .stop - 調用 event.stopPropagation(), v-on:click.stop
+
+      // 阻止默認事件
+      // .prevent - 調用 event.preventDefault(), v-on:click.prevent
+
+      /**
+       * .capture - 事件函式改為捕獲階段執行
+       * 若配合 .stop 使用可以有以下效果, 在父子元素都有相同事件與事件函式的情況下,
+       * 子元素觸發事件後, 子元素不執行事件函式, 而父元素執行事件函式
+       */
+
+      /**
+       * .self - 限制事件函式, 只有在被綁定事件的 dom 身上才能觸發, 例如事件函式
+       * parent v-on:click.self 則 children 觸發事件也不會讓 parent 的 event
+       * function 執行, 簡單而言誰觸發事件就只會執行自己的事件函式, 其他人都閉嘴
+       */
+
+      // .once - 只能執行一次的事件函式
+
+      // .passive - 類似事件函式的節流, 但測試失敗暫時無法看到效果
+
+      /**
+       * .{ keyAlias || keyCode } - 配合鍵盤事件時的修飾符, 通常建議使用 vue 提供的
+       * 英文單字按鍵修飾符, 官方網站介紹有設置瀏覽器版本兼容
+       *
+       * .enter
+       * .shift, .16
+       * .ctrl, .17
+       * .tab
+       * .delete
+       * .esc
+       * .space
+       * .up
+       * .down
+       *
+       * 可以串聯使用 .enter.16.17, v-on:mousedown.enter.16.17, 串聯使用代表同時按
+       * 下這些按鍵, 事件函式才會執行
+       *
+       * 添加自訂的 keyCode 的方式, 可以使用 v-on:keyup.f1 對應 112
+       * Vue.config.keyCodes.f1 = 112;
+       *
+       * 注意事項, v-on:keyup.ctrl 單純放開 ctrl 按鍵不會觸發事件, vue 預設這樣寫的
+       * 效果是 ctrl 為輔助鍵, 例如 ctrl + c 複製, 當 c 按鍵放開時才會觸發事件, 若
+       * 你期望的是正常的 ctrl 放開觸發事件, 應該寫 v-on:keyup.17
+       */
+
+      /**
+       * .exact - 事件精確修飾符, 通常用於組合快捷鍵事件的組合, 有點模糊需要再測試,
+       * 例如 ctrl + c 複製
+       */
+
+      // .left 滑鼠左鍵點擊時觸發
+      // .right 滑鼠右鍵點擊時觸發
+      // .middle - 滑鼠中鍵點擊時觸發
+
+      /**
+       * .lazy 延遲資料雙向的時間, 例如 input model.lazy 改變後, 在 blur 後才執行
+       * api 函式或是繪製畫面, 有點模糊需要再測試
+       */
+
+      // .native - 監聽組件根元素的原生事件
+
+      // .trim 刪除頭尾的空白
+      // .number 將值轉為數值類型
+
+      // .sync 允許子組件修改父組件的資料，詳細代補充
+
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          msg: "歡迎光臨",
+        },
+        // vm 實體管理的函式
+        methods: {
+          show: function () {
+            // 使用 this 獲取實體的 data 資料
+            console.log(this.msg);
+          },
+          mousemoveHandler: function () {
+            console.log(1);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

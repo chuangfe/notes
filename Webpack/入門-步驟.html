@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body></body>
+</html>
+<script>
+  // 專案目錄內需要 webpack.config.js 檔案，通常是自己新增
+
+  // 在專案目錄執行 npm init -y
+  // -y 代表跳過預設，懶人專用
+
+  // 安裝局部 webpack and webpack-cli 指令 npm install webpack webpack-cli --save-dev
+  // --save-dev 將專案使用的套件，在開發使用的套件目錄中紀錄，在 package.json 的 devDependencies 的物件內
+  // --save-dev 縮寫 -D
+
+  // entry 編譯前的 js 檔案位置
+
+  // output path
+  // output filename 編譯後上線用的 js 檔案名稱
+
+  // 在專案路徑執行命令 webpack  or package.json scripts 的命令
+
+  // npm 指令 package.json 額外補充 -----
+  // package.json 內不能寫註釋
+  // 注意，這裡使用 npx 執行 webpack 而不是 npm 因為使用 npx 代表使用專案的 nodejs 插件
+
+  // 持續編譯但是不壓縮
+  // ctrl + c 可以停止
+  // 執行請輸入 npx run watch OR webpack --mode development --watch
+  // "watch": "webpack --mode development --watch",
+
+  // 編譯不壓縮版本一次
+  // 執行請輸入 npx run start OR webpack --mode development
+  // "start": "webpack --mode development",
+
+  // 編譯成線上版本
+  // 執行請輸入 npx run deploy OR webpack --mode production
+  // "deploy": "webpack --mode production"
+</script>
+
+<script>
+  // 補充 HMR 熱更新
+
+  // 首先，需要在 webpack.config.js 設置 devServer.hot = true;
+
+  // html 與 css 要開啟即時更新需要將檔案加入至 entry 裡，才能生效
+
+  // js 要開啟即時更新，需要以下步驟
+  // 在 entry js import 的 component js 需要使用 export default function(){} 回傳函式
+  // 在 entry js 使用變數接收 component js 回傳的函式
+  // 在 entry js 設置條件判斷
+  // import header from "./../../components/header/script";
+  // if (module.hot) {
+  //   module.hot.accept("./../../components/header/script", header);
+  // }
+  // 代表 "./../../components/header/script" 更改時，執行 header 函式
+</script>

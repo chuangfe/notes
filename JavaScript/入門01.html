@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>入門01</title>
+    <style>
+      #container1 {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container1">
+      content
+    </div>
+
+    <hr />
+
+    <script>
+      /**
+       * style 標籤，放在 head 標籤內部
+       *
+       * script 標籤，整合完成後放在 body 標籤內的底部
+       *
+       * 寫程式注意要點: who when what -> 誰 在什麼時候 做什麼事
+       *
+       * window, document -> who
+       *
+       * server render -> 打開一個網頁，檢視網頁原始檔所看到的內容，代表網頁在伺服器的樣子
+       *
+       * client render -> server render 完成之後等 javascript 跑完後給的畫面，可以想像是前端
+       */
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+      // 範例: 修改 #container1 的內容
+      let oCon = document.querySelector("#container1");
+      oCon.innerHTML = "Hello World";
+
+      oCon.addEventListener("click", function () {
+        this.innerHTML = "Alex";
+      });
+
+      console.log(
+        "----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----"
+      );
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+      // 傳值 傳址
+      /**
+       * 傳值，變數保存的是值
+       *
+       *   string number boolean null undefined
+       *
+       * 傳址，變數保存的是地址
+       *
+       *   obj array function
+       *
+       * 物件複製
+       *
+       *   JSON.parse(JSON.stringify(Obj));  // 淺拷貝，不能複製物件的物件
+       *
+       *   Object.assign({}, Obj);  // 淺拷貝，物件的物件還是同一個
+       *
+       *   框架 jQuery $.extend(true, {}, Obj);  // 深拷貝
+       *
+       *   框架 lodash _.cloneDeep(Obj); // 深拷貝
+       */
+
+      let objOne = {
+        name: "Ian",
+      };
+
+      let objTwo = objOne;
+
+      objTwo.name = "Vivian";
+
+      console.log(objOne.name); // Vivian
+
+      console.log(
+        "----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----"
+      );
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+      // BUG 解釋
+      /**
+       * undefined 變數已存在，但是沒有內容
+       *
+       * not defined 完全不存在
+       */
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+      // 作用域
+      /**
+       * 為了避免客製化 物件、函式 ... 等等外洩(在 Console 被使用)，通常會把程式放在暱名自執行函式內執行
+       *
+       * (function () {
+       *   Code ...
+       * })();
+       *
+       * ES6 可以使用大誇號，但是不能用 var 關鍵字聲明變數
+       *
+       * {
+       *   Code ...
+       * }
+       */
+
+      {
+        var vTest = {
+          name: "Ian",
+        };
+
+        let lTest = {
+          name: "Ian",
+        };
+
+        const cTest = {
+          name: "Ian",
+        };
+      }
+
+      console.log(
+        "----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----"
+      );
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+
+      // 瀏覽器間容
+      /**
+       * IE
+       *
+       * Window Chrome
+       *
+       * iOS Chrome
+       *
+       * FireFox
+       *
+       * Safari
+       */
+
+      // ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- -----
+    </script>
+  </body>
+</html>

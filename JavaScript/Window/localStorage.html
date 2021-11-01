@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  // localStorage 是以網址作區隔的方式，在用戶端的瀏覽器上保存資料
+  // 所有在 localStorage 的屬性值，一律是字串
+  // 需要特別注意 Json 格式，屬性與屬性值都需要使用雙引號
+
+  // 獲取已保存的資料方式為
+  // localStorage.getItem('屬性');
+
+  // 存入資料的方式
+  // localStorage.setItem('屬性', 字串型別的物件);
+
+  // 可以配合，這兩種方法使用
+  // JSON.parse(); // 將字串型別的物件轉為物件
+  // JSON.stringify(); // 將物件轉為字串型別的物件
+
+  console.log(localStorage);
+</script>

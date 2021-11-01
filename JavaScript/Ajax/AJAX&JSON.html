@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>範例-AJAX&JSON</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        padding: 20px;
+      }
+
+      input {
+        margin-right: 20px;
+      }
+
+      #users li {
+        margin: 20px 0 10px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="creat">
+      <input type="text" placeholder="請輸入名字" />
+      <a href="javascript:;">Creat</a>
+    </div>
+
+    <br />
+
+    <div id="delete">
+      <input type="text" placeholder="請輸入ID" />
+      <a href="javascript:;">Delete</a>
+    </div>
+
+    <br />
+
+    <div id="updata">
+      <input type="text" placeholder="請輸入Id" name="id" />
+      <input type="text" placeholder="請輸入Name" name="name" />
+      <a href="javascript:;">Updata</a>
+    </div>
+
+    <ul id="users"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      (function() {
+        // 標準的 json 格式，屬性使用雙引號，值若是字串使用雙引號
+        var test = {
+          user: [
+            {
+              id: 1,
+              name: "Alex"
+            },
+            {
+              id: 2,
+              name: "John"
+            },
+            {
+              id: 3,
+              name: "Mary"
+            }
+          ]
+        };
+
+        // 安裝完 npm install -g json-server
+        // 在路徑對的地方用命令輸入 json-server --watch ./JavaScript/test.json
+        // 可以使用 Chrome 外掛 Postman 測試 json-server 返回的網址，例如: http://localhost:3000/user
+        // 用 Post 記得選到 Body 並將 Text 改為 JSON(application/json)
+        // 測試 Get(獲取) Post(加入) Put(修改) Delete(刪除)
+        // 使用 Postman 針對陣列的某一個網址是 http://localhost:3000/user/1 -> 第一個，不是從 0 開始
+
+        // ----- ----- ----- ----- -----
+
+        // 使用 jQuery 操作
+
+        // 第一次獲取 ----- ----- ----- ----- -----
+        $.ajax({
+          url: "http://localhost:3000/user",
+          method: "get",
+          dataType: "json",
+          data: {}
+        })
+          .done(function(res) {
+            $("#users").empty();
+            res.forEach(function(uers) {
+              $("#users").append(`<li>${uers.name}</li>`);
+            });
+          })
+          .fail(function(err) {
+            console.log(err);
+          });
+
+        // 增加 ----- ----- ----- ----- -----
+        $("#creat > a").on("click", function() {
+          let name = $("#creat > input")
+            .val()
+            .trim();
+
+          if (!name) return;
+
+          $.ajax({
+            url: "http://localhost:3000/user",
+            method: "post",
+            dataType: "json",
+            data: {
+              name: name
+            }
+          }).done(function(res) {
+            $("#creat > input")[0].value = "";
+          });
+        });
+
+        // 刪除 ----- ----- ----- ----- -----
+        $("#delete > a").on("click", function() {
+          let id = $("#delete > input")
+            .val()
+            .trim();
+
+          if (!id) return;
+
+          $.ajax({
+            url: "http://localhost:3000/user/" + id,
+            method: "delete",
+            dataType: "json"
+          });
+        });
+
+        // 修改 ----- ----- ----- ----- -----
+        $("#updata > a").on("click", function() {
+          let id = $("#updata > input[name=id]")
+            .val()
+            .trim();
+          if (!id) return;
+
+          let name = $("#updata > input[name=name]")
+            .val()
+            .trim();
+          if (!name) return;
+
+          $.ajax({
+            url: "http://localhost:3000/user/" + id,
+            method: "put",
+            dataType: "json",
+            data: {
+              name: name
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

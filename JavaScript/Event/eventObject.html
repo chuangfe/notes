@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #div1 {
+        width: 500px;
+        height: 500px;
+        background-color: #ccc;
+        margin: auto;
+        display: flex;
+      }
+
+      #p1 {
+        width: 100px;
+        height: 100px;
+        background-color: #000;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div1">
+      <p id="p1"></p>
+    </div>
+  </body>
+</html>
+<script>
+  // e.currentTarget 有監聽事件的元素
+  // e.target 觸發事件的元素
+
+  let div = document.querySelector("#div1");
+  let p = document.querySelector("#p1");
+
+  let clickHandler = function (e) {
+    // this = e.currentTarget 通常要找的目標
+    // e.target 觸發事件的元素，可能是子元素觸發事件，然後在父元素的事件函式被捕捉到
+    console.log(this, e.target, e.currentTarget);
+
+    // 阻止預設默認事件發生
+    // 例如:A 標籤、from 標籤、滑鼠右鍵菜單、圖片拖動 ... 等等
+    // e.preventDefault();
+
+    // 阻止事件冒泡
+    // e.stopPropagation();
+  };
+
+  div.addEventListener("click", clickHandler);
+  p.addEventListener("click", clickHandler);
+
+  // 事件發生補充，由根元素往下層觸發事件，再由事件元素往根元素觸發事件函式，所以事件函式是在冒泡時才會執行
+  // 捕獲(觸發事件的元素)，從根元素逐層往下尋找目標元素
+  // 目標，尋找到發生事件的目標元素
+  // 冒泡，目標元素事件函式執行後，目標元素的每層父級元素都會觸發相同事件，並執行事件函式
+
+  // 事件函式可以在捕獲階段就觸發
+  // addEventListener(event, callFunction, true);
+</script>

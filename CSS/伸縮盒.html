@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./reset.css" />
+    <style>
+      body {
+        padding: 10px;
+      }
+
+      .layout .warp {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+      }
+
+      .layout .item {
+        margin: 10px;
+        width: 100%;
+        border: 1px solid #ccc;
+      }
+
+      .layout .item > img {
+        width: 100%;
+      }
+
+      .layout .item > p {
+        padding: 10px;
+        font-size: 16px;
+        line-height: 20px;
+      }
+
+      /* -----  ----- ----- ----- ----- -----  ----- ----- ----- -----*/
+
+      .about {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .about h2 {
+        width: 100%;
+        font-size: 42px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .about .box {
+        padding: 10px;
+        background-color: #f9f9f9;
+      }
+      .about .box > .logo,
+      .about .box > .nav {
+        display: block;
+      }
+
+      .about .box > .logo {
+        float: left;
+      }
+
+      .about .box > .nav {
+        float: right;
+      }
+
+      .about .box > .nav > a {
+        font-size: 20px;
+        line-height: 80px;
+        text-align: center;
+        padding: 0 10px;
+        display: inline-block;
+      }
+
+      .about .box > .nav > a:hover {
+        background-color: #fa0;
+      }
+
+      /* -----  ----- ----- ----- ----- -----  ----- ----- ----- -----*/
+
+      .products {
+        background-color: #f4f4f4;
+      }
+
+      .products .warp {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+      }
+
+      .products .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .products .text h3 {
+        margin-bottom: 10px;
+        font-size: 28px;
+        text-align: center;
+      }
+
+      .products .text p {
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?1" />
+        </div>
+      </div>
+
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?2" />
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?3" />
+        </div>
+      </div>
+
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?4" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?5" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?6" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+      </div>
+
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?7" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?8" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?9" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?10" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+      </div>
+
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?7" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?8" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?9" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?10" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+        <div class="item">
+          <img src="https://picsum.photos/300/200/?10" />
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse, sed
+            quibusdam? Eligendi necessitatibus itaque aperiam dolores. Obcaecati
+            praesentium quaerat iste deserunt commodi explicabo. Dolor rerum
+            tenetur sed quos, nostrum sunt?
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="about">
+      <h2>關於我們</h2>
+      <div class="box clearfix">
+        <img src="https://picsum.photos/100/80/" class="logo" />
+        <nav class="nav">
+          <a href="javascript:;">關於我們</a>
+          <a href="javascript:;">最新消息</a>
+          <a href="javascript:;">產品</a>
+          <a href="javascript:;">服務</a>
+          <a href="javascript:;">連絡我們</a>
+          <a href="javascript:;">網站地圖</a>
+        </nav>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="products">
+      <div class="warp">
+        <div class="item">
+          <img src="https://picsum.photos/300/200/" />
+        </div>
+        <div class="item text">
+          <h3>伸縮盒 垂直置中</h3>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate,
+            earum recusandae esse eos a praesentium illum dolorem autem, magni
+            sapiente veniam accusamus quaerat veritatis id voluptatum.
+            Voluptatem nesciunt earum fugit hic molestiae ratione error id
+            dolorem eum ut dolorum laudantium fugiat, quas deserunt reiciendis
+            aspernatur? Nihil nostrum animi adipisci obcaecati, voluptatibus
+            cupiditate nisi! In pariatur repudiandae, nemo, provident nostrum
+            perferendis reiciendis exercitationem obcaecati, deserunt similique
+            dolores. Impedit corrupti nobis esse tempore, dolorem beatae quaerat
+            sed eaque porro, facere, voluptatum delectus architecto accusamus
+            sequi debitis placeat. Et atque voluptatem, placeat quia eos
+            similique, incidunt accusamus distinctio tenetur voluptatibus
+            reiciendis, dolore aperiam.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  // display: flex; 將元素轉為伸縮盒模型.
+
+  /**
+   * flex-direction 設定伸縮盒的主軸和側軸的排列方式.
+   *
+   * row 默認排列方式, 主軸左至右, 側軸上至下.
+   *
+   * row-reverse 主軸右至左, 側軸上至下.
+   *
+   * column 主軸上至下, 側軸左至右.
+   *
+   * column-reverse 主軸下至上, 側軸左至右.
+   */
+
+  /**
+   * flex-wrap 設置身縮盒的子元素換行.
+   *
+   * nowrap 不可換行, 子元素可能會超出身縮盒.
+   *
+   * wrap 默認, 可換行.
+   *
+   * wrap-reverse 反轉換行的排列.
+   */
+</script>
+
+<script>
+  // 身縮盒對齊方向.
+
+  /**
+   * justify-content 設置主軸的排列方式, 默認主軸是左至右.
+   *
+   * flex-start 元素向主軸起始位置排序.
+   *
+   * flex-end 元素向主軸結束位置排序.
+   *
+   * center 元素向主軸中間排序.
+   *
+   * space-between 元素平均分散，第一個元素與最後一個元素分別至最邊側.
+   *
+   * space-around 元素平均分散, 每個元素的外邊距相等.
+   */
+
+  /**
+   * align-items 設置側軸的排列方式, 默認側軸是上至下.
+   *
+   * flex-start 元素向側軸起始位置排序.
+   *
+   * flex-end 元素向側軸結束位置排序.
+   *
+   * center 元素向側軸中間排序.
+   *
+   * baseline 待補充.
+   *
+   * stretch 待補充.
+   */
+
+  /**
+   * justify-self 該樣式是給伸縮盒的子元素單獨設定, 設定某個子元素的主軸對齊方向.
+   *
+   * flex-start 元素向側軸起始位置排序.
+   *
+   * flex-end 元素向側軸結束位置排序.
+   *
+   * center 元素向側軸中間排序.
+   *
+   * baseline 待補充.
+   *
+   * stretch 待補充.
+   */
+</script>
+
+<script>
+  // 設置在身縮盒的子元素.
+
+  /**
+   * flex-start 該樣式是給伸縮盒的子元素單獨設定, 設定某個子元素的主軸對齊方向.
+   *
+   * flex-start 元素向主軸起始位置排序.
+   *
+   * flex-end 元素向主軸結束位置排序.
+   *
+   * center 元素向主軸中間排序.
+   *
+   * 其他待補充.
+   */
+
+  /**
+   * align-self 該樣式是給伸縮盒的子元素單獨設定, 設定某個子元素的側軸對齊方向.
+   *
+   * flex-start 元素向側軸起始位置排序.
+   *
+   * flex-end 元素向側軸結束位置排序.
+   *
+   * center 元素向側軸中間排序.
+   *
+   * 其他待補充.
+   */
+
+  /**
+   * flex-grow 身縮盒子元素的放大比例.
+   *
+   * flex-shrink 身縮盒子元素的縮小比例.
+   *
+   * flex-basis 待補充.
+   */
+
+  /**
+   * order 身縮盒子元素的排列順序.
+   *
+   * 依照 number 值小的排前面.
+   */
+</script>

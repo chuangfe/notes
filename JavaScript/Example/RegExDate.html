@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <span></span>
+  </body>
+</html>
+
+<script>
+  let input = document.querySelector("#input");
+  let span = input.nextElementSibling;
+
+  let inputHandler = function () {
+    // 將 0-9 - 以外的字元，轉為空字串
+    this.value = this.value.replace(/[^0-9\-]/, "");
+
+    if (/^[0-9]{1,4}\-[0-9]{1,2}\-[0-9]{1,2}$/.test(this.value)) {
+      span.textContent = "輸入正確";
+      span.style.color = "rgb(0,128,0)";
+    } else {
+      span.textContent = "輸入錯誤";
+      span.style.color = "rgb(255,0,0)";
+    }
+  };
+
+  input.addEventListener("input", inputHandler);
+</script>

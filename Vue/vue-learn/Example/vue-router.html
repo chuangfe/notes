@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Vue-Router</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .tabs {
+        width: 660px;
+        height: 210px;
+        border: 1px solid #e2e2e6;
+        margin: 20px auto 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .tabs ul {
+        width: 680px;
+        height: 34px;
+        list-style: none;
+        background-color: #f4f4f4;
+      }
+
+      .tabs ul:first-child {
+        margin-left: -1px;
+      }
+
+      .tabs li {
+        width: 105px;
+        height: 30px;
+        float: left;
+        text-align: center;
+        line-height: 26px;
+        border-top: 4px solid #f4f4f4;
+        border-right: 1px solid #f4f4f4;
+        border-left: 1px solid #f4f4f4;
+        cursor: pointer;
+      }
+
+      .tabs i {
+        font-style: normal;
+      }
+
+      .tabs .current {
+        background-color: #ffffff;
+        border-top: 4px solid #7300ff;
+        border-right: 1px solid #d6d6d6;
+        border-left: 1px solid #d6d6d6;
+        color: #7300ff;
+        font-weight: 700;
+      }
+
+      .panels {
+        width: 660px;
+        height: 176px;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+
+      .panels div {
+        width: 660px;
+        height: 176px;
+        padding: 20px 0 0 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="tabs">
+      <ul>
+        <li
+          v-for="(value, key) in tabs"
+          v-bind:class="{current: name === value.name}"
+          v-on:mouseenter="tabMouseenterHandler(value.name)"
+        >
+          <i>{{value.title}}</i>
+        </li>
+      </ul>
+      <div class="panels">
+        <router-view></router-view>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js"></script>
+
+<script>
+  // many page 傳統網站，由複數或大量網頁組成
+  // single page 新式網站，由少量或單一網頁組成
+
+  // 純前端完成 single page 是不完美的
+
+  // 前端的 Router 用於控制網址，就是哈希值
+
+  // 範例說明
+  // Vue 實體接收 data.tabs -> v-for tabs 新建 li
+  // tabs li 設置 mouseenter 事件，使用 data.tabs 的資料，修改 Vue 實體的 data.name 與跳轉頁面，
+  // Vue Router 依照 tabs li mouseenter 事件的參數與預先寫好的 template 和 VueRouter 實體 routes 的設置修改 <router-view></router-view> 視圖
+  // 暫時沒用到 props 屬性
+</script>
+
+<!-- template -->
+
+<template id="focus">
+  <div>焦點</div>
+</template>
+
+<template id="movement">
+  <div>運動</div>
+</template>
+
+<template id="entertainment">
+  <div>娛樂</div>
+</template>
+
+<template id="fun">
+  <div>FUN</div>
+</template>
+
+<template id="life">
+  <div>生活</div>
+</template>
+
+<template id="movie">
+  <div>影片</div>
+</template>
+
+<!-- // template -->
+
+<script>
+  // VueRouter 實體的 routes 子組件
+
+  let focus = {
+    template: "#focus",
+
+    // 子組件屬性: data
+    // 需要使用 return 返回值的方式
+    data: function () {
+      return {};
+    },
+
+    // 子組件屬性: methods
+    // 設置方法
+    methods: {},
+
+    // 子組件屬性: computed
+    // 將 data 計算並返回的變數
+    computed: {},
+
+    // 子組件屬性: mounted
+    // 生命週期中的一種
+    mounted: function () {
+      console.log(
+        "當前頁面 focus",
+        "每個 Router 子組件被載入時，都會執行一次生命週期"
+      );
+    },
+  };
+
+  let movement = {
+    template: "#movement",
+
+    mounted: function () {
+      console.log("當前頁面 movement");
+    },
+  };
+
+  let entertainment = {
+    template: "#entertainment",
+
+    mounted: function () {
+      console.log("當前頁面 entertainment");
+    },
+  };
+
+  let fun = {
+    template: "#fun",
+
+    mounted: function () {
+      console.log("當前頁面 fun");
+    },
+  };
+
+  let life = {
+    template: "#life",
+
+    mounted: function () {
+      console.log("當前頁面 life");
+    },
+  };
+
+  let movie = {
+    template: "#movie",
+
+    mounted: function () {
+      console.log("當前頁面 movie");
+    },
+  };
+</script>
+
+<script>
+  // Router 主控制器
+
+  let router = new VueRouter({
+    // 路由設定
+    // 範例需要多個，所以屬性值是陣列
+    // routes 的順序需要注意，越重要的越前面
+    routes: [
+      {
+        // 根目錄，網址的哈希值
+        path: "/focus",
+
+        // 方便找到應對的 router
+        name: "focus",
+
+        // 模組簡介
+        // 管理(相關的包在一起)
+        // 重用
+        component: focus,
+      },
+
+      { path: "/movement", name: "movement", component: movement },
+
+      {
+        path: "/entertainment",
+        name: "entertainment",
+        component: entertainment,
+      },
+
+      { path: "/fun", name: "fun", component: fun },
+
+      { path: "/life", name: "life", component: life },
+
+      { path: "/movie", name: "movie", component: movie },
+
+      {
+        // 其他路由，可能的原因是網址打錯或亂打
+        // * 代表網址非以上設定的其他
+        path: "*",
+
+        // 重新導回首頁
+        redirect: "/focus",
+
+        // 網址出現 #/ 代表成功
+        // http://127.0.0.1:8080/Vue/RESTfulAPI/index.html#/
+      },
+    ],
+  });
+</script>
+
+<script>
+  // Vue 父組件
+
+  let app = new Vue({
+    el: "#app",
+
+    data: {
+      name: "",
+
+      tabs: [
+        { name: "focus", title: "焦點" },
+        { name: "movement", title: "運動" },
+        { name: "entertainment", title: "娛樂" },
+        { name: "fun", title: "FUN" },
+        { name: "life", title: "生活" },
+        { name: "movie", title: "看片" },
+      ],
+    },
+
+    // router 記得加進來
+    router: router,
+
+    methods: {
+      tabMouseenterHandler: function (index) {
+        this.name = index;
+
+        // $router 管理 vue route 的子組件，用這個轉頁面
+        // 跳轉頁面的詳細寫法
+        // $router.push 會保存歷史紀錄
+        this.$router.push({
+          name: index,
+
+          // 這裡傳參數用
+          params: {},
+        });
+      },
+    },
+
+    computed: {},
+
+    mounted: function () {
+      this.name = this.$route.name;
+    },
+  });
+</script>

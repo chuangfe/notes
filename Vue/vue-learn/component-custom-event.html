@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>component-custom-event</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{title}}</p>
+      <hr />
+      <basic-component
+        @title-update="titleUpdateHandler"
+        v-model="title"
+        :sync-title.sync="title"
+        v-bind.sync="user"
+      ></basic-component>
+    </div>
+
+    <template id="basic-template">
+      <div>
+        <!-- 傳統改 props 方式 -->
+        <p>{{title}}</p>
+        <p>
+          <input type="button" value="Emit" @click="emitClickHandler" />
+        </p>
+        <hr />
+        <!-- v-model 改 props 方式 -->
+        <p>{{vmTitle}}</p>
+        <p><input type="button" value="Model" @click="modelHandler" /></p>
+        <hr />
+        <!-- sync 改 props 方式  -->
+        <p>{{syncTitle}}</p>
+        <p>{{title}}</p>
+        <!-- 佔位符 :sync-title.sync="title", props syncTitle: String, 
+          @click="$emit('update:syncTitle', title)", 改 props 的簡寫方式, 補充 
+          .sync 的值不能使用運算, 例如 .sync="{title: obj.name}" .sync="num + 1" -->
+        <p>
+          <input
+            type="button"
+            value="Sync String"
+            @click="$emit('update:syncTitle', title)"
+          />
+        </p>
+        <!-- Sync 綁物件, v-bind.sync="user", 解構至 props: [ "name", "age"], 使
+          用 @click="$emit('update:name', 'vivi')" 改資料-->
+        <p>{{name}} {{age}}</p>
+        <p>
+          <input
+            type="button"
+            value="Sync Object"
+            @click="$emit('update:name', 'Vivi')"
+          />
+        </p>
+      </div>
+    </template>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+      integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // component event 組件自訂事件
+
+      // 組件命名規則
+      // camelCase 字首小寫駝峰
+      // PascalCase 字首大寫駝峰
+      // kebab-case 符號串接, 原生 html 只支援這種
+      // snake_case 底線串接
+
+      const BasicComponent = {
+        template: "#basic-template",
+        // 宣告 prop 變數物件
+        props: ["vmTitle", "syncTitle", "name", "age"],
+        // 告訴 component v-model 參照該物件
+        model: {
+          // v-model 綁定至 props vmTitle 變數
+          prop: "vmTitle",
+          event: "11111",
+        },
+        data: function () {
+          return {
+            title: "Basic title",
+          };
+        },
+        methods: {
+          /**
+           * 傳統子組件更新父組件資料的方式, 父組件將修改資料的函式, 使用假事件函式的
+           * 方式綁定給子組件, 子組件在真事件中調用假事件函式並傳參數
+           * 佔位符 @title-update="titleUpdateHandler"
+           * 組件 template @click="emitClickHandler"
+           * 組件 methods this.$emit("title-update", this.title);
+           */
+          emitClickHandler() {
+            this.$emit("title-update", this.title);
+          },
+          /**
+           * 使用 v-model 非傳統子組件更新父組件資料的方式, 資料使用 v-model 綁定給
+           * 子組件佔位符 v-model="title", 然後設置子組件的 model 物件
+           * model: { prop: "vmTitle", event: "11111" }, 最後在事件使用假
+           * 事件函式 modelHandler() { this.$emit("11111", this.title); }
+           */
+          modelHandler() {
+            this.$emit("11111", this.title);
+          },
+        },
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        data: { title: "Vm Title", user: { name: "Ian", age: 28 } },
+        methods: {
+          titleUpdateHandler(val) {
+            this.title = val;
+          },
+          modelUpdateHandler() {
+            console.log("Model Handler");
+          },
+        },
+        components: { BasicComponent },
+      });
+    </script>
+  </body>
+</html>

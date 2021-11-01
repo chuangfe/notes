@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>範例-分頁計算</title>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="page">{{pageContents}}
+  </div>
+</body>
+
+</html>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.js'></script>
+<script>
+  // 計算分頁重點
+  // 總資料數
+  // 一頁幾筆資料
+  // 你需要第幾頁
+
+  // 範例：文字敘述
+  // 假設資料共有 10 筆，資料起始數字是 0
+  // 一頁最多 3 筆資料
+  // 第一頁: 0 1 2
+  // 第二頁: 3 4 5
+  // 第三頁: 6 7 8
+  // 第四頁: 9
+  // 假設需要第三頁的資料: (3 - 1) * 3 => 第三頁資料的起始數號碼，3 - 1 是因為分頁與資料的起始號碼不同
+  // 假設需要第三頁的資料: 6 + 3 - 1 => 第三頁資料最後的號碼，因為起始號碼也算一筆資料，所以需要 - 1
+</script>
+
+<script>
+  let data = {
+    page: 1,
+    contents: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  };
+
+  let app = new Vue({
+    el: '#app',
+
+    data: data,
+
+    computed: {
+      pageContents() {
+        // page 代表第幾筆資料，this.page - 1 是因為 data 從 0 開始，而頁面上的 page 是從 1 開始
+        // 從 (this.page - 1) * 3 的位置
+        // * 3 是因為一頁 3 筆資料
+        let startIndex = (this.page - 1) * 3;
+
+        // 從 (this.page - 1) * 3 的位置獲取 3 筆資料
+        let endtIndex = (this.page - 1) * 3 + 3;
+
+        // arr.slice(起始位置, 結束位置) 返回 arr 起始位置至結束位置 -1 的資料組成的新陣列
+        return this.contents.slice(startIndex, endtIndex);
+      },
+    },
+  });
+</script>

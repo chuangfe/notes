@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <button @click="page = 'index-component'">index</button>
+        <button @click="page = 'about-component'">about</button>
+        <button @click="ifActive = !ifActive">If</button>
+      </div>
+
+      <div>
+        <component v-if="ifActive" is="if-component"></component>
+      </div>
+
+      <keep-alive>
+        <component :is="page"></component>
+      </keep-alive>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
+  integrity="sha512-pSyYzOKCLD2xoGM1GwkeHbdXgMRVsSqQaaUoHskx/HF09POwvow2VfVEdARIYwdeFLbu+2FCOTRYuiyeGxXkEg=="
+  crossorigin="anonymous"
+></script>
+
+<template id="index-template">
+  <div>
+    <p>Index</p>
+  </div>
+</template>
+
+<template id="about-template">
+  <div>
+    <p>About</p>
+  </div>
+</template>
+
+<template id="if-template">
+  <div>
+    <p>if</p>
+  </div>
+</template>
+
+<script>
+  /**
+   * 測試 v-if mounted activated keep-alive 之間的差別.
+   *
+   * 以下都會重新繪製 dom tree, 但 component 的 html 未必會重新繪製.
+   *
+   * v-if
+   * v-if 會平凡觸發 mounted hook, 代表 component 的 html 會重新繪製.
+   * v-if 不會觸發 activated hook, deactivated hook.
+   *
+   * hook.
+   * activated hook, deactivated hook 需要配合 keep-alive tag, component tag 兩個標籤使用.
+   * 此時不會觸發 mounted hook, 代表 component 的 html 並沒有重新繪製.
+   */
+
+  Vue.component("index-component", {
+    template: "#index-template",
+
+    mounted() {
+      console.log("mounted", "index");
+    },
+
+    activated() {
+      console.log("activated", "index");
+    },
+
+    deactivated() {
+      console.log("deactivated", "index");
+    },
+  });
+
+  Vue.component("about-component", {
+    template: "#about-template",
+
+    mounted() {
+      console.log("mounted", "about");
+    },
+
+    activated() {
+      console.log("activated", "about");
+    },
+
+    deactivated() {
+      console.log("deactivated", "about");
+    },
+  });
+
+  Vue.component("if-component", {
+    template: "#if-template",
+
+    mounted() {
+      console.log("mounted", "if");
+    },
+
+    activated() {
+      console.log("activated", "if");
+    },
+
+    deactivated() {
+      console.log("deactivated", "if");
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+
+    data: {
+      page: "index-component",
+      ifActive: true,
+    },
+  });
+</script>

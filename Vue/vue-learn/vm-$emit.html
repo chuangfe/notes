@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vm-$emit</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{title}}</p>
+      <basic-component @title-update="titleUpdateHandler"></basic-component>
+    </div>
+
+    <template id="basic-template">
+      <div>
+        <p>{{title}}</p>
+        <p><input type="button" value="Basic" @click="clickHandler" /></p>
+      </div>
+    </template>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+      integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // $emit 子組件使用父組件給予的假事件時使用
+
+      const BasicComponent = {
+        template: "#basic-template",
+        props: [],
+        model: {
+          prop: {},
+        },
+        data: function () {
+          return {
+            title: "Basic title",
+          };
+        },
+        methods: {
+          clickHandler() {
+            this.$emit("title-update", this.title);
+          },
+        },
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        data: { title: "Vm Title" },
+        methods: {
+          titleUpdateHandler(val) {
+            this.title = val;
+          },
+        },
+        components: { BasicComponent },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <router-link to="/index/99/Ian">Index</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+  </body>
+</html>
+
+<template id="index-template">
+  <div>
+    <h3>Index</h3>
+    <p>Id: {{$route.params.id}}</p>
+    <p>Name: {{$route.params.name}}</p>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /**
+   * Navigation Guards 導航守衛, 通俗說法就是路由的生命週期.
+   *
+   * 當路由切換網址時, 到 component 載入結束, 各種時間執行的函式, 每個路由生命週期,
+   * 都需要執行 next 函式, 否則會卡住, afterEach 例外.
+   *
+   * Navigation triggered. 當你按下 router link 切換網址時.
+   *
+   * 1. beforeRouteLeave 離開路由時觸發.
+   * 設置在 component 內.
+   * 可以使用 this.
+   *
+   * 2. beforeEach 進入全部路由之前執行, 這個生命週期函式所有路由的一樣.
+   * global 設置在 router 實例.
+   * 可以在這理做使用者帳號權限判斷.
+   *
+   * 3. beforeEnter 進入某個路由之前執行.
+   * 設置在 routes 個每個物件內.
+   * 可以在這理做使用者帳號權限判斷.
+   *
+   * 4. beforeRouteEnter 進入路由後執行.
+   * 設置在 component 內.
+   * 在 component 生命週期之前.
+   * 這裡不能使用 this.
+   *
+   * 這邊開始執行 component 的生命週期.
+   *
+   * 5. beforeRouteUpdate 在相同的路由時, 修改路由參數時觸發.
+   * 設置在 component 內.
+   * 可以使用 this.
+   * alex 說這個生命週期做的事情通常會與 beforeRouteEnter 相似, 甚至是相同.
+   *
+   * 6. beforeResolve 待補充.
+   *
+   * 7. afterEach 進入路由之後和繪製畫面之後執行.
+   * global 設置在 router 實例.
+   * 不需要執行 next 函式參數, 這個生命週期函式所有路由的一樣.
+   */
+
+  const Index = {
+    template: "#index-template",
+    // 順序 3
+    beforeRouteEnter(to, from, next) {
+      // 這裡不能使用 this.
+      console.log("router.beforeRouteEnter --------------------");
+      next();
+    },
+    // 順序 4
+    beforeRouteUpdate(to, from, next) {
+      console.log("router.beforeRouteUpdate --------------------");
+      next();
+    },
+    // 順序 5
+    beforeRouteLeave(to, from, next) {
+      console.log("router.beforeRouteLeave --------------------");
+      next();
+    },
+  };
+
+  const router = new VueRouter({
+    routes: [
+      {
+        path: "/index/:id/:name",
+        name: "index",
+        components: {
+          default: Index,
+        },
+        // 順序 2
+        beforeEnter(to, from, next) {
+          console.log("router.beforeEnter --------------------");
+          // console.log(to);
+          // console.log(from);
+          // console.log(next);
+          next();
+        },
+      },
+    ],
+  });
+
+  /**
+   * 設定在 router 實體
+   * 載入任何頁面都會先執行, 包含完全沒設定的 # 號 path 路徑, 並且鎖住 router 不能自
+   * 動跳轉頁面, 必需在函式內手動設定跳轉頁面.
+   *
+   * to 你要進入的頁面的 route 資料
+
+   * from 你進入前的頁面的 route 資料
+
+   * next() 是函式, 執行才能跳轉頁面, 函式可以依照參數的不同, 達到不同的效果
+   * 可選參數
+   * 不傳
+   * boolean 跳轉或是停止跳轉
+   * string path 其他路徑
+   * object 更詳細的重新導向
+   * error 待補充
+   *
+   */
+  // 順序 1
+  router.beforeEach((to, from, next) => {
+    console.log("router.beforeEach --------------------");
+    // console.log(to);
+    // console.log(from);
+    // console.log(next);
+
+    // 可以跳轉頁面
+    next();
+  });
+
+  // 順序 6
+  router.afterEach((to, from) => {
+    console.log("router.afterEach --------------------");
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    computed: {},
+    methods: {},
+    // 註冊 router 的實體
+    router,
+  });
+</script>

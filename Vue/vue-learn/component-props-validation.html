@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>component-props-validation</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>{{title}}</p>
+      <children :inside-title="title"></children>
+      <!-- style class 會自動合併, 其他原生屬性不指定的情況下, 會給 template 的根元
+        素繼承, v-bind="$attrs" 可以改變繼承的目標, 補充原生屬性盡量要設值 -->
+      <children class="aaa" checked="checked"></children>
+    </div>
+
+    <template id="children-template">
+      <div class="bbb">
+        <p>{{insideTitle}}</p>
+        <!-- v-bind="$attrs" 將佔位符的原生屬性, 從 template 根元素移動到 checkbox 
+          必需使用 v-bind="$attrs" -->
+        <p><input type="checkbox" v-bind="$attrs" /></p>
+      </div>
+    </template>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+      integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const children = {
+        template: "#children-template",
+        props: {
+          "inside-title": {
+            // 型別限制
+            type: String,
+            // 未傳值時的默認值
+            // default: undefined, 在沒有硬性要求下, 建議使用 undefined 來作判斷
+            // default: "Children Title",
+            // 通常函式的 default 是用來回傳 array object 時才使用
+            default: function () {
+              return "Children Title";
+            },
+            /**
+             * 限制參數的值, 判斷 value 的值後再決定回傳 true false 讓 vue 給過或是
+             * 報錯, 這邊需要注意, validator 除了判斷 v-bind 的值以外, 也會對
+             * default 進行判斷, 補充 default validator 無法讀取 data computed
+             * ... 等等, 這部分的在生命週期中非常靠前, 所以讀不到其他屬性
+             */
+            validator: function (value) {
+              console.log(value);
+              return ["Vm Title", "Children Title"].indexOf(value) !== -1
+                ? true
+                : false;
+            },
+            // 限制必需要傳值進來.
+            required: true,
+          },
+        },
+        // 是否要讓 template 的根元素繼承佔位符的原生屬性, 佔位符的 class style 不受影響
+        // inheritAttrs: false,
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          title: "Vm Title",
+        },
+        components: { children },
+      });
+    </script>
+  </body>
+</html>

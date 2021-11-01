@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 推薦使用這個 vue-router 內建的 class 切換 router-link 的樣式 */
+      .router-link-exact-active {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <router-link to="Index">Index</router-link>
+      <router-link to="About">About</router-link>
+      <router-link to="News">News</router-link>
+      <router-link to="Motion">Motion</router-link>
+      <router-link to="Music">Music</router-link>
+      <router-link to="Video">Video</router-link>
+
+      <hr />
+
+      <button @click="clickHandler">Index</button>
+
+      <hr />
+
+      <p>
+        Target: <input type="number" v-model="target" />
+        <button @click="goHandler">Go</button>
+      </p>
+
+      <hr />
+
+      <router-view></router-view>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /**
+   * router methods 介紹.
+   *
+   * push(object) 前往指定路由, 可以保留歷史紀錄
+   * object.path 路由的 path.
+   * object.query 可以傳的參數.
+   * 補充, params 只能使用在 path 字串拼接.
+   *
+   * go(number) 依照 number 前往歷史紀錄的某一頁.
+   * number 所需要的數字, 是依照當前索引去判斷.
+   * 假設歷史紀錄為: index -> about -> news, 當前在 about, 則 number = -1, 就會前
+   * 往 index, 若當前在 news, number = -2, 就會前往 index
+   * 補充, number = 0, 代表重新整理
+   */
+
+  const Index = {
+    template: "<h1>Index</h1>",
+  };
+
+  const About = {
+    template: "<h1>About</h1>",
+  };
+
+  const News = {
+    template: "<h1>News</h1>",
+  };
+
+  const Motion = {
+    template: "<h1>Motion</h1>",
+  };
+
+  const Music = {
+    template: "<h1>Music</h1>",
+  };
+
+  const Video = {
+    template: "<h1>Video</h1>",
+  };
+
+  const router = new VueRouter({
+    routes: [
+      {
+        path: "/index",
+        name: "Index",
+        components: {
+          default: Index,
+        },
+      },
+      {
+        path: "/about",
+        name: "About",
+        components: {
+          default: About,
+        },
+      },
+      {
+        path: "/News",
+        name: "News",
+        components: {
+          default: News,
+        },
+      },
+      {
+        path: "/motion",
+        name: "Motion",
+        components: {
+          default: Motion,
+        },
+      },
+      {
+        path: "/music",
+        name: "Music",
+        components: {
+          default: Music,
+        },
+      },
+      {
+        path: "/video",
+        name: "Video",
+        components: {
+          default: Video,
+        },
+      },
+    ],
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      target: 0,
+    },
+    computed: {},
+    methods: {
+      clickHandler() {
+        this.$router.push({
+          path: "/index",
+          query: { test: true },
+        });
+      },
+
+      goHandler() {
+        this.$router.go(this.target);
+      },
+    },
+    router,
+  });
+</script>

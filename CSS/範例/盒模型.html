@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>盒模型</title>
+  <style>
+    html, body, div, ul, li, h1, h2, h3 {
+      margin: 0;
+      padding: 0;
+    }
+
+    .borderBox {
+      font: 16px "Microsoft YaHei";
+      box-sizing: border-box;
+    }
+
+    .news {
+      margin: 50px auto 0;
+      width: 340px;
+      border: 1px solid #ccc;
+      border-top: 3px solid #ff8400;
+    }
+
+    .newsTitle {
+      padding-left: 12px;
+      height: 35px;
+      line-height: 35px;
+      border-bottom: 1px solid #d9e0ee;
+    }
+
+    .newsItem {
+      padding-left: 24px;
+    }
+
+    .newsItem li {
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="news borderBox">
+    <div class="newsTitle">焦點</div>
+    <ul class="newsItem">
+      <li>45箱香蕉捐監獄 驚見「5億」</li>
+      <li>驚！「潭美」升級 變強颱了</li>
+      <li>小英「最佳貢獻」鄉民7字神解</li>
+      <li>小小的里「1人代表數萬人」</li>
+      <li>六都空屋率 最低竟是這一區</li>
+    </ul>
+  </div>
+</body>
+</html>

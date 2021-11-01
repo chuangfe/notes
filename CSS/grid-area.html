@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .grid-container​ {
+        width: 500px;
+        height: 500px;
+        background-color: #ccc;
+
+        /* 將 box 設定為 grid 類型 */
+        display: grid;
+
+        /* 使用座標方式 */
+        /* grid-template-columns: [X1] 100px [X2] 100px [X3] 100px [X4] 100px [X5] 100px [X6];
+        grid-template-rows: [Y1] 100px [Y2] 100px [Y3] 100px [Y4] 100px [Y5] 100px [Y6]; */
+
+        /* 使用特別單位, 與函式 */
+        /* fr 代表比例, 代表將 x 軸分為 5 等份 */
+        /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+        /* 效果與上相同, repeat(重複次數, 單位) */
+        grid-template-columns: repeat(5, 1fr);
+        /* 代表第一行的高度為 (10 / 6 * 2) / 10 * height */
+        /* 6 = 2fr + 1fr  + 1fr  + 1fr  + 1fr */
+        grid-template-rows: 2fr repeat(4, 1fr);
+
+        /* 將一定範圍的格子合併, 並取名字 */
+        grid-template-areas:
+          "header header header header header"
+          "nav main main main main"
+          "nav main main main main"
+          "nav main main main main"
+          ". footer footer footer .";
+
+        /* 格子中間的間距, 不包含最外面邊框, 
+        若有使用 areas 分類, 則為分類區塊中間的間距 */
+        /* column-gap: 10px;
+        row-gap: 10px; */
+      }
+
+      .header {
+        background-color: blue;
+        grid-area: header;
+      }
+
+      .nav {
+        background-color: yellow;
+        grid-area: nav;
+      }
+
+      .main {
+        background-color: green;
+        grid-area: main;
+      }
+
+      .footer {
+        background-color: red;
+        grid-area: footer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container​">
+      <div class="header">header</div>
+      <div class="main">main</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+    </div>
+  </body>
+</html>

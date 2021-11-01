@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <p>
+        {{$store.state.count}}
+        <input type="button" value="按鈕" @click="clickHandler" />
+      </p>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * 在 vuex 中, 只能使用 mutations 的方法修改 state 的資料, 使用方式, 相當於
+   *  vm methods component methods 的 event.
+   *
+   * mutations 的函式, 必需要是同步.
+   *
+   * mapMutations 定義的位置是在 vm component methods 的物件裡.
+   */
+
+  // 官網推薦, 將 mutations or action 的值, 預先設計變數, 避免打錯字.
+  const INCREMENT_COUNT = "INCREMENT_COUNT";
+
+  const store = new Vuex.Store({
+    // 資料, 狀態
+    state: {
+      count: 0,
+    },
+    mutations: {
+      // state 形參是 mutations 自帶, 固定會有, 可以不用寫 this.
+      /**
+       * payload 盡量只傳遞 state 需要的資料, 官網推薦 playLoad 是物件型別, 因為物
+       * 件可以保存較多的資料.
+       */
+      // INCREMENT_COUNT(state, payload) {
+      //   state.count++;
+      //   console.log(payload);
+      // },
+
+      // ES6 宣告方式, 配合預先設計的變數, 避免打錯字.
+      [INCREMENT_COUNT](state, payload) {
+        state.count++;
+        console.log(payload);
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    computed: {},
+    methods: {
+      clickHandler() {
+        // mutations 使用方式, 事件方式.
+        this.$store.commit(INCREMENT_COUNT, { id: 1, name: "Ian" });
+        // mutations 使用方式, 物件方式, type 是必要的屬性.
+        this.$store.commit({
+          type: INCREMENT_COUNT,
+          id: 1,
+          name: "Ian",
+        });
+      },
+    },
+    store,
+  });
+</script>

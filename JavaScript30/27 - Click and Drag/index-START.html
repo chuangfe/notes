@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="items">
+      <div class="item item1">01</div>
+      <div class="item item2">02</div>
+      <div class="item item3">03</div>
+      <div class="item item4">04</div>
+      <div class="item item5">05</div>
+      <div class="item item6">06</div>
+      <div class="item item7">07</div>
+      <div class="item item8">08</div>
+      <div class="item item9">09</div>
+      <div class="item item10">10</div>
+      <div class="item item11">11</div>
+      <div class="item item12">12</div>
+      <div class="item item13">13</div>
+      <div class="item item14">14</div>
+      <div class="item item15">15</div>
+      <div class="item item16">16</div>
+      <div class="item item17">17</div>
+      <div class="item item18">18</div>
+      <div class="item item19">19</div>
+      <div class="item item20">20</div>
+      <div class="item item21">21</div>
+      <div class="item item22">22</div>
+      <div class="item item23">23</div>
+      <div class="item item24">24</div>
+      <div class="item item25">25</div>
+    </div>
+
+    <script>
+      // mouseover mouseout   // 滑鼠進入 滑鼠離開 -> 會觸發冒泡
+      // mouseenter mouseleave  // 滑鼠進入 滑鼠離開 -> 不會觸發冒泡
+
+      // 補充，移動裝置拖曳使用
+      // touchstart
+      // touchmove  手指拖動時觸發
+      // touchend
+
+      // 補充，移動裝置手勢事件
+      // swipe  手指完成一件事情時觸發
+
+      let items = document.querySelector(".items");
+      let startX, endX, distance;
+
+      // Handler 處理器
+      function moveHandler(e) {
+        // 防止非按下時執行事件
+        if (!items.classList.contains("active")) return false;
+        // 滑鼠最後移動的 X 座標
+        endX = e.clientX;
+
+        // distance 距離
+        distance = startX - endX;
+
+        // 重新獲取起始 X 座標
+        startX = endX;
+
+        // 在 DOM 上控制卷軸
+        // scrollLeft 卷軸左右移動
+        // scrollTop 卷軸上下移動
+        items.scrollLeft += distance * 1.5;
+      }
+
+      items.addEventListener("mousedown", e => {
+        // 在箭頭函式中 this => window
+        items.classList.add("active");
+
+        // e.clientX -> 螢幕可視區內的 X 座標
+        // e.layerX ->
+        // e.movementX ->
+        // e.offsetX -> 元素內的 X 座標
+        // e.pageX -> 網頁內的 X 座標
+        // e.screenX -> 螢幕內的 X 座標
+        startX = e.clientX;
+
+        // 另一種防止非按下時執行事件
+        // items.addEventListener('mousemove', moveHandler);
+      });
+
+      items.addEventListener("mouseup", function() {
+        this.classList.remove("active");
+
+        // 另一種防止非按下時執行事件
+        // items.removeEventListener('mousemove', moveHandler);
+      });
+
+      // 避免拖曳時超出瀏覽器，而導致動畫失效，所以 mousemove 事件給 window
+      window.addEventListener("mousemove", moveHandler);
+    </script>
+  </body>
+</html>

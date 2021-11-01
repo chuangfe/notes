@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>文字樣式</title>
+    <style>
+      p {
+        background-color: #eee;
+      }
+
+      #p1 {
+        /* 文字寬度大小 */
+        font-size: 24px;
+
+        /* 文字粗細 */
+        /* 700 較常用 */
+        font-weight: 700;
+
+        /* 文字字型，盡量使用英文 */
+        /* Microsoft YaHei = 微軟雅黑 */
+        font-family: "Microsoft YaHei";
+
+        /* 文字風格 */
+        /* italic = 斜體 */
+        font-style: italic;
+
+        /* 文字縮排 */
+        /* 通常中文設置 2em 代表首行文字縮排 2個字的寬度 */
+        /* 1em = 當前元素的文字寬度 */
+        text-indent: 2em;
+
+        /* 行高 */
+        /* 通常設置為 1.5em 或 2em 代表文字寬度的倍數 */
+        line-height: 1.5em;
+      }
+
+      #p2 {
+        /* 文字樣式簡寫 */
+        /* font: 文字風格 文字粗細 文字大小/行高 文字字型 */
+        /* 必需有 文字大小 文字字型 */
+        font: italic 700 24px/40px "Microsoft YaHei";
+
+        /* 當前元素內部的行內元素的水平對齊方式，文字屬於行內元素 */
+        /* 補充：塊級元素水平對齊居中使用 magrin: 0 auto; */
+        text-align: center;
+
+        /* 行高 */
+        /* 通常設置為 1.5em 或 2em 代表文字寬度的倍數 */
+        line-height: 1em;
+      }
+
+      a {
+        /* 刪除 a 標籤的預設底線 */
+        text-decoration: none;
+      }
+
+      /* 
+      * 字體 英文 Unicode編碼 中文
+
+      * SimSun  \5B8B\4F53  宋體
+
+      * NSimSun \65B0\5B8B\4F53 新宋體
+
+      * SimHei  \9ED1\4F53  黑體
+
+      * Microsoft YaHei \5FAE\8F6F\96C5\9ED1  微軟雅黑
+
+      * 控制台輸入 escape("宋體") => %u5B8B%u9AD4 => 可以用這個查
+     */
+    </style>
+  </head>
+  <body>
+    <p id="p1">文字樣式</p>
+    <p id="p2">文字樣式</p>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>global-filter</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>{{ date }}</h3>
+      <h3>{{ date | dateFilter('11111') }}</h3>
+    </div>
+  </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/zh-tw.js"></script>
+<script>
+  // 用於處理字串的格式, 已於 vue 3 刪除, 可以使用 computed or methods 取代
+
+  // 自定全局過濾器，請參考 vue-learn 品牌列表管理
+  // Vue 提供過濾器，但是只能用在 {{}} 和 v-bind 中使用
+  // 定義過濾器 Vue.filter('過濾器名稱', 回調函式)
+  /**
+   * 使用方式 {{name | nameFilter(arg) | 可以多次調用}} 代表會將 name 傳給
+   * nameFilter 函式，並使用 nameFilter 的返回值
+   */
+  Vue.filter("dateFilter", (date, arg) => {
+    console.log(arg);
+    // 可以再接收參數 -> arg -> {{nameFilter(arg)}}
+    return moment(date).format("YYYY-MM-DD, HH:mm:ss , dddd a");
+  });
+
+  let vm = new Vue({
+    el: "#app",
+    data: {
+      date: new Date(),
+    },
+  });
+</script>

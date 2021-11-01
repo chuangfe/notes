@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mixin</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <button @click="clickHandler">Logo</button>
+      </div>
+      <hr />
+      <basic></basic>
+    </div>
+  </body>
+</html>
+
+<template id="basic-template">
+  <div>
+    <input type="text" @input="inputHandler" />
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script>
+  // 全局 mixin 註冊, 因為是所有組件都可以使用, 需要特別注意覆蓋的情況
+  Vue.mixin({
+    methods: {
+      logHandlerGlobalMixin() {
+        console.log("Log Global Mixin");
+      },
+    },
+  });
+
+  /**
+   * 局部 mixin 註冊
+   * mixin 物件, 用於整合共用函式方法, 可以讓複數的組件載入 mixin 物件後, 使用相同的
+   * 函式方法, 當不需要使用時, 刪除 mixin 的方法內的程式即可, 如此做到整合管理.
+   * 需要特別注意, 當載入複數的 mixin 時, 且複數 mixin 都有相同的 methods, 組件只會
+   * 使用到載入時索引靠後的 mixin methods.
+   * 如果組件和複數 mixin 都有相同的 methods, 組件只會使用到自己的 methods, data
+   * computed 等其他屬性在該情況也相同.
+   * 複數 mixin 都有生命週期時, 會依照組件載入的 mixin 順序執行生命週期, 之後才是組
+   * 件的生命週期.
+   */
+  const logMixin = {
+    methods: {
+      logHandlerMixin(value) {
+        // 不需要 debug  時, 將該函式內的程式註釋或刪除即可
+        console.log(value);
+      },
+    },
+  };
+
+  // 局部組件
+  const basic = {
+    template: "#basic-template",
+    mixins: [logMixin],
+    methods: {
+      inputHandler() {
+        this.logHandlerMixin("input end");
+      },
+    },
+  };
+
+  const vm = new Vue({
+    el: "#app",
+    mixins: [logMixin],
+    methods: {
+      clickHandler() {
+        // click event 事件函式需要執行的程式 ...
+        // debug 時可能會在程式的結尾加上 log, 故使用 mixin 將 log 整合
+        this.logHandlerMixin("click end");
+        this.logHandlerGlobalMixin();
+      },
+    },
+    components: { basic },
+  });
+</script>

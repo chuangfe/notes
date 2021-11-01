@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      h1 {
+        text-align: center;
+      }
+
+      .slider {
+        position: relative;
+        display: block;
+        box-sizing: border-box;
+        user-select: none;
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      .slider button {
+        font-size: 0;
+        line-height: 0;
+        display: block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        background-color: transparent;
+      }
+
+      .slider_list {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 0;
+        padding-top: 50%;
+        box-sizing: border-box;
+      }
+
+      .slider_list > img {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+      }
+
+      .slider_prev,
+      .slider_next {
+        position: absolute;
+        bottom: 0;
+        background-color: white;
+      }
+
+      .slider_prev {
+        left: 0;
+      }
+
+      .slider_next {
+        right: 0;
+      }
+
+      .slider_prev:before {
+        content: "◂";
+      }
+
+      .slider_next:before {
+        content: "▸";
+      }
+
+      .slider_prev:before,
+      .slider_next:before {
+        font-size: 20px;
+        line-height: 1;
+        color: black;
+        opacity: 0.25;
+      }
+
+      .slider_prev:hover:before,
+      .slider_next:hover:before {
+        opacity: 1;
+      }
+
+      .slider_dots {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        font-size: 0;
+        text-align: center;
+      }
+
+      .slider_dots > li {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin: 0 5px;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .slider_dots > li > button:before {
+        font-size: 20px;
+        line-height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        content: "•";
+        text-align: center;
+        opacity: 0.25;
+        color: black;
+      }
+
+      .slider_dots > li > button:hover:before,
+      .slider_dots > li.active > button:before {
+        opacity: 1;
+      }
+
+      /* 改用 Vue 提供的動畫方式 */
+      /* fade 是 tag 的 name 屬性 */
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: opacity 0.5s;
+      }
+
+      /* .fade-enter 代表開始的動畫 */
+      /* .fade-leave-to 代表結束的動畫 */
+      .fade-enter,
+      .fade-leave-to {
+        opacity: 0;
+      }
+
+      /* 滑動 */
+      .slider_list .slide-enter-active,
+      .slider_list .slide-leave-active {
+        transition: left 0.5s;
+      }
+      .slider_list .slide-enter {
+        left: 100%;
+      }
+      .slider_list .slide-leave-to {
+        left: -100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>JQ Slider by Alice Chen</h1>
+    <div class="slider" id="app">
+      <!-- <img
+          v-for="(value, key) in srcs"
+          v-bind:src="value"
+          v-bind:class="{active: key === active}"
+        /> -->
+      <transition-group tag="div" name="fade" class="slider_list">
+        <img
+          v-for="(value, key) in srcs"
+          v-bind:src="value"
+          v-bind:key="value"
+          v-show="key === active"
+        />
+      </transition-group>
+      <button class="slider_prev" v-on:click="prev">prev</button>
+      <button class="slider_next" v-on:click="next">next</button>
+      <ul class="slider_dots">
+        <li
+          v-for="(value, key) in srcs"
+          v-bind:class="{active: key === active}"
+        >
+          <button v-on:click="active = key">{{ key }}</button>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script>
+  // 輪播圖
+  (function(Vue) {
+    let vm = new Vue({
+      el: "#app",
+      data: {
+        active: 0,
+        srcs: [
+          "https://picsum.photos/400/200?image=0",
+          "https://picsum.photos/400/200?image=1",
+          "https://picsum.photos/400/200?image=2",
+          "https://picsum.photos/400/200?image=3",
+          "https://picsum.photos/400/200?image=4"
+        ]
+      },
+      methods: {
+        prev: function() {
+          this.active = this.active - 1;
+          if (this.active < 0) this.active = this.srcs.length - 1;
+        },
+        next: function() {
+          this.active = this.active + 1;
+          if (this.active > this.srcs.length - 1) this.active = 0;
+        },
+        change: function(index) {
+          // 高手寫法，合格範圍 0 ~ 4
+          // (-1 + 5) % 5 = 4 / 5 = 0 ... 4
+          // (0 + 5) % 5 = 5 / 5 = 1 ... 0
+          // (1 + 5) % 5 = 6 / 5 = 1 ... 1
+          // (2 + 5) % 5 = 7 / 5 = 1 ... 2
+          // (3 + 5) % 5 = 8 / 5 = 1 ... 3
+          // (4 + 5) % 5 = 9 / 5 = 1 ... 4
+          // (5 + 5) % 5 = 10 / 5 = 2 ... 0
+          this.active = (index + this.srcs.length) % this.srcs.length;
+        }
+      }
+    });
+
+    // Vue 動畫使用說明，需要配合樣式、標籤、標籤屬性
+
+    // 淡入淡出
+    // .fade-enter-active, .fade-leave-active {transition: opacity 0.5s;}
+    // .fade-enter, .fade-leave-to {opacity: 0;}
+
+    // transition 用於單個元素執行動畫時
+    // transition-group 用於多個元素都要執行相同動畫時
+    // tag="div" 代表 transition-group 轉為 div
+    // name="fade" 配合樣式名稱
+    // 需要配合 v-show 指令
+    // <transition-group tag="div" name="fade" class="slider_list">
+    //   <img v-for="(value, key) in srcs" v-bind:src="value" v-bind:key="value" v-show="key === active"/>
+    // </transition-group>
+
+    // 滑動
+  })(Vue);
+</script>

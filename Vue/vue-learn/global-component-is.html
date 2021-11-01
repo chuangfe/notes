@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>global-component-is</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 另一種寫法 -->
+      <!-- 所有組件都可以用這種寫法 -->
+
+      <input type="button" value="Login" @click="flag = 'login'" />
+      <input type="button" value="Register" @click="flag = 'register'" />
+
+      <component v-bind:is="flag"></component>
+
+      <hr />
+
+      <!-- 適合多個切換 -->
+
+      <input type="button" value="Login" @click="flag2 = true" />
+      <input type="button" value="Register" @click="flag2 = false" />
+      <input type="button" value="Error" @click="flag2 = 'E'" />
+
+      <login v-if="flag2 === true"></login>
+      <register v-else-if="flag2 === false"></register>
+      <error v-else-if="flag2 === 'E'"></error>
+
+      <!-- 另一種寫法 -->
+      <!-- 所有組件都可以用這種寫法 -->
+      <!-- 需要 v-bind:is 並且要注意屬性值是組件名稱，字串類型 -->
+      <component v-bind:is="'login'" v-if="flag2 === true"></component>
+      <component v-bind:is="'register'" v-else-if="flag2 === false"></component>
+      <component v-bind:is="'error'" v-else-if="flag2 === 'E'"></component>
+
+      <hr />
+    </div>
+
+    <template id="template">
+      <div>
+        <h3>{{ title }}</h3>
+      </div>
+    </template>
+
+    <template id="vm-template">
+      <div>
+        <h3>{{ title }}</h3>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // 全局組件註冊
+      // vm 的屬性，組件都有，可以將組件看成小型的 vm 實體
+      Vue.component("global-component", {
+        template: "#template",
+
+        props: ["title"],
+
+        // 組件的 data 必需是 function 並且 return object
+        data: function() {
+          return {};
+        },
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          massage: "Global Component",
+
+          flag: "login",
+
+          flag2: true,
+        },
+        components: {
+          "vm-component": {
+            template: "#vm-template",
+            props: ["title"],
+          },
+
+          login: { template: "<h3>Login Component</h3>" },
+          register: { template: "<h3>Register Component</h3>" },
+          error: { template: "<h3>Error Component</h3>" },
+        },
+      });
+    </script>
+  </body>
+</html>

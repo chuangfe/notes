@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      a {
+        color: #000;
+      }
+
+      /* 推薦使用這個 vue-router 內建的 class 切換 router-link 的樣式 */
+      .router-link-exact-active {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>Id: <input type="number" v-model="id" /></p>
+      <p>Name: <input type="text" v-model="name" /></p>
+      <p>
+        <button @click="clickHandler">按鈕</button>
+      </p>
+      <hr />
+      <p>
+        <!-- router 實體配合切換 hash 的特殊標籤, 且有內建的 class 切換 -->
+        <!-- router-link 可以使用 tag 屬性, 指定轉換成什麼標籤 -->
+        <!-- router-link 如果在路由中切換成相同的路由, 可以避免錯誤, 若使用 
+          $router.push 會報錯誤, 可以參考 vue-router 官網 Navigation Failures -->
+        <!-- replace 不會保留歷史紀錄 -->
+        <router-link to="/page1" replace>Page1</router-link>
+        <router-link :to="getPage2Path">Page2</router-link>
+        <router-link tag="span" :to="getPage2ProfilePath">Page2</router-link>
+        <button @click="toPathPage2">Page2</button>
+      </p>
+      <hr />
+      <!-- router 實體所需要的佔位符, 依據 hash 切換 component 顯示 -->
+      <router-view></router-view>
+    </div>
+  </body>
+</html>
+
+<template id="page2">
+  <div>
+    <h3>Page 2</h3>
+    <p>Id: {{$route.params.id}}</p>
+    <p>Name {{$route.params.name}}</p>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  // vue-router 基本使用
+
+  const Page1 = {
+    template: "<h3>Page 1</h3>",
+  };
+
+  const Page2 = {
+    template: "#page2",
+    /**
+     * path 無論如何改變, 在沒有切換 component 的情況下, component 的生命週期只會
+     * 在第一次繪製畫面時執行, 若要多次執行, 建議指用 watch 監視 $route, 或是使用
+     * vue-router 專屬生命週期 beforeRouteUpdate
+     */
+    mounted() {
+      setTimeout(() => {
+        console.log("Mounted setTimeout, Id:" + this.$route.params.id);
+      }, 1000);
+    },
+    // 使用 watch 監視 $route, 只有在 component 相同, path 參數改變時觸發
+    watch: {
+      // to 在 Page2 component, 新的 $route 物件
+      // from 在 Page2 component, 之前的 $route 物件
+      $route(to, from) {
+        setTimeout(() => {
+          console.log("Watch $route, Id:" + this.$route.params.id);
+        }, 1000);
+      },
+    },
+    // 暫時無測試
+    // beforeRouteUpdate(to, from, next) {
+    //   console.log(to, from, next);
+    // },
+  };
+
+  const ErrorComponent = {
+    template: "<h3>404</h3>",
+  };
+
+  // router 實體, 管理 hashchange 時切換畫面
+  const router = new VueRouter({
+    // hash, 網址的變更使用 hash 方式
+    // history, 網址的變更使用 history 方式, 就是正常的網址 live server 無法使用, CLI 可以使用
+    model: "hash",
+    // path 導向順序, 由索引數小到到, 故 path 條件越簡單請放前面
+    routes: [
+      {
+        // 網址(hash)應對畫面(component)
+        path: "/page1",
+        // 在 vue-cli 的情況下, 值可以是引入的 .vue 檔
+        component: Page1,
+      },
+      {
+        // path 參數寫法如下, 相當於變數宣告, 在 template 中使用名稱需相同
+        /**
+         * :id :name 代表 hash 可傳參數, 例如: /page2/99/Ian
+         * (profile/)? 代表 (profile/) 可選, 即是可有可無
+         * (\\d+) 代表必需是數字
+         */
+        path: "/page2/(profile/)?:id(\\d+)/:name",
+        component: Page2,
+      },
+      {
+        /**
+         * path * 號代表任何頁面, 通常用於讓前面的 path 都不符合的網址時使用, 可以用
+         * 在默認頁面, 也可以用在 error 頁面.
+         * redirect 的值可以是 path 字串, 跳轉至指定頁面 path 頁面
+         * component 物件, 可以保留網址在歷史紀錄中, 在 debug 時可能會使用
+         */
+        path: "*",
+        // 跳轉至指定頁面, 不會保留歷史紀錄, 相當於 $router.replace() 方法
+        // redirect: "/page1",
+        // 跳轉至指定 component, 保留歷史紀錄
+        // component: Page1,
+        // 跳轉至指定 component, 保留歷史紀錄, debug 時使用
+        component: ErrorComponent,
+      },
+    ],
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      id: 99,
+      name: "Ian",
+    },
+    computed: {
+      getPage2Path() {
+        return "/page2/" + this.id + "/" + this.name;
+      },
+      getPage2ProfilePath() {
+        return "/page2/profile/" + this.id + "/" + this.name;
+      },
+    },
+    methods: {
+      clickHandler() {
+        // vm 實體註冊的 router 實體, 可以控制 hash 頁面的切換
+        console.log(this.$router);
+        // route 讀取資料使用, 當前 hash 頁面的相關資料
+        console.log(this.$route);
+      },
+      toPathPage2() {
+        this.$router
+          .push({
+            path: "/page2/" + this.id + "/" + this.name,
+          })
+          .catch((err) => {
+            // 有錯誤
+            console.log(err);
+            /**
+             * VueRouter 提供判斷錯誤的方法, 可以確認錯誤是否由框架發生的.
+             * VueRouter.isNavigationFailure(err, errType)
+             *
+             * err, 傳入 push.catch 的參數, 發生的錯誤.
+             *
+             * errType, 傳入 VueRouter.NavigationFailureType.redirected 判斷錯誤
+             * 是否來自 router 框架.
+             *
+             * 這部分需要更詳細的補充.
+             */
+            console.log(
+              VueRouter.isNavigationFailure(
+                err,
+                VueRouter.NavigationFailureType.redirected
+              )
+            );
+          });
+      },
+      logRouteError() {
+        console.log("發生跳轉頁面的錯誤");
+      },
+    },
+    // 註冊 router 的實體
+    router,
+  });
+</script>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="ul">
+      <li class="li">li1</li>
+      <li class="li">li2</li>
+      <li class="li">li3</li>
+      <li class="li">li4</li>
+      <li class="li">li5</li>
+      <li class="li">li6</li>
+    </ul>
+  </body>
+</html>
+<script>
+  // DOM 在 JS 中，查找使用的屬性
+
+  let ul = document.querySelector("#ul");
+  let lis = ul.querySelectorAll(".li");
+
+  // 以下方法大部分都有另一套專門獲取節點的屬性，但是節點需要額外判斷，故不補充內容
+
+  // children 子元素集合
+  console.log("children", ul.children[0] === lis[0]);
+
+  // firstElementChild 第一個子元素
+  console.log("firstElementChild", ul.firstElementChild === lis[0]);
+
+  // lastElementChild 最後一個子元素
+  console.log("lastElementChild", ul.lastElementChild === lis[5]);
+
+  // parentElement 父元素
+  console.log("parentElement", lis[0].parentElement === ul);
+
+  // previousElementSibling 同層級上一個元素
+  console.log(
+    "previousElementSibling",
+    lis[1].previousElementSibling === lis[0]
+  );
+
+  // nextElementSibling 同層級下一個元素
+  console.log("previousElementSibling", lis[0].nextElementSibling === lis[1]);
+</script>

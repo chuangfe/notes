@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>transition</title>
+    <style>
+      html,
+      body,
+      ul,
+      li {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        padding: 20px;
+      }
+
+      li {
+        list-style: none;
+        margin: 20px 0;
+        padding-left: 10px;
+        border: 1px dashed #999;
+        font-size: 1.5em;
+        line-height: 1.5em;
+        width: 100%;
+
+        cursor: pointer;
+      }
+
+      li:hover {
+        background-color: #eee;
+      }
+
+      .li-enter,
+      .li-leave-to {
+        opacity: 0;
+        transform: translateY(80px);
+      }
+
+      .li-enter-active,
+      .li-leave-active {
+        transition: all 0.6s ease-in;
+      }
+
+      /* list 刪除時，下方的 list 補位動畫 */
+      /* 特殊案例，照抄就好 */
+      .li-move {
+        transition: all 0.6s ease-in;
+      }
+      .li-leave-active {
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <form v-on:submit.prevent="create">
+          <input type="text" placeholder="Name" v-model.trim="name" />
+          <input type="submit" value="Create" />
+        </form>
+      </div>
+
+      <!-- 多元素，或是 v-for 元素綁定動畫，需要使用 -->
+      <!-- 需要使用 transition-group tag -->
+      <!-- 並且需要綁定 v-bind:key 屬性 -->
+
+      <!-- transition-group appear 屬性，可以開場時執行入場動畫 -->
+      <!-- 元素隱藏，執行離開(leave)動畫 -->
+      <!-- 元素顯示，執行輸入(enter)動畫 -->
+
+      <!-- transition-group tag 屬性，可以指定繪製到頁面時，指定的標籤 -->
+      <!-- 若不指定標籤，默認是 span 標籤 -->
+
+      <transition-group name="li" appear tag="ul">
+        <li
+          v-for="(value, key) in list"
+          v-bind:key="value.id"
+          v-on:click="remove(value.id)"
+        >
+          {{ value.id }} ----- {{ value.name }}
+        </li>
+      </transition-group>
+    </div>
+  </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script>
+  let vm = new Vue({
+    el: "#app",
+
+    data: {
+      name: "",
+
+      list: [
+        { id: 1, name: "Vue JS" },
+        { id: 2, name: "Bootstrap CSS" },
+        { id: 3, name: "English" },
+        { id: 4, name: "ECMAScript 6" },
+        { id: 5, name: "CSS 3" },
+      ],
+    },
+
+    methods: {
+      create: function () {
+        if (!this.name) return false;
+
+        let id = this.list.length ? this.list[this.list.length - 1].id + 1 : 1;
+
+        this.list.push({ id: id, name: this.name });
+
+        this.name = "";
+      },
+      remove: function (id) {
+        let i = this.list.findIndex((item) => {
+          if (item.id === id) return true;
+        });
+
+        this.list.splice(i, 1);
+      },
+    },
+  });
+</script>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>入門-Event</title>
+  <style>
+    #container {
+      font-size: 0;
+    }
+
+    #container a {
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="container">
+    <a href="javascript:;">Button</a>
+  </div>
+
+  <script src="./jquery-3.3.1.js"></script>
+  <script>
+    (function () {
+      // .hover() -> 依靠 JS 原生事件 mouseenter mouseleave -> 不會觸發事件冒泡
+
+      // .on() .off() -> 用於綁定事件
+      // $('a').on('click', function () {
+      //   console.log(this.innerText);
+      // });
+
+      // 假設網頁上線後 DOM 會再增加，可以這樣設置事件
+      let $container = $('#container');
+      $container.on('click', 'a', function () {
+        $container.append('<a href="javascript:;">Button</a>');
+      });
+
+    })();
+  </script>
+</body>
+
+</html>

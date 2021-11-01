@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>global-component</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>Vm Massage - {{ massage }}</h3>
+      <vm-component v-bind:title="'Vm Component'"></vm-component>
+
+      <hr />
+
+      <global-component v-bind:title="massage"></global-component>
+      <global-component v-bind:title="massage"></global-component>
+      <global-component v-bind:title="massage"></global-component>
+
+      <hr />
+
+      <!-- 適合單個或兩個的切換 -->
+
+      <input type="button" value="Login" @click="flag = true" />
+      <input type="button" value="Register" @click="flag = false" />
+
+      <login v-if="flag === true"></login>
+      <register v-else="flag === false"></register>
+    </div>
+
+    <template id="template">
+      <div>
+        <h3>{{ title }}</h3>
+      </div>
+    </template>
+
+    <template id="vm-template">
+      <div>
+        <h3>{{ title }}</h3>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // 全局組件註冊
+      // vm 的屬性，組件都有，可以將組件看成小型的 vm 實體
+      Vue.component("global-component", {
+        template: "#template",
+
+        // 父組件傳遞資料給子組件，是使用屬性綁定的方式傳遞，使用 v-bind 指令
+        // 1. 子組件需要 props 陣列，陣列內容可以看作是變數集合
+        // props: ["title"],
+        // 2. 在使用子組件時，使用 v-bind 指令，綁定 props 變數的屬性值
+        // <global-component v-bind:title="massage"></global-component>
+        // 3. 該屬性值只讀
+        props: ["title"],
+
+        // 組件的 data 必需是 function 並且 return object
+        // 該屬性值可讀可寫
+        data: function () {
+          return {};
+        },
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          massage: "Global Component",
+          flag: true,
+        },
+        components: {
+          "vm-component": {
+            template: "#vm-template",
+            props: ["title"],
+          },
+
+          login: { template: "<h3>Login Component</h3>" },
+          register: { template: "<h3>Register Component</h3>" },
+          error: { template: "<h3>Error Component</h3>" },
+        },
+      });
+    </script>
+  </body>
+</html>

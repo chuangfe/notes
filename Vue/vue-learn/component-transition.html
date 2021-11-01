@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>component-transition</title>
+    <style>
+      .template {
+        border: 1px solid #ccc;
+        position: absolute;
+        margin-top: 10px;
+        padding: 10px;
+      }
+    </style>
+
+    <!-- 元素隱藏，執行離開(leave)動畫 -->
+    <!-- 元素顯示，執行輸入(enter)動畫 -->
+    <style>
+      .test-enter {
+        opacity: 0;
+      }
+
+      .test-enter-to {
+        opacity: 1;
+      }
+
+      .test-enter-active {
+        transition: opacity 1s;
+      }
+
+      .test-leave {
+        opacity: 1;
+      }
+
+      .test-leave-to {
+        opacity: 0;
+      }
+
+      .test-leave-active {
+        transition: opacity 1s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 多個組件動畫 -->
+      <input type="button" value="login" @click="flag = 'login'" />
+      <input type="button" value="Register" @click="flag = 'register'" />
+
+      <!-- transition mode 屬性，設置組件切換時的動畫的執行時機 -->
+      <!-- out-in 代表組件切換時，該隱藏的組件執行隱藏動畫，並且結束時，才執行顯示組件的顯示動畫 -->
+      <!-- in-out 則相反 -->
+      <transition name="test" mode="out-in">
+        <component v-bind:is="flag"></component>
+      </transition>
+    </div>
+
+    <template id="login-template">
+      <div class="template">
+        <h3>Login</h3>
+      </div>
+    </template>
+
+    <template id="register-template">
+      <div class="template">
+        <h3>Register</h3>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // 全局組件註冊
+      // vm 的屬性，組件都有，可以將組件看成小型的 vm 實體
+      Vue.component("login", {
+        template: "#login-template",
+      });
+
+      Vue.component("register", {
+        template: "#register-template",
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          flag: "login",
+        },
+      });
+    </script>
+  </body>
+</html>

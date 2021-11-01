@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      p {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{valString}}</p>
+      <p>{{count}}</p>
+      <p>{{incrementCount}}</p>
+      <p>
+        <button @click="clickHandler">按鈕 1</button>
+        <button @click="increment">按鈕 2</button>
+      </p>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * mapState 通常用於 component 快速引入 store.state 的資料, 方法和返回的值是否都
+   * 是三等號暫時不管, 框架使用熟悉後在研究.
+   *
+   * 補充, webpack or cli 需要 import { mapState } from 'vuex';
+   */
+
+  const store = new Vuex.Store({
+    // 資料, 狀態
+    state: {
+      val: "test",
+      count: 0,
+    },
+    getters: {
+      incrementCount(state) {
+        return state.count + 1;
+      },
+    },
+    mutations: {
+      increment() {
+        this.state.count++;
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    /**
+     * 補充, ... 符號是因為要拼接物件, 原理應該是將 map 返回的物件, 與當前所在的物件
+     * 拼接屬性與屬性值, 這是新的語法, 有夠醜, 但是很方便, 真香.
+     */
+    computed: {
+      // mapState 詳細介紹, 三種方式都可以使用.
+      ...Vuex.mapState({
+        valString: "val",
+        // valString: (state) => state.val,
+        // valString(state) {
+        //   return state.val;
+        // },
+      }),
+
+      // 最簡潔的寫法.
+      // 將 vuex.state.count 和 vuex.getters.incrementCount 綁定到 vm 實體
+      ...Vuex.mapState(["count"]),
+      ...Vuex.mapGetters(["incrementCount"]),
+    },
+
+    methods: {
+      clickHandler() {
+        this.$store.commit("increment");
+      },
+      // 將 vuex.mutations.increment 綁定到 vm 實體, mapActions 使用方式也一樣.
+      ...Vuex.mapMutations(["increment"]),
+    },
+    // 將 vuex 實體, 註冊在 vm 實體即可, 這樣 vm 和 vm 的 component 都可以使用.
+    store,
+  });
+</script>

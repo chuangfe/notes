@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      p {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>
+        <button @click="oddNumbersLog">奇數</button>
+        <button @click="evenNumbersLog">偶數</button>
+      </p>
+
+      <hr />
+
+      <p>Id: <input type="number" v-model.number="id" /></p>
+      <p>{{filterTodo}}</p>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * vuex getter 相當於 vm component computed
+   *
+   * 前端取資料的流程
+   * api 0(後端整理好資料格式) -> 前端 1(js) -> store 2(getter)
+   * -> component 3(computed) -> 畫面
+   *
+   * 根據資料的類型, 判斷在哪裡整理資料.
+   * 0 這部分是由後端處理, 不祈求後端處理, 故通常不會選擇在這裡處理資料.
+   * 1 前端的資料, 通常會有接收與回傳, 故如果接收資料後, 就修資料改格式, 之後需要回傳
+   * 資料時可能會有問題.
+   * 2 如果該資料是有多個 component 使用, 請在 store 修改資料格式.
+   * 3 如果該資料僅單組件使用, 在 computed 修改較合適.
+   *
+   * mapGetters 應該與 mapState 使用方式是相同的.
+   *
+   * 補充, 用戶資料驗證可以範例, 請顯示"帳號或密碼錯誤"可以避免部分暴力破解密碼.
+   * 使用者錯誤, 出現在註冊時.
+   * 密碼錯誤, 出現在登入時.
+   */
+
+  const store = new Vuex.Store({
+    state: {
+      count: 0,
+      numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      todos: [
+        { id: 1, text: "html", done: true },
+        { id: 2, text: "css", done: false },
+        { id: 3, text: "javascript", done: false },
+      ],
+    },
+    getters: {
+      oddNumbers(state) {
+        return state.numbers.filter((num) => {
+          return num % 2 !== 0;
+        });
+      },
+      evenNumbers(state) {
+        return state.numbers.filter((num) => {
+          return num % 2 === 0;
+        });
+      },
+      // 可以傳參數的 getters
+      // find 在陣列中尋找符合條件的元素, 並返回第一個被找到的元素.
+      // 比較清晰的寫法.
+      getTodosById(state) {
+        return (id) => {
+          return state.todos.find((todo) => {
+            return todo.id === id;
+          });
+        };
+      },
+      // 超級簡略的寫法.
+      getTodosByIdArrow: (state) => (id) =>
+        state.todos.find((todo) => todo.id === id),
+    },
+    mutations: {
+      increment() {
+        this.state.count++;
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      id: 1,
+    },
+    computed: {
+      filterTodo() {
+        return this.$store.getters.getTodosByIdArrow(this.id);
+      },
+      ...Vuex.mapGetters({ f1: "getTodosByIdArrow", f2: "getTodosByIdArrow" }),
+    },
+    methods: {
+      oddNumbersLog() {
+        console.log(this.$store.getters.oddNumbers);
+      },
+      evenNumbersLog() {
+        console.log(this.$store.getters.evenNumbers);
+      },
+    },
+    store,
+  });
+</script>

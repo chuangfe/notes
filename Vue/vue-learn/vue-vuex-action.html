@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <p>
+        {{$store.state.count}}
+        <input type="button" value="按鈕" @click="clickHandler" />
+      </p>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * action 專門針對異步的屬性(api 延遲 ...), 概念上接近 callback, 在需要的地方呼叫
+   * mutation 修改 state, action 不能直接修改 state.
+   *
+   * alex, 資料篩選, 資料排序, 資料邏輯處理 ... 即使是同步也可以設計在這裡.
+   */
+
+  const store = new Vuex.Store({
+    state: {
+      count: 0,
+    },
+    getters: {
+      message(state) {
+        return String(state.count);
+      },
+    },
+    mutations: {
+      SET_COUNT(state, payload) {
+        state.count = payload.count;
+      },
+    },
+    actions: {
+      // context 組合物件, 相當於重新封裝的 store,
+      // payload 可傳參數
+      INCREMENT_ACTIONS(context, payload) {
+        // console.log(context, payload);
+        // context.commit("SET_COUNT", { id: 1, name: "Alex" });
+
+        // alex 寫法, 降低 mutations 內部的資料邏輯程式.
+        /**
+         * 補充說明, actions 本身就是 Promise, 所以在 actions 的函式中使用 return 返回值, 在外側使用 async await 就能強制同步, 並獲取 return 的值, 需要注意函式內是同步的情況, 不然 return 的值可能不會是想要的結果.
+         *
+         * 在這裡自己寫 new Promise 是因為需要假的延遲時間, 在延遲時間結束的地方使用 resolve 返回值.
+         */
+        return new Promise((resolve, reject) => {
+          console.log("Actions", context, payload);
+
+          // context.commit("SET_COUNT", { count: context.state.count + 1 });
+          // resolve(context.state.count);
+
+          // 測試延遲.
+          setTimeout(() => {
+            context.commit("SET_COUNT", { count: context.state.count + 1 });
+            resolve(context.state.count);
+          }, 3000);
+
+          // 這裡可以使用 try catch 判斷, 返回 resolve 的值,
+          // try {
+          //   axios
+          //     .xxx("http://")
+          //     .then((res) => {
+          //       context.commit("SET_COUNT", { count: context.state.count + 1 });
+          //       resolve(context.state.count);
+          //     })
+          //     .catch((res) => {
+          //       // 發生錯誤的狀態碼, 可能是 404 4xx 5xx 的編號, 目前還不太理解.
+          //       // err 物件應該是預先設計好的, 依據狀態碼返回錯誤實的資料.
+          //       resolve(err[res.status]);
+          //     });
+          // } catch (e) {
+          //   // 真正的錯誤, 會導致網頁爆炸.
+          //   resolve({ err: e });
+          // }
+        });
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    computed: {},
+    methods: {
+      // 可以使用 async await 來獲取 resolve 返回的值.
+      async clickHandler() {
+        let obj = await this.$store.dispatch("INCREMENT_ACTIONS", {
+          id: 0,
+          name: "Ian",
+        });
+
+        console.log("Promise", obj); // Promise
+
+        // 可能會這樣做, 配合 actions 的 resolve 做判斷.
+        // if (obj.err) {
+        //   this.errHandler(obj.err.type);
+        // } else {
+        //   this.completeHandler(obj.data);
+        // }
+      },
+    },
+    store,
+  });
+</script>

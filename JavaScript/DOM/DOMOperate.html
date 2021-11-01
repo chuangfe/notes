@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">按鈕</button>
+    <div id="div"></div>
+
+    <hr />
+
+    <button id="btn2">按鈕</button>
+    <ul id="ul">
+      <li>li1</li>
+      <li>li2</li>
+      <li>li3</li>
+      <li>li4</li>
+      <li>li5</li>
+      <li>li6</li>
+    </ul>
+  </body>
+</html>
+<script>
+  // 使用 JS 對 Tag 操作，增、刪、改、查
+
+  // createDocumentFragment() 新增元素碎片
+  // 一般來說若要使用 JS 新增元素，我們會在 JS 中把子元素們放到父元素後，再把父元素插入到頁面中
+  // 但是如過操作時沒有父元素，則可以使用該方法來代替，可以避免子元素們輪流插入頁面
+
+  // cloneNode(true || false) 複製元素，並返回
+  // true 代表深複製，包含元素自身、元素屬性、子元素
+  // false 代表淺複製，僅包含元素自身、元素屬性
+
+  // replaceChild(新節點, 舅節點) 替換節點
+
+  // ---------------------------------------------------------------------------
+
+  let btn = document.querySelector("#btn");
+  let div = document.querySelector("#div");
+
+  // createElement() 新增元素
+  let p = document.createElement("p");
+  // textContent 設置元素(標籤)的字串內容
+  p.textContent = "這是一個 P 標籤";
+  p.id = "p";
+
+  let clickHandler = function () {
+    // removeChild() 刪除子元素，若要刪除 p (子元素) 標籤，則需要在 div (父元素) 使用該方法
+    // div.removeChild(p);
+
+    // remove() 刪除元素，較為簡單
+    p.remove();
+  };
+
+  btn.addEventListener("click", clickHandler);
+
+  // appendChild() 從最後插入元素
+  // insertBefore() 從最前插入元素
+  div.appendChild(p);
+
+  // ---------------------------------------------------------------------------
+
+  // 補充，刪除所有子元素
+
+  let btn2 = document.querySelector("#btn2");
+  let ul = document.querySelector("#ul");
+
+  // 1. 先記錄子元素長度
+  let len = ul.children.length;
+  let i = 0;
+
+  let removeHandler = function () {
+    // 2. 使用父元素，刪除最後一個子元素
+    while (i < len) {
+      i++;
+      // remove() 刪除元素
+      ul.lastElementChild.remove();
+    }
+  };
+
+  btn2.addEventListener("click", removeHandler);
+</script>

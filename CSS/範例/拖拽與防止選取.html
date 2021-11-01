@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <style>
+    #div1 {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #000;
+      user-select: none;
+    }
+  </style>
+  <body>
+    <div id="div1">1111111111111</div>
+
+    <script>
+      // 在 chrome 時，拖拽可以能會失效，因位會拖拽到元素的內容文字，無內容也有可能觸發
+      // 建議使用 user-select: none; 與 tag 屬性 draggable="false" 解決
+      (function() {
+        let div = document.querySelector("#div1");
+
+        div.addEventListener("mousedown", function() {
+          this.classList.add("active");
+        });
+
+        window.addEventListener("mouseup", function() {
+          div.classList.remove("active");
+        });
+      })();
+    </script>
+  </body>
+</html>

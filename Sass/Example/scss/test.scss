@@ -1,0 +1,62 @@
+// 變數
+$width: 100%;
+
+// 繼成
+// 將所有繼成者共用樣式
+%aBase {
+  color: #000;
+  text-decoration: none;
+}
+
+// 函式
+@function lineHeight($count: 1){
+  @return 10px * $count;
+}
+
+// 混用
+// 將所有繼成者各自設置相同的樣式
+// 用於集合變數、繼成、函式、樣式
+@mixin style() {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+}
+
+// 引入其他文件
+@import "function";
+
+div {
+  // 變數使用
+  width: $width;
+
+  // 繼成使用
+  @extend %aBase;
+
+  // 函式使用
+  line-height: lineHeight(5);
+
+  // 混用使用
+  @include style();
+
+  /* 混合使用範例 */
+  @include font(2);
+}
+
+p {
+  // 繼成使用
+  @extend %aBase;
+
+  // 混用使用
+  @include style();
+
+  /* 混合使用範例 */
+  @include font(4);
+}
+
+span {
+  // 混用使用
+  @include style();
+
+  /* 混合使用範例 */
+  @include font(1);
+}

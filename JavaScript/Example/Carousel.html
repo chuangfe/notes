@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      html,
+      body,
+      ul,
+      li,
+      img,
+      div {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul,
+      li {
+        list-style: none;
+      }
+
+      img {
+        display: block;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      #carousel {
+        width: 1000px;
+        height: 600px;
+        border: 1px solid #ccc;
+        margin: 40px auto 0;
+
+        z-index: 1;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #carousel-images-ul {
+        display: flex;
+        flex-wrap: nowrap;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        transition: left 0.4s ease-out;
+      }
+
+      #carousel-images-ul > li {
+        flex: 1;
+        width: 1000px;
+        height: 600px;
+        overflow: hidden;
+      }
+
+      #carousel-images-nav {
+        display: flex;
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+      }
+
+      #carousel-images-nav > a {
+        display: block;
+        margin: 0 40px;
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        background-color: #ccc;
+        opacity: 0.2;
+      }
+
+      #carousel-images-nav > a:hover {
+        opacity: 0.6;
+      }
+
+      #carousel-images-nav > a.active {
+        opacity: 1;
+      }
+
+      #carousel > .button {
+        display: block;
+        width: 40px;
+        height: 40px;
+        border: 10px solid #ccc;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        opacity: 0.2;
+
+        z-index: 2;
+        position: absolute;
+        top: 50%;
+        left: 0px;
+        margin-top: -25px;
+        transform: rotate(-45deg);
+      }
+
+      #carousel > .button:hover {
+        opacity: 1;
+      }
+
+      #carousel > .previous {
+        left: 20px;
+      }
+
+      #carousel > .next {
+        left: 100%;
+        transform: rotate(135deg);
+        margin-left: -80px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="carousel">
+      <ul id="carousel-images-ul">
+        <li><img src="https://picsum.photos/1000/600/?1" /></li>
+        <li><img src="https://picsum.photos/1000/600/?2" /></li>
+        <li><img src="https://picsum.photos/1000/600/?3" /></li>
+        <li><img src="https://picsum.photos/1000/600/?4" /></li>
+        <li><img src="https://picsum.photos/1000/600/?5" /></li>
+      </ul>
+      <nav id="carousel-images-nav">
+        <a href="javascript:;" class="active"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+        <a href="javascript:;"></a>
+      </nav>
+
+      <a href="javascript:;" class="button previous"></a>
+      <a href="javascript:;" class="button next"></a>
+    </div>
+    <script>
+      (function() {
+        const imagesUl = document.querySelector("#carousel-images-ul");
+        const imagesLi = imagesUl.querySelectorAll("li");
+        const imagesNav = Array.from(
+          document.querySelector("#carousel-images-nav").querySelectorAll("a")
+        );
+        const button = Array.from(
+          document.querySelector("#carousel").querySelectorAll(".button")
+        );
+
+        let indexNow = 0;
+        let indexOld = 0;
+
+        const imagesUlMove = function() {
+          imagesUl.style.left = indexNow * -1000 + "px";
+        };
+        const imagesNavToggle = function() {
+          imagesNav[indexOld].classList.remove("active");
+          imagesNav[indexNow].classList.add("active");
+        };
+
+        button.forEach(btn => {
+          btn.indexNow = btn.addEventListener("click", function() {
+            indexOld = indexNow;
+            this.classList.contains("next") ? indexNow++ : indexNow--;
+            if (indexNow < 0) indexNow = 0;
+            if (indexNow > imagesLi.length - 1) indexNow = imagesLi.length - 1;
+
+            imagesUlMove();
+            imagesNavToggle();
+          });
+        });
+
+        imagesNav.forEach(nav => {
+          nav.addEventListener("click", function() {
+            indexOld = indexNow;
+            indexNow = imagesNav.indexOf(this);
+
+            imagesUlMove();
+            imagesNavToggle();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>優先級</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      p {
+        margin: 10px;
+      }
+
+      /* ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+      #idP {
+        color: blue;
+        font-size: 80px;
+      }
+
+      .classP {
+        color: green;
+        font-size: 60px;
+      }
+
+      p {
+        color: blueviolet;
+        font-size: 40px;
+      }
+
+      * {
+        /* 最大級別 */
+        font-size: 20px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="idP" class="classP" style="color: red; font-size: 100px">優先級</p>
+  </body>
+</html>
+
+<script>
+  // 優先級與權重.
+
+  // 當一個元素，使用各種方式設置相同的樣式時，保留優先級較高的樣式.
+
+  // !important(無限大) > 行內樣式(1000) > ID 樣式(100) > Class 樣式(10) > 標籤樣式(1) > 默認樣式(0) = 繼承而來的樣式(0).
+
+  // 權重可以相加, 例如: #id > .container {}, 這樣比權重單個 id 高.
+</script>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  // 箭頭函式
+  // 1. 若沒有參數，需要使用小誇號
+  // 2. 若有一個參數，不需要使用小誇號
+  // 3. 若有多個參數，需要使用小誇號
+  // 4. 若函式只有一段語句，並且需要返回語句結果，可以不使用 return 關鍵字
+  // 5. 箭頭函式沒有 this
+
+  // ---------------------------------------------------------------------------
+
+  let log = (a) => console.log(a);
+
+  log(123); // 123
+
+  // ---------------------------------------------------------------------------
+
+  // 不需要使用 return 關鍵字
+  let sum = (a, b) => a + b;
+
+  console.log(sum(1, 2)); // 3
+
+  // ---------------------------------------------------------------------------
+
+  // this 問題
+  let obj = {
+    test: function () {
+      document.addEventListener("click", (e) => {
+        // 可以改使用 e.target or e.currentTarget
+        console.log(this); // obj
+      });
+    },
+  };
+
+  obj.test();
+
+  // ---------------------------------------------------------------------------
+
+  let arr = [9, 4, 2, 36, 7, 1, 5];
+
+  arr.sort((a, b) => a - b);
+
+  console.log(arr);
+
+  // ---------------------------------------------------------------------------
+</script>

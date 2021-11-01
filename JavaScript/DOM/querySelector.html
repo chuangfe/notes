@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>querySelector</title>
+  </head>
+  <body>
+    <div id="div"></div>
+    <div id="box">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </body>
+</html>
+<script>
+  // 獲取條件符合的標籤，若多個標籤符合條件，則只獲取第一個
+  let div = document.querySelector("#div");
+
+  console.log(div);
+
+  // ---------------------------------------------------------------------------
+
+  // 獲取條件符合的標籤，可獲取多個
+  // 標籤集合，偽陣列，只有少部分的陣列方法
+
+  // 偷懶寫法 document.querySelectorAll('#box > span')
+  // 代表可以使用 CSS 的選擇器，來獲取元素
+  // [value=123] 屬性選擇器，value 值等於 123 的元素獲取
+  // [value~=456] 屬性選擇器，value 值中有 456 且必需與其他值用空格分開，的元素獲取
+  // [value^=7] 屬性選擇器，value 值是 7 開頭的元素獲取
+  // [value*=8] 屬性選擇器，value 值中只要有 8 的元素獲取
+
+  let box = document.querySelector("#box");
+  let spanTags = box.querySelectorAll("span");
+
+  console.log(spanTags); // NodeList
+
+  // 轉換為陣列
+  let spanArr = Array.from(spanTags);
+
+  console.log(spanArr); // Array
+</script>

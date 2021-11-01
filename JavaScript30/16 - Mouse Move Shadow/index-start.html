@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+    html {
+      color: black;
+      font-family: sans-serif;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+    }
+
+    h1 {
+      text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+      font-size: 100px;
+    }
+  </style>
+
+  <script>
+    let hero = document.querySelector('.hero');
+    let h1 = hero.querySelector('h1');
+
+    hero.addEventListener('mousemove', function (e) {
+      // hero 的寬高
+      // offsetWidth -> 元素計算後的寬度
+      let w = hero.offsetWidth;
+      let h = hero.offsetHeight;
+
+      // 滑鼠在元素內的座標
+      // offsetX -> 元素內的 X 座標
+      let x = e.offsetX;
+      let y = e.offsetY;
+
+      // hero 中心點座標
+      // let centerX = w / 2;
+      // let centerY = h / 2;
+
+      // h1 的中心點座標
+      let centerX = h1.offsetLeft + h1.offsetWidth / 2;
+      let centerY = h1.offsetTop + h1.offsetHeight / 2;
+
+      // currentTarget 綁定事件的元素
+      // target 觸發事件的元素
+      if (e.currentTarget !== e.target) {
+        x += e.target.offsetLeft;
+        y += e.target.offsetTop;
+      };
+
+      // 陰影的座標，滑鼠座標 - 中心點座標
+      let lengthX = (x - centerX) * -0.5;
+      let lengthY = (y - centerY) * -0.5;
+
+      h1.style.textShadow = `${lengthX}px ${lengthY}px 1px rgba(255, 0, 0, 0.7)`;
+    });
+
+    // 測試
+    // hero.addEventListener('click', function(e) {
+    //   console.log(e.target, e.offsetX, e.offsetY);
+    // });
+
+    h1.addEventListener('click', function (e) {
+      console.log(this.offsetTop, this.offsetLeft);
+    });
+  </script>
+</body>
+
+</html>

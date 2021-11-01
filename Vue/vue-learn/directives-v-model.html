@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-model</title>
+    <style>
+      * {
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- .trim 修飾符, 刪除頭尾的空白 -->
+      <p><input type="text" v-model.trim="msg" /></p>
+      <p>{{ msg }}</p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <input type="number" v-model.number="num1" />
+      <select v-model.number="arithmetic">
+        <!-- 請選擇相關提示設置, arithmetic = "", 請選擇 value = "" 就可以預設為請
+          選擇, 原生 html value 是 string 類型, 與 vue data 對應需要注意, option 
+          一定要有 value 的值 -->
+        <!-- 非必需選擇, 選擇性填寫, 不建議開 disabled="disabled" -->
+        <option value="">請選擇</option>
+        <!-- 必需選擇請打開 disabled="disabled" -->
+        <option disabled="disabled" value="">請選擇</option>
+        <option value="1">＋</option>
+        <option value="2">－</option>
+        <option value="3">＊</option>
+        <option value="4">／</option>
+      </select>
+      <input type="number" v-model.number="num2" />
+      <button v-on:click="calc">=</button>
+      <input type="text" disabled="disabled" v-model="result" />
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <p>單選</p>
+      <p>{{edm1}}</p>
+      <p><input type="checkbox" v-model="edm1" />訂閱 EDM1</p>
+      <!-- 特殊情況的 checkbox, 依照 true false 回傳不同的值 -->
+      <p>
+        <input
+          type="checkbox"
+          true-value="訂閱"
+          false-value="不要訂閱"
+          v-model="edm2"
+        />訂閱 EDM2
+      </p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <p>多選</p>
+      <!-- 陣列的順序會隨時變動, 若最後結果有需要特定的順序, 將 value 改為後端的 id, 
+        並將陣列用數值排序後, 依照 id 篩選原始資料 -->
+      <p>{{checks}}</p>
+      <p><input type="checkbox" value="A" v-model="checks" />AAA</p>
+      <p><input type="checkbox" value="B" v-model="checks" />BBB</p>
+      <p><input type="checkbox" value="C" v-model="checks" />CCC</p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <p>單選</p>
+      <p>{{radio}}</p>
+      <p><input type="radio" value="A" v-model="radio" />AAA</p>
+      <p><input type="radio" value="B" v-model="radio" />BBB</p>
+      <p><input type="radio" value="C" v-model="radio" />CCC</p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <p>性別</p>
+      <p>{{gender}}</p>
+      <!-- .number 修飾符, 將 data gender 轉為數值類型 -->
+      <p><input type="radio" value="0" v-model.number="gender" />男</p>
+      <p><input type="radio" value="1" v-model.number="gender" />女</p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      /**
+       * v-model 實現資料雙像綁定的指令，通常用於表單的元素
+       * 當鍵盤輸入還在拼音時, v-model 不會有效果, 只有在 enter 內容輸入後才會生效,
+       * 拼音的偵側應該使用 v-on:input 事件, 同時要注意 enter 可能會導致 form 表單
+       * 發出 api 給後端, 故選字相關的事件需要特別注意
+       */
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          msg: "歡迎光臨",
+          num1: 0,
+          num2: 0,
+          arithmetic: "",
+          result: 0,
+          // checkbox 單選的 data 需要注意是 Boolean 類型
+          // checkbox 多選的 data 需要注意是 Array 類型
+          edm1: false,
+          edm2: "訂閱",
+          checks: [],
+          // radio 的 data 需要注意是 String 類型
+          radio: "A",
+          // 性別
+          gender: 0,
+        },
+        // vm 實體管理的函式
+        methods: {
+          calc: function () {
+            switch (this.arithmetic) {
+              case 1:
+                this.result = this.num1 + this.num2;
+                break;
+              case 2:
+                this.result = this.num1 - this.num2;
+                break;
+              case 3:
+                this.result = this.num1 * this.num2;
+                break;
+              case 4:
+                this.result = this.num1 / this.num2;
+                break;
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

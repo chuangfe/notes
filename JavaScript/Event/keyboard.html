@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+      html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+
+      .box {
+        margin: auto;
+        border: 1px solid #ccc;
+        font-size: 128px;
+        color: #ccc;
+      }
+
+      span {
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <p>Key：<span id="key"></span></p>
+      <p>KeyCode：<span id="keyCode"></span></p>
+    </div>
+  </body>
+</html>
+<script>
+  // keydown  鍵盤按下時觸發，會連續觸發
+  // keyup  鍵盤抬起時觸發
+
+  let key = document.querySelector("#key");
+  let keyCode = document.querySelector("#keyCode");
+
+  let keydownHandler = function (e) {
+    key.textContent = e.key;
+    keyCode.textContent = e.keyCode;
+
+    console.log(e);
+  };
+
+  document.addEventListener("keydown", keydownHandler);
+</script>

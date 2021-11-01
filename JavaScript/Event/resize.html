@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  // resize 事件，有幾項缺點
+  // 1. 該事件的觸發頻率非常高，非常消耗性能
+  // 2. 移動端小鍵盤彈出，也會觸發該事件
+
+  let resizeHandler = function(e) {
+    // 建議只調整 body 的字體大小，而其他響應式布局則使用 rem 作為單位
+    // document.documentElement.style.fontSize;
+  };
+
+  window.addEventListener("resize", resizeHandler);
+</script>

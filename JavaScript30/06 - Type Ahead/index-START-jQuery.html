@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="zh">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State" disabled="disabled">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+  <script>
+    (function () {
+      const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const input = document.querySelector('.search');
+      const ul = document.querySelector('.suggestions');
+      let data = [];
+      
+      function inputEvent() {
+        // trim() 字串方法，刪除字串頭尾的空白
+        const val = this.value.trim();
+        const re = new RegExp(val, 'gi');
+
+        // filter() 陣列方法，根據返回值 true or false 保留並組成新陣列
+        const filterData = data.filter(function (item) {
+          // match(正則表達式) 字串方法，將符合的字串組成新陣列
+          // const str = 'ASDFaGVCBaERTHGDaSHGSASDFaCVXBAaAaAA';
+          // console.log(str.match(new RegExp('a', 'gi')));  // ["A", "a", "a", "a", "A", "a", "A", "a", "A", "a", "A", "A"]
+          // 利用 match() 返回的 arr or null 交給 filter() 判斷 true or false
+          return item.city.match(re) || item.state.match(re);
+        });
+
+        // map() 陣列方法，根據函式的返回值組成新的陣列
+        let liHTML = filterData.map(function (item) {
+          let name = `${item.city}, ${item.state}`;
+          let population = Number(item.population);
+
+          // replace(正則表達式, 函式) 字串方法，操作正則符合的字串返回組成新的字串
+          name = name.replace(re, function (match, key) {
+            return `<span class="hl">${match}</span>`;
+          });
+
+          // toLocaleString() 數字方法，這裡預設是加上千分位符號
+          return `<li>
+            <span class="name">${name}</span>
+            <span class="population">${population.toLocaleString()}</span>
+          </li>`;
+        }).join('');
+        // join(字串) 陣列方法，使用參數字串將陣列間隔組成新字串
+
+        ul.innerHTML = liHTML;
+      };
+
+      $.ajax({
+        'url': './data.json',
+      }).done(function (res) {
+        data = res;
+
+        input.disabled = '';
+        input.addEventListener('keyup', inputEvent);
+      });
+    })();
+  </script>
+</body>
+</html>

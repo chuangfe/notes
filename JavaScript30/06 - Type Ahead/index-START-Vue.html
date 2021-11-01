@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <form class="search-form" v-on:submit.prevent>
+    <input type="text" class="search" placeholder="City or State" disabled="disabled" v-model="filter">
+    <ul class="suggestions">
+      <template v-if="filterModel && filterModel.length">
+        <li v-for="(value, key) in filterModel">
+          <span class="name" v-html="liHtml(value)"></span>
+          <span class="population" v-text="populationToNumber(value.population)"></span>
+        </li>
+      </template>
+      <template v-else>
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </template>
+    </ul>
+  </form>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js'></script>
+  <script>
+    (function () {
+      const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const input = document.querySelector('.search');
+      const ul = document.querySelector('.suggestions');
+      
+      const app = new Vue({
+        // Vue 管理的 DOM
+        'el': '.search-form',
+        
+        'data': {
+          'model': [],
+          'filter': '',
+        },
+        
+        // 保存 Vue 計算後的物件
+        // 當你需要將 A 資料計算完，並返回成 B 資料時的函式放在這裡
+        // computed 的屬性相可以再 DOM 當做變數或 Vue 實體內使用 this 獲取
+        // computed 的屬性值必須是函式，而且一定要有返回值
+        'computed': {
+          'filterModel': function () {
+            if (!this.filter.trim()) return [];
+
+            const self = this;
+
+            return this.model.filter(function (item) {
+              // match() 字串方法，搜尋字串內有沒有參數的字串，若有則返回陣列，若無則返回 null
+              // 參數應該是正規表達式
+              // let str = 'Filter For A City Filter For A City Filter For A City';
+              // let regexp = new RegExp(/A/); -> ['A'];
+              // let regexp = new RegExp(/A/, 'gi'); -> ['A', 'A', 'A'];
+              // 這裡不需要 match 方法返回的陣列，只需要利用陣列與 null 進行 true or false 的判斷
+              return item.city.match(self.regexp) || item.state.match(self.regexp);
+            });
+          },
+          
+          // 依照 .search 的 value 隨時修改正則表達式
+          'regexp': function () {
+            return new RegExp(this.filter, 'gi');
+          },
+        },
+        
+        // 保存 Vue 方法的物件
+        // computed 的屬性相可以再 DOM 當做變數(函式)或 Vue 實體內使用 this 獲取
+        // computed 的屬性值必須是函式
+        'methods': {
+          'liHtml': function (item) {
+            let name = `${item.city}, ${item.state}`;
+            
+            name = name.replace(this.regexp, function (match, key) {
+              return `<span class="hl">${match}</span>`;
+            });
+            
+            // toLocaleString() 數字方法，這裡預設是加上千分位符號
+            return `<span class="name">${name}</span>`;
+          },
+
+          'populationToNumber': function (str) {
+            return Number(str).toLocaleString();
+          },
+        },
+        
+        // 生命週期，在 Vue 實體創建後與 Vue 讀取自身屬性前
+        'mounted': function () {
+          const self = this;
+          fetch('./data.json').then(function (response) {
+            return response.json();
+          }).then(function (json) {
+            self.model = json;
+
+            document.querySelector('.search').disabled = '';
+          });
+        },
+      });
+    })();
+  </script>
+</body>
+</html>

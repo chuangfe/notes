@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      body {
+        width: 5000px;
+        height: 5000px;
+      }
+
+      #div {
+        padding: 10px;
+
+        border: 1px solid red;
+        position: absolute;
+        top: 10px;
+        left: 20px;
+      }
+
+      p {
+        width: 400px;
+        height: 400px;
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div" class="test1 tes2 tes3 tes">
+      <p></p>
+    </div>
+  </body>
+</html>
+<script>
+  // DOM 常見屬性、常健方法
+
+  // document 為 DOM 的根節點
+
+  // ---------------------------------------------------------------------------
+
+  // document.documentElement // html 標籤
+
+  // 當前頁面的寬高，不計算 position 的標籤
+  // document.documentElement.clientWidth
+  // document.documentElement.clientHeight
+
+  // document.body
+
+  // document.title
+
+  // document.body.className
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的事件設置
+
+  // addEventListener()
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的屬性操作
+
+  // 標籤屬性，使用小寫英文字母，單字之間使用 - 符號連接
+  // 例如：<meta charset="UTF-8" />
+
+  // 物件屬性，部分物件屬性會顯示在標籤中
+  // let div = document.createElement("div");
+  // div.test = "d";
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的屬性操作
+
+  // 由於物件屬性設置，可能無法在頁面中看到，故推薦使用以下方式
+
+  let div = document.querySelector("#div");
+
+  // setAttribute(屬性, 屬性值)
+  // 設置屬性，屬性值一律為字串
+  div.setAttribute("data-test", "d");
+
+  // getAttribute(屬性)
+  // 獲取屬性
+  let s = div.getAttribute("data-test");
+  console.log(s); // d
+
+  // removeAttribute(屬性)
+  // 刪除屬性
+  // div.removeAttribute("data-test");
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的內容操作
+
+  // innerHTML
+  // 修改 DOM 的內容，可以插入標籤，盡量減少使用，若來自外部的資料是標籤，會有安全問題
+  // DOM.innerHTML = 'String';
+
+  // textContent
+  // 修改 DOM 的內容，只能插入內容，標籤無效，推薦使用
+  // div2.textContent = 'String';
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的樣式操作
+
+  // 使用 JS 設置行內樣式
+  // 注意，行內樣式，權重僅低於 !important
+
+  div.style.width = "100px";
+  div.style.height = "100px";
+
+  // CSS 樣式與 JS 樣式的語法差異
+  // 在 CSS 中是 background-color
+  // 在 JS 中是 backgroundColor
+  div.style.backgroundColor = "#ccc";
+
+  // 以上是行內樣式的設置與獲取，非行內樣式無法獲取 ----------
+
+  // 獲取 DOM 的樣式值
+  // 非 IE
+  // getComputedStyle(DOM, 偽類).styles
+  console.log(getComputedStyle(div).width); // 100px
+  console.log(getComputedStyle(div).border); // 1px solid rgb(255, 0, 0)
+
+  // IE 專用
+  // console.log(div.currentStyle.width); // 100px
+
+  // ---------------------------------------------------------------------------
+
+  // DOM "計算" 後的寬高
+
+  // DOM 自身的寬高，包含 width + height + padding + border
+  console.log("offsetWidth", div.offsetWidth, "offsetHeight", div.offsetHeight); // 122 122
+
+  // DOM 自身的寬高，包含 width + height + padding
+  console.log("clientWidth", div.clientWidth, "clientHeight", div.clientHeight); // 120 120
+
+  // ---------------------------------------------------------------------------
+
+  // DOM "計算" 後的邊距
+
+  // DOM.offsetTop 該元素距離定位的父元素的上邊距 position: top;
+  // DOM.offsetLeft 該元素距離定位的父元素的左邊距 position: left;
+  // 補充：若要計算距離頁面的左邊距，且相對定位的父元素不是 body，則需要遞迴計算每層父元素的 offsetLeft 值
+  console.log("offsetTop", div.offsetTop, "offsetLeft", div.offsetLeft); // 10 20
+
+  // 目測是 content 到父元素邊距，可能是 border-top border-left
+  console.log("clientTop", div.clientTop, "clientLeft", div.clientLeft); // 1 1
+
+  // ---------------------------------------------------------------------------
+
+  // DOM 的 Class 操作
+
+  // 增加
+  // document.body.classList.add(String);
+
+  // 刪除
+  // document.body.classList.remove(String);
+
+  // 查找
+  // 返回 Index (索引編號) 的 Class
+  // document.body.classList.item(Index);
+  // console.log(div.classList.item(1)); // tes2
+
+  // 判斷操作
+  // 若只有一個參數時，String(Class) 存在，該方法則刪除
+  // 反之，若 String(Class) 不存在，則增加
+  // 若有兩個參數時，true 增加，false 刪除
+  // document.body.classList.toggle(String, true or false);
+
+  // 判斷
+  // 若標籤有 String(Class) 則返回 true，反之返回 false
+  // document.body.classList.contains(String);
+
+  // ---------------------------------------------------------------------------
+</script>

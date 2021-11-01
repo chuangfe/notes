@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta type="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .group {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #000;
+      }
+
+      .rect {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #000;
+        background-color: burlywood;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <test-component :data="data"></test-component>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
+  integrity="sha512-pSyYzOKCLD2xoGM1GwkeHbdXgMRVsSqQaaUoHskx/HF09POwvow2VfVEdARIYwdeFLbu+2FCOTRYuiyeGxXkEg=="
+  crossorigin="anonymous"
+></script>
+
+<template id="test-template">
+  <div :class="data.type">
+    <test-component
+      v-for="(item, key) in children"
+      :data="item"
+    ></test-component>
+  </div>
+</template>
+
+<script>
+  Vue.component("test-component", {
+    template: "#test-template",
+
+    props: ["data"],
+
+    computed: {
+      children() {
+        return this.data.type === "group" ? this.data.children || [] : [];
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+
+    data: {
+      data: {
+        type: "group",
+        children: [
+          {
+            type: "group",
+            children: [
+              {
+                type: "group",
+                children: [
+                  { type: "group", children: [{ type: "rect" }] },
+                  { type: "rect" },
+                ],
+              },
+              { type: "rect" },
+            ],
+          },
+
+          { type: "rect", children: [{ type: "group" }, { type: "rect" }] },
+        ],
+      },
+    },
+  });
+</script>

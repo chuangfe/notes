@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #div {
+        margin: 30px;
+        padding: 20px;
+        width: 200px;
+        height: 200px;
+        border: 2px solid red;
+
+        position: relative;
+        z-index: 1;
+      }
+
+      #div p {
+        margin: 10px;
+        padding: 10px;
+
+        width: 500px;
+        height: 500px;
+
+        background-color: #eee;
+
+        border: 7px solid blue;
+
+        position: absolute;
+        top: 70px;
+        left: 20px;
+
+        z-index: 11;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div">
+      <p></p>
+    </div>
+  </body>
+</html>
+<script>
+  // DOM.getBoundingClientRect()
+  // 獲取 DOM 的計算後的樣式
+
+  let div = document.querySelector("#div");
+  let p = div.querySelector("p");
+
+  let obj = {
+    // DOM 距離瀏覽器可視驅左邊距離.
+    x: 62,
+
+    // DOM 距離瀏覽器可視驅頂部距離.
+    y: 112,
+
+    // DOM 寬度
+    // width + border + padding
+    width: 534,
+
+    // DOM 高度
+    // width + border + padding
+    height: 534,
+
+    // 同 x
+    top: 112,
+
+    // x + width + border + padding
+    right: 596,
+
+    // y + height + border + padding
+    bottom: 646,
+
+    // 同 y
+    left: 62,
+  };
+
+  console.log(p.getBoundingClientRect());
+
+  // 補充
+  // offsetX 是該元素與其定位的父元素距離
+  // clientX 是該元素與視窗起點的距離
+  // screenX 是該元素與螢幕起點的距離
+</script>

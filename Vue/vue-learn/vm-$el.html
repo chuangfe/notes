@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vm-$el</title>
+  </head>
+  <body>
+    <div id="app">{{msg}}</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // vm.$el 用於獲取實例初始化時綁定的 dom 元素, 可讀可寫但是不推薦修改
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          msg: "Test",
+        },
+      });
+      mount;
+      let app = document.querySelector("#app");
+
+      console.log(vm.$el);
+      console.log(vm.$el === app); // true
+    </script>
+  </body>
+</html>

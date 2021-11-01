@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State" disabled="disabled">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script>
+    (function () {
+      const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const input = document.querySelector('.search');
+      const ul = document.querySelector('.suggestions');
+      let data = [];
+
+      function inputEvent() {
+        let val = this.value.trim();
+        // gi 代表 val 可以無數個並無視大小寫
+        let re = new RegExp(val, 'gi');
+
+        let filterData = data.filter(function (item) {
+          // match() 字串方法，搜尋字串內有沒有參數的字串，若有則返回陣列，若無則返回 null
+          // 參數應該是正規表達式
+          // let str = 'Filter For A City Filter For A City Filter For A City';
+          // let regexp = new RegExp(/A/); -> ['A'];
+          // let regexp = new RegExp(/A/, 'gi'); -> ['A', 'A', 'A'];
+          // 這裡不需要 match 方法返回的陣列，只需要利用陣列與 null 判斷返回 true or false 並由 filter 方法組成新陣列
+          return item.city.match(re) || item.state.match(re);
+        });
+
+        // let liHtml = '';
+        // filterData.forEach(function (item) {
+        //   let name = `${item.city}, ${item.state}`;
+        //   let population = Number(item.population);
+
+        //   name = name.replace(re, function (match, key) {
+        //     return `<span class="hl">${match}</span>`;
+        //   });
+
+        //   liHtml += `<li>
+        //     <span class="name">${name}</span>
+        //     <span class="population">${population.toLocaleString()}</span>
+        //   </li>`;
+        // });
+
+        // Alex 的方式
+        // map() 陣列方法，將返回的結果組成新陣列
+        let liHtml = filterData.map(function (item) {
+          let name = `${item.city}, ${item.state}`;
+          let population = Number(item.population);
+
+          name = name.replace(re, function (match, key) {
+            return `<span class="hl">${match}</span>`;
+          });
+          
+          // toLocaleString() 數字方法，這裡預設是加上千分位符號
+          return `<li>
+            <span class="name">${name}</span>
+            <span class="population">${population.toLocaleString()}</span>
+          </li>`;
+        }).join('');
+
+        ul.innerHTML = liHtml;
+      };
+
+      fetch('./data.json').then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        data = json;
+
+        input.disabled = '';
+
+        input.addEventListener('keyup', inputEvent);
+      });
+
+      // post 範例 https://developer.mozilla.org/zh-TW/docs/Web/API/Fetch_API/Using_Fetch
+    })();
+  </script>
+</body>
+</html>

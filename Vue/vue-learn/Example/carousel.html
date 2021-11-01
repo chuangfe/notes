@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>carousel</title>
+    <style>
+      div,
+      img,
+      a {
+        margin: 0px;
+        padding: 0px;
+        display: block;
+      }
+
+      .carousel {
+        margin: 20px auto;
+        width: 1000px;
+        height: 600px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .item {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+
+      .button {
+        width: 10%;
+        height: 100%;
+        background-color: #000;
+        opacity: 0;
+        position: absolute;
+        top: 0px;
+      }
+
+      .button:hover {
+        opacity: 0.3;
+      }
+
+      .prev {
+        left: 0px;
+      }
+
+      .next {
+        right: 0px;
+      }
+
+      /* 進場過程中的動畫 */
+      .next-enter-active,
+      .next-leave-active {
+        transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      /* 進場前的樣式 */
+      .next-enter {
+        transform: translateX(100%);
+      }
+
+      /* 進場結束的樣式 */
+      .next-enter-to {
+        transform: translateX(0%);
+      }
+
+      /* 離場前的樣式 */
+      .next-leave {
+        transform: translateX(0%);
+      }
+
+      /* 離場結束的樣式 */
+      .next-leave-to {
+        transform: translateX(-100%);
+      }
+
+      /* 進場過程中的動畫 */
+      .prev-enter-active,
+      .prev-leave-active {
+        transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      /* 進場前的樣式 */
+      .prev-enter {
+        transform: translateX(-100%);
+      }
+
+      /* 進場結束的樣式 */
+      .prev-enter-to {
+        transform: translateX(0%);
+      }
+
+      /* 離場前的樣式 */
+      .prev-leave {
+        transform: translateX(0%);
+      }
+
+      /* 離場結束的樣式 */
+      .prev-leave-to {
+        transform: translateX(100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="carousel">
+        <transition-group class="container" tag="div" :name="direction">
+          <div
+            class="item"
+            v-for="(item, i) of items"
+            :key="item.id"
+            v-show="i === index"
+          >
+            <img :src="item.src" />
+          </div>
+        </transition-group>
+        <a href="javascript:;" class="button prev" @click="prevHandler"></a>
+        <a href="javascript:;" class="button next" @click="nextHandler"></a>
+      </div>
+    </div>
+  </body>
+</html>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script>
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      items: [
+        {
+          id: 1,
+          src: "https://picsum.photos/1000/600/?1",
+        },
+        {
+          id: 2,
+          src: "https://picsum.photos/1000/600/?2",
+        },
+        {
+          id: 3,
+          src: "https://picsum.photos/1000/600/?3",
+        },
+        {
+          id: 4,
+          src: "https://picsum.photos/1000/600/?4",
+        },
+        {
+          id: 5,
+          src: "https://picsum.photos/1000/600/?5",
+        },
+      ],
+      index: 0,
+      direction: "next",
+    },
+    methods: {
+      prevHandler() {
+        this.direction = "prev";
+        this.index--;
+        if (this.index < 0) this.index = this.items.length - 1;
+      },
+      nextHandler() {
+        this.direction = "next";
+        this.index++;
+        if (this.index > this.items.length - 1) this.index = 0;
+      },
+    },
+  });
+</script>

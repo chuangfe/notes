@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="#" method="get" id="form">
+      <input type="text" />
+      <input type="submit" value="上傳" />
+      <input type="reset" value="清除" />
+    </form>
+  </body>
+</html>
+<script>
+  // submit reset 事件用於監聽 form 標籤
+  // 若網頁設計時，不想要跳轉頁面，則需要取消默認事件
+
+  let form = document.querySelector("#form");
+
+  let submitHandler = function(e) {
+    // 取消默認事件
+    e.preventDefault();
+  };
+
+  let resetHandler = function(e) {};
+
+  form.addEventListener("submit", submitHandler);
+  form.addEventListener("reset", resetHandler);
+</script>

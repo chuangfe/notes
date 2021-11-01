@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 推薦使用這個 class 切換 */
+      .router-link-exact-active {
+        background-color: rgb(223, 30, 30);
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <router-link to="/page1">Page1</router-link>
+      <router-link to="/page2">Page2</router-link>
+      <button @click="clickHandler">Page2 Router</button>
+      <hr />
+      <!-- router 實體所需要的佔位符, 依據 hash 切換 component 顯示 -->
+      <router-view></router-view>
+    </div>
+  </body>
+</html>
+
+<style>
+  .page2 {
+    background-color: #eee;
+  }
+</style>
+
+<template id="page2">
+  <div class="page2">
+    <h3>Page 2</h3>
+    <router-link to="/page2/index">Index</router-link>
+    <router-link to="/page2/about">About</router-link>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  // 巢狀路由, 在 hash 的各個頁面, 還可以再依據 hash 切割頁面的部分內容
+  // 補充, 網頁設計 api -> 路由 -> 模組
+
+  const Page1 = {
+    template: "<h3>Page 1</h3>",
+  };
+
+  const Page2 = {
+    template: "#page2",
+  };
+
+  const Page2Index = {
+    template: "<h3>Index Content</h3>",
+  };
+
+  const Page2About = {
+    template: "<h3>About Content</h3>",
+  };
+
+  const router = new VueRouter({
+    routes: [
+      {
+        path: "/page1",
+        component: Page1,
+      },
+      {
+        // 有 / 斜線符號的 path 代表根目錄(root)
+        path: "/page2",
+        component: Page2,
+        // 巢狀路由, 格式基本相同
+        children: [
+          {
+            // children path 不能有 / 斜線符號
+            path: "index",
+            component: Page2Index,
+          },
+          {
+            path: "about",
+            component: Page2About,
+          },
+          {
+            // children 預設頁面的方式, 空字串
+            path: "",
+            // 沒有保留歷史紀錄
+            redirect: "/page2/index",
+            // 保留歷史紀錄
+            // component: Page2Index,
+          },
+        ],
+      },
+      {
+        path: "*",
+        redirect: "/page1",
+      },
+    ],
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      id: 99,
+      name: "Ian",
+    },
+    methods: {
+      clickHandler() {
+        /**
+         * $router.push('path', func) 方法, 相當於 router-link 的 to 屬性, 有歷史
+         * 紀錄, 修改網址, 跳轉至應對的 component
+         * path, 應對 router 的 path
+         * func, path 跳轉完成後執行的回調函式
+         *
+         * $router.replace() 方法, 與 push 相同, 但是不會保留歷史紀錄
+         *
+         * $router.go(number) 方法, 依據 number 的正負數指定歷史紀錄跳轉頁面
+         */
+        // 兩者方式都可以達成跳轉頁面後執行函式, 無 func 參數就可以當作 promise 使用
+        // this.$router.push("/page2", this.completeHandler);
+        this.$router.push("/page2").then(() => {
+          console.log("complete promise");
+        });
+      },
+      completeHandler() {
+        console.log("complete callback");
+      },
+    },
+    // 註冊 router 的實體
+    router,
+  });
+</script>

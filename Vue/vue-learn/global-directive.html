@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>global-directive</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-focus />
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // 自定全局指令，請參考 vue-learn 品牌列表管理
+      // <input type="text" v-focus>
+      Vue.directive("focus", {
+        // 每個函式第一個參數，固定是 el 是被綁定該指令的元素，該 el 是原生的 js 物件
+
+        // 每當指令綁定到元素上時，執行 bind 函式，只執行一次
+        // 該生命週期是在繪製頁面前，故 focus 無效
+        // el.style 有效
+        // el 屬性設置可以在這裡
+        bind: function(el) {
+          // el.focus();
+          // console.log("bind");
+        },
+
+        // 元素插入到 DOM 中時，才執行 inserted 函式，只執行一次
+        // 該生命週期是在繪製頁面後
+        // js 行為操作最好在這裡設置
+        inserted: function(el) {
+          el.focus();
+          console.log("global-inserted");
+        },
+
+        // 當 VNode 更新時觸發 update 函式，可能會執行多次
+        update: function(el) {},
+
+        componentUpdated: function() {},
+        unbind: function() {},
+      });
+
+      let vm = new Vue({
+        el: "#app",
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    form {
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <router-view></router-view>
+
+    <!-- <div>
+      <p>
+        <form v-on:submit.prevent="update">
+          <input type="text" v-model.trim="value">
+        </form>
+        <a href="javascript:;" v-on:click="update">Create</a>
+      </p>
+    
+      <ol>
+        <li v-for="(value, key) in contents">
+          {{value.content}}
+          <a href="javascript:;">Update</a>
+          <a href="javascript:;" v-on:click="deleteHandler(key)">Delete</a>
+        </li>
+      </ol>
+    </div> -->
+
+
+
+
+  </div>
+
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.2/vue-router.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js'></script>
+
+  <script>
+    // 說明
+    // API -> 應用程式介面
+
+    // REST ful
+    // 前端 get post patch / put delete
+    // 後端 read create update delete
+
+    // ----- ----- ----- ----- ----- ----- -----
+
+    // Router 通常用於管理畫面
+    // 在頁面中保留相同的內容，利用 Ajax 修改不同的部分
+    // 在大型網站中可能用於:判斷登入、cookie、... 在網頁跳轉的過程中先檢查，這樣不用等進入畫面後再處理
+
+    // 使用順序說明
+    // 主要組件使用 new Vue，並使用該實體管理 DOM 元素
+
+    // Vue 實體屬性簡介，含 Vue 擴充功能，例如 Vue-Router Vuex
+    // el(父組件) data(父子組件) router(父組件) methods(父子組件) computed(父子組件)
+    // 生命週期(父子組件) template(子組件) routes(Vue-Router 控制器獨有) props(子組件獨有)
+
+    // 子組件 component 會放到父組件的 router 屬性裡面
+
+    // ----- ----- ----- ----- ----- ----- -----
+
+    // Vuex
+    // Vue 的 data 分三種，data(父組件的資料)、props(父組件傳給子組件的資料)、store(公用資料)
+    // 子組件資料可能來自於父組件的傳遞
+  </script>
+
+  <!-- 子組件模版 -->
+  <template id="list-template">
+    <div>
+      <p>
+        <form v-on:submit.prevent="createHandler">
+          <!-- .trim 修飾符，刪除 value 的頭尾空白 -->
+          <input type="text" v-model.trim="value">
+        </form>
+        <a href="javascript:;" v-on:click="createHandler">Create</a>
+      </p>
+
+      <ol>
+        <!-- 要使用 Vue 綁屬性要使用 : 符號 -->
+        <li v-for="(value, key) in contents" :key="value.id">
+          {{value.content}}
+          <a href="javascript:;" v-on:click="updateHandler(key)">Update</a>
+          <a href="javascript:;" v-on:click="deleteHandler(key)">Delete</a>
+        </li>
+      </ol>
+    </div>
+  </template>
+
+  <!-- 子組件 List -->
+  <script>
+    let List = {
+      // 模版
+      template: '#list-template',
+
+      // component 子組件的 data 必需要使用函式返回物件
+      // 因為子組件會重複使用，避免子組件改到父組件的資料
+      // 若需要使用子組件的功能改父組件的資料，可以使用 bus(一種概念)
+      // or 在父組件的 methods 設置改父組件資料的方法，並將該方法傳給子組件並使用
+      data: function () {
+        return {
+          value: '',
+
+          url: 'http://localhost:3000/contents',
+        };
+      },
+
+      computed: {
+        contents: function () {
+          // 子元件可以使用主元件的 store
+          return this.$store.state.contents;
+        },
+      },
+
+      methods: {
+        // 順序說明
+        // List 子元件 createHandler -> store MUTATIONS_CONTENTS_DELETE
+        createHandler: function () {
+          if (!this.value) return;
+
+          // Create 執行時，先打 Ajax 到 data.json 
+          // 然後再使用 store mutations MUTATIONS_CONTENTS_ADD 將相同的資料寫入 store state 裡面
+          // 讓 data.json 與 store 的資料相同
+          axios.post(this.url, { content: this.value }).then((res) => {
+            this.value = '';
+
+            // ID 會自動給
+            // axios.post 的 res 會返回新增的資料
+            // 將資料新增至資料庫，並同時新增到 this.contents 裡面
+            // this.contents.push(res.data);
+
+            // 其他組件要使用 store 的 mutations 方法，請使用 this.$store.commit
+            this.$store.commit('MUTATIONS_CONTENTS_ADD', res.data);
+          });
+        },
+
+        // 順序說明
+        // List 子元件 deleteHandler -> store ACTIONS_CONTENTS_DELETE 打 API + 調用 MUTATIONS_CONTENTS_DELETE
+        deleteHandler(index) {
+          // index = 頁面上被點的 li
+          // target.id = 被點的 li 應對的資料
+          let target = this.contents[index];
+
+          // 其他組件要使用 store 的 actions 方法，請使用 this.$store.dispatch
+          this.$store.dispatch('ACTIONS_CONTENTS_DELETE', { target: target });
+        },
+
+        updateHandler(index) {
+          // index = 頁面上被點的 li
+          // target.id = 被點的 li 應對的資料
+          let target = this.contents[index];
+
+          // $route 當前的頁面，當前頁面網址的資料
+          // $router 管理 vue route 的變數，用這個跳轉頁面
+
+          // $router.push 可跳轉頁面，保留上一頁，推薦使用
+          // $router.replace 可跳轉頁面，不保留上一頁
+
+          // 詳細的寫法
+          this.$router.push({
+            name: 'update',
+            params: { id: target.id }
+          });
+        },
+      },
+
+      // Vue 實體生命中期的其中一種
+      // mounted Vue 繪至畫面前
+      mounted: function () { },
+
+      // createHandler 與 deleteHandler 的差別只在於 API 在子元件或 store 發送而已，兩者都可以
+    };
+  </script>
+
+  <!-- 子組件 Edit -->
+  <script>
+    let Edit = {
+      template: `<div><input type="text" v-model.trim="input">
+      <a href="javascript:;" v-on:click="upDateHandler">更新</a></div>`,
+
+      data: function () {
+        return {
+          input: '',
+        };
+      },
+
+      computed: {
+        content: function () {
+          // 從子元件或取 store state 資料並依照 route 資料篩選，最後回傳
+          // store state -> contents -> [很多個]
+          // route.params.id -> http://127.0.0.1:8080/Vue/RESTfulAPI/index.html#/update/1 -> 1
+          let content = this.$store.state.contents.find((item) => {
+            return item.id == this.$route.params.id;
+          });
+
+          return content;
+        },
+      },
+
+      methods: {
+        // upDate 說明
+        // Edit 元件將 {id, input} 發給 store ACTIONS_CONTENTS_UPDATE
+        // store ACTIONS_CONTENTS_UPDATE 打 API 修改 server
+        // 並調用 MUTATIONS_CONTENTS_UPDATE 修改 state.contents
+        upDateHandler: function () {
+          if (!this.input) return false;
+
+          this.$store.dispatch('ACTIONS_CONTENTS_UPDATE', {
+            id: this.$route.params.id,
+            content: this.input,
+
+            // Vuex 可以接 then
+          }).then(() => {
+            this.$router.push({ name: 'list' });
+          });
+        },
+      },
+
+      mounted: function () {
+        if (!this.$store.state.contents || !this.content) {
+          // 不保留歷史紀錄，跳轉頁面
+          return this.$router.replace({
+            name: 'list'
+          });
+        };
+
+        this.input = this.content.content;
+      },
+    };
+  </script>
+
+  <!-- 公用資料 Store -->
+  <script>
+    let store = new Vuex.Store({
+      // 嚴格模式
+      // 官方建議只在開發階段時打開嚴格模式，因為較耗效能
+      strict: true,
+
+      // 存公用資料
+      state: {
+        url: 'http://localhost:3000/contents',
+
+        contents: [],
+      },
+
+      // 同步
+      // 原則上若要操控 store 的資料，一律使用 mutations 的方法
+      mutations: {
+        // 其他組件要使用 store 的 mutations 方法，請使用 this.$store.commit.MUTATIONS_CONTENTS_SET()
+
+        MUTATIONS_CONTENTS_SET: function (state, data) {
+          // 這裡寫法與一般的 Vue 實體不同
+          // state.contents === store 的 state 屬性的 contents
+          // data === context.commit('MUTATIONS_CONTENTS_SET', res.data) 的 res.data 參數
+          state.contents = data;
+        },
+
+        MUTATIONS_CONTENTS_ADD: function (state, data) {
+          state.contents.push(data);
+        },
+
+        MUTATIONS_CONTENTS_DELETE: function (state, index) {
+          state.contents.splice(index, 1);
+        },
+
+        MUTATIONS_CONTENTS_UPDATE: function (state, data) {
+          let item = state.contents.find((item) => {
+            return item.id == data.id;
+          });
+
+          item.content = data.content;
+        },
+      },
+
+      // 非同步
+      // 原則上在 actions 打 API
+      actions: {
+        // Alex 推薦使用全大寫，
+        ACTIONS_CONTENTS_READ: function (context) {
+          // context 的方法解說
+          // commit: Actions -> Mutations，概念相當於保存資料
+          // 其他組件要使用 store 的 mutations 方法，請使用 this.$store.commit
+
+          // dispatch: 自己再做一次 Ajax，例如驗證，驗證結束後再去真正的伺服器讀資料
+          // 其他組件要使用 store 的 actions 方法，請使用 this.$store.dispatch
+
+          // getters: Actions -> State，只能讀 State 的資料，不能寫入，getters 的功能相當於 Vue 實體的 computed
+          // state: Actions -> State，只能讀 State 的資料，不能寫入
+
+          // return 是為了傳資料給 Vue 組件
+          return axios.get(context.state.url).then((res) => {
+            // actions 不能使用賦值的方式寫入 state 資料，要特別調用 mutations 的方法並傳參
+            context.commit('MUTATIONS_CONTENTS_SET', res.data);
+          });
+        },
+
+        ACTIONS_CONTENTS_DELETE: function (context, data) {
+          // 為何要在 actions 做 mutations 的事情?
+          // 因為 actions 負責打 API 在這裡作條件判斷可以避免資料錯誤，打浪費的 API
+          let index = context.state.contents.indexOf(data.target);
+
+          if (index === -1) return false;
+
+          return axios.delete(context.state.url + '/' + data.target.id).then((res) => {
+            // splice(起始編號, 數量) 陣列方法，從起始編號刪除數量個
+            // this.contents.splice(index, 1);
+
+            context.commit('MUTATIONS_CONTENTS_DELETE', index);
+          });
+        },
+
+        ACTIONS_CONTENTS_UPDATE: function (context, data) {
+          let item = context.state.contents.find((item) => {
+            return item.id == data.id;
+          });
+
+          if (!item) return false;
+
+          return axios.patch(context.state.url + '/' + item.id, { content: data.content }).then((res) => {
+            context.commit('MUTATIONS_CONTENTS_UPDATE', data);
+          });
+        },
+      },
+    });
+  </script>
+
+  <!-- Vue-Router 主要控制器 -->
+  <script>
+    let router = new VueRouter({
+      // 路由設定
+      // 範例需要多個，所以屬性值是陣列
+      // routes 的順序需要注意，越重要的越前面
+      routes: [
+        {
+          // 根目錄
+          path: '/',
+
+          // 方便找到應對的 router
+          name: 'list',
+
+          // 模組簡介
+          // 管理(相關的包在一起)
+          // 重用
+          component: List
+        },
+        {
+          path: '/update/:id',
+          name: 'update',
+          component: Edit
+        },
+        {
+          // 其他路由，可能的原因是網址打錯或亂打
+          // * 代表網址非以上設定的其他
+
+          // 網址出現 #/ 代表成功
+          // http://127.0.0.1:8080/Vue/RESTfulAPI/index.html#/
+          path: '*',
+
+          // 重新導回首頁
+          redirect: '/'
+        }
+      ],
+
+    });
+  </script>
+
+  <script>
+    // 測試需要開啟 liveServer json-server
+    // Vue 父組件
+    let app = new Vue({
+      // 指定 Vue 實體 app 管理哪個 Element
+      el: '#app',
+
+      // VueRouter 實體，Vue-Router 主要控制器放到父組件
+      router: router,
+
+      // Vuex.Store 實體，store 公用資料、本地資料
+      store: store,
+
+      // 生命週期
+      mounted: function () {
+        this.$store.dispatch('ACTIONS_CONTENTS_READ');
+      },
+    });
+  </script>
+</body>
+
+</html>

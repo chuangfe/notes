@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  let arr = [
+    // 正確的網址
+    { id: 0, src: "https://i.picsum.photos/id/1/5616/3744.jpg" },
+
+    // 錯誤的網址
+    // { id: 0, src: "https://i.picsum.photos/id/1/5616/3744.jpgcdd" },
+
+    { id: 1, src: "https://i.picsum.photos/id/10/2500/1667.jpg" },
+    { id: 2, src: "https://i.picsum.photos/id/100/2500/1656.jpg" },
+    { id: 3, src: "https://i.picsum.photos/id/1000/5626/3635.jpg" },
+    { id: 4, src: "https://i.picsum.photos/id/1001/5616/3744.jpg" },
+    { id: 5, src: "https://i.picsum.photos/id/1002/4312/2868.jpg" },
+    { id: 6, src: "https://i.picsum.photos/id/1003/1181/1772.jpg" },
+    { id: 7, src: "https://i.picsum.photos/id/1004/5616/3744.jpg" },
+    { id: 8, src: "https://i.picsum.photos/id/1005/5760/3840.jpg" },
+  ];
+
+  // ---------------------------------------------------------------------------
+
+  // 異步下載圖片
+
+  // let loadHandler = function () {
+  //   this.removeEventListener("load", loadHandler, false);
+  //   console.log(this);
+  // };
+
+  // arr.forEach((item) => {
+  //   let img = new Image();
+  //   img.addEventListener("load", loadHandler);
+  //   img.id = item.id;
+  //   img.src = item.src;
+  // });
+
+  // ---------------------------------------------------------------------------
+
+  // 同步下載圖片
+  // 鏈式用法
+
+  // function getImage(obj) {
+  //   // Promise 是建構函式，用於強制同步
+  //   // resolve 解決，若程式執行成功(img 下載成功)，則執行 resolve 函式
+  //   // reject 拒絕，若程式執行失敗(img 下載失敗)，則執行 reject 函式
+  //   return new Promise(function (resolve, reject) {
+  //     let img = new Image();
+
+  //     img.onload = function () {
+  //       resolve(img);
+  //     };
+
+  //     img.onerror = function () {
+  //       reject(img);
+  //     };
+
+  //     img.id = obj.id;
+  //     img.src = obj.src;
+  //   });
+  // }
+
+  // let imgPro = getImage(arr[0]);
+
+  // 第一種寫法
+  // imgPro
+  //   .then(
+  //     // 這個參數函式應對第一次的 Promise 的 resolve 函式
+  //     function (data) {
+  //       console.log("成功", data);
+  //       return getImage(arr[1]);
+  //     },
+  //     // 這個參數函式應對第一次的 Promise 的 reject 函式
+  //     function (data) {
+  //       console.log("失敗", data);
+  //       return getImage(arr[1]);
+  //     }
+  //   )
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[2]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[3]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[4]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[5]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[6]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[7]);
+  //   })
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //     return getImage(arr[8]);
+  //   });
+
+  // 第二種寫法
+  // 差別在於 resolve 函式與 reject 函式寫在哪裡而已
+  // imgPro
+  //   .then(
+  //     // 這個參數函式應對第一次的 Promise 的 resolve 函式
+  //     function (data) {
+  //       console.log("成功", data);
+  //       return getImage(arr[1]);
+  //     }
+  //   )
+  //   .catch(
+  //     // 這個參數函式應對第一次的 Promise 的 reject 函式
+  //     function (data) {
+  //       console.log("失敗", data);
+  //       return getImage(arr[1]);
+  //     }
+  //   )
+  //   .then(function (data) {
+  //     console.log("成功", data);
+  //   });
+
+  // ---------------------------------------------------------------------------
+
+  // 正式用法
+  // all 測試失敗，img.onload 順序和 list 順序不同
+
+  function loadImage(obj) {
+    // Promise 是建構函式，用於強制同步
+    // resolve 解決，若程式執行成功(img 下載成功)，則執行 resolve 函式
+    // reject 拒絕，若程式執行失敗(img 下載失敗)，則執行 reject 函式
+    return new Promise(function (resolve, reject) {
+      let img = new Image();
+
+      img.onload = function () {
+        document.body.append(img);
+        resolve(img);
+      };
+
+      // img.onerror = function () {
+      //   reject(img);
+      // };
+
+      img.id = obj.id;
+      img.src = obj.src;
+    });
+  }
+
+  let list = [];
+
+  arr.forEach((item) => {
+    list.push(loadImage(item));
+  });
+
+  console.log("list", list);
+
+  // race 返回先完成的異步
+  Promise.race(list).then(function (data) {
+    console.log("race", data);
+  });
+
+  // all 測試失敗，img.onload 順序和 list 順序不同
+  Promise.all(list).then(function (data) {
+    console.log("all", data);
+  });
+</script>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>directives-custom</title>
+    <style>
+      div {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      .content-container {
+        width: calc(50% - 10px);
+        height: 100px;
+        background-color: #eee;
+        display: inline-block;
+      }
+
+      /* screen 電腦螢幕, 平板, 手機 */
+      @media screen and (max-width: 768px) {
+        .content-container {
+          width: calc(100%);
+          display: block;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>
+        <input type="text" />
+      </p>
+      <basic></basic>
+    </div>
+  </body>
+</html>
+
+<template id="basic-template">
+  <div>
+    <p>
+      <!-- 需要注意, 自訂指令冒號與小數點的順序, 與取值時的方式, 屬性值與冒號可綁動態參
+      數, 小數點僅能判斷值是否 true or false, 可以動態綁值類如 resize 後的寬高 -->
+      <input type="text" v-focus:[name].age="val" v-model="val" />
+    </p>
+    <p>{{windowInnerWidth}}</p>
+    <div class="container">
+      <div
+        class="content-container"
+        v-resize-width="windowInnerWidth"
+        :css="{lg: windowInnerWidth > 960, }"
+      ></div>
+      <div class="content-container" v-resize-width="windowInnerWidth"></div>
+    </div>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script>
+  /**
+   * Custom Directives 自訂指令, 需要特別操作 dom 的時候可能會使用到
+   */
+
+  // 全局自訂指令
+  Vue.directive("focus", {
+    // 生命週期, 自訂指令綁定到 dom 上和繪製畫面前執行
+    bind(el, binding) {
+      // 使用自訂指令的 dom
+      // console.log(el);
+      // binding 自訂指令相關參數的集合物件
+      // console.log(binding);
+      // binding.value 指令的屬性值
+      // binding.arg 指令冒號的值
+      // binding.modifiers 指令小數點的值
+      // console.log(binding.value, binding.arg, binding.modifiers);
+      // console.log("focus directive bind");
+    },
+    // 生命週期, 繪製畫面後執行
+    inserted(el, binding) {
+      // console.log(el);
+      // console.log(binding);
+      // console.log(binding.value, binding.arg, binding.modifiers);
+      // console.log("focus directive inserted");
+
+      el.focus();
+    },
+    // 生命週期, 指令的值更新時執行
+    update(el, binding) {
+      // console.log(el);
+      // console.log(binding);
+      // console.log(binding.value, binding.arg, binding.modifiers);
+      // console.log("focus directive update");
+    },
+    componentUpdated() {},
+    unbind() {},
+  });
+
+  Vue.directive("resize-width", (el, binding) => {
+    // 簡寫的自訂指令, 該函式只會對應 bind update 的狀態
+
+    el.innerText = el.offsetWidth;
+
+    // console.log(el);
+    // console.log(binding);
+    // console.log("resize-width");
+  });
+
+  // 全局組件
+  Vue.component("basic", {
+    template: "#basic-template",
+    data() {
+      return {
+        val: "basic",
+        name: "Ian",
+        windowInnerWidth: 0,
+      };
+    },
+    mounted() {
+      this.windowInnerWidth = window.innerWidth;
+      window.addEventListener("resize", () => {
+        this.windowInnerWidth = window.innerWidth;
+      });
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+
+    // 局部自訂指令
+    // directives: {
+    //   focus: {
+    //     inserted: function (el) {
+    //       el.focus();
+    //     },
+    //   },
+    // },
+    data: {
+      items: [],
+    },
+  });
+</script>

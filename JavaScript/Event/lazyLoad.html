@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  // Img 懶加載，使用遞迴下載圖片
+
+  let arr = [];
+
+  let src = [
+    { id: 0, src: "https://placem.at/things?random=0" },
+    { id: 1, src: "https://placem.at/things?random=1" },
+    { id: 2, src: "https://placem.at/things?random=2" },
+    { id: 3, src: "https://placem.at/things?random=3" },
+    { id: 4, src: "https://placem.at/things?random=4" },
+    { id: 5, src: "https://placem.at/things?random=5" },
+    { id: 6, src: "https://placem.at/things?random=6" },
+    { id: 7, src: "https://placem.at/things?random=7" },
+  ];
+
+  // ---------------------------------------------------------------------------
+
+  // 舊版
+
+  // let load = function() {
+  //   src.forEach((item, i) => {
+  //     let img = new Image();
+
+  //     img.id = i;
+
+  //     img.addEventListener("load", function() {
+  //       // 將優先 load 的 img push arr
+  //       arr.push(this.id);
+
+  //       // 將優先 load 的 img  append body
+  //       document.body.append(this);
+  //     });
+
+  //     img.src = item.src;
+  //   });
+  // };
+
+  // load();
+
+  // ---------------------------------------------------------------------------
+
+  // 新版
+  // 簡查順序，都可以刪除
+
+  // arr = [{ id: 0, src: "https://placem.at/things?random=0" }]
+  // callBack function 是 loadHandler 後執行的函式
+  // boolean 若是 true 則每個 Image 的 loadHandler 都執行 callBack function
+  // boolean 若是 false 則最後一個 Image 的 loadHandler 執行 callBack function
+  let lazyLoad = function(arr, callBack, boolean) {
+    // 簡查順序
+    let test = [];
+    let i = 0;
+
+    let init = function() {
+      if (!arr[i]) return;
+
+      // 若 lazyLoad 不只是圖片，也需要影片、音樂等等，也可以完成
+      // 只是需要 arr 的內容更加詳細，比如
+      // arr = [{ id: 0, tag: 'video', src: "https://xxx.xxx" }]
+      // document.createElement(arr[0].tag)
+      let img = new Image();
+
+      // 簡查順序，
+      img.id = i;
+
+      img.addEventListener("load", loadHandler);
+      img.src = arr[i].src;
+    };
+
+    let loadHandler = function() {
+      // 一次性的事件，事件函式執行完成後要記得刪除
+      // load 事件任務完成，就可以刪除，確保記憶體空間
+      this.removeEventListener("load", loadHandler);
+
+      // 簡查順序，將優先 load 的 img push arr，方便在控制台看 arr 的元素順序
+      test.push(this.id);
+
+      // 簡查順序，將優先 load 的 img  append body
+      document.body.append(this);
+
+      if (boolean) {
+        callBack();
+      } else {
+        if (i === arr.length - 1) callBack();
+      }
+
+      // load 結束後再進行下一張圖片下載
+      i++;
+
+      init();
+    };
+
+    init();
+
+    // 簡查順序
+    return test;
+  };
+
+  let test = lazyLoad(src, () => {
+    console.log("load OK");
+  });
+
+  // ---------------------------------------------------------------------------
+</script>

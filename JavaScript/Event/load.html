@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="" />
+  </head>
+  <body></body>
+</html>
+<script>
+  // load 事件
+  // 針對可以載入外部資源的 DOM，下載完成後，才觸發的事件
+  // 例如： <link> <script> <img> <audio> <video>
+
+  let src = "https://static.pexels.com/photos/261628/pexels-photo-261628.jpeg";
+
+  let img = new Image();
+
+  let loadHandler = function() {
+    console.log("OK");
+  };
+
+  // 若要使用 JS 設置 load 事件，必要順序 1
+  img.addEventListener("load", loadHandler);
+
+  // 若要使用 JS 設置 load 事件，必要順序 2，若先設置 src 則可能不會觸發 load 事件
+  img.src = src;
+
+  document.body.append(img);
+</script>

@@ -1,0 +1,4 @@
+/* 若 JS 拖拽有問題，可以試試這個 */
+p {
+  user-select: none;
+}

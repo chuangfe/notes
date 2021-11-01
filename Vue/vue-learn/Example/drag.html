@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: #000;
+        transform: translate(0px, 0px);
+        transition: transform 0.4s ease-out 0s;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div
+        class="box"
+        :style="style"
+        @mousedown.stop.prevent="mousedownHandler($event)"
+      ></div>
+    </div>
+  </body>
+</html>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script>
+  const vue = new Vue({
+    el: "#app",
+    data: {
+      offset: {},
+      style: {},
+    },
+    computed: {},
+    watch: {},
+    methods: {
+      mousedownHandler(e) {
+        this.offset.x = e.offsetX;
+        this.offset.y = e.offsetY;
+        window.addEventListener("mousemove", this.mousemoveHandler);
+        window.addEventListener("mouseup", this.mouseupHandler);
+      },
+      mousemoveHandler(e) {
+        let x = e.clientX - this.offset.x;
+        let y = e.clientY - this.offset.y;
+        this.style = { transform: "translate(" + x + "px, " + y + "px)" };
+      },
+      mouseupHandler(e) {
+        window.removeEventListener("mousemove", this.mousemoveHandler);
+        window.removeEventListener("mouseup", this.mouseupHandler);
+      },
+    },
+  });
+</script>

@@ -1,0 +1,53 @@
+// 有底線的 Scss 不會被轉為 css
+
+// 混用範例 -----
+
+// 範例：根據參數計算 font-size lien-height
+// 簡單來說，在一定程度的標準下，可以根據參數的不同，產出一組相同的樣式，但是值因參數而不同
+
+$baseSize: 12px;
+$baseLineSize: 10px;
+$sizeLevel: 4px;
+$paddingLevel: 1.2;
+
+@function font($level: 0){
+  @if $level < 0 {
+    $level: 0;
+  };
+
+  // round() 四捨五入
+  @return $baseSize + $sizeLevel * round($level);
+  
+  // 假設參數是 1 -> 1 級字
+  // 12px + 4px * 1 = 16px
+}
+
+@function rhythm($size){
+  // ceil() 無條件進位
+  @return ceil($size * $paddingLevel / $baseLineSize) * $baseLineSize;
+
+  // 一般情況下，line-height > font-size 較為合適
+  // 假設參數是 16px
+  // ceil(16px * 1.2 / 10) * 10px -> 20px
+}
+
+@mixin font($level: 1, $line-height: auto) {
+  // 假設參數是 1 -> 1 級字
+  // 12px + 4px * 1 = 16px
+  $size: font($level);
+
+  // 一般情況下，line-height > font-size 較為合適
+  // 假設參數是 16px
+  // ceil(16px * 1.2 / 10) * 10px -> 20px
+  $line: rhythm($size);
+
+  font-size: $size;
+
+  @if $line-height == auto or $line-height < $line {
+    line-height: $line;
+  } @else {
+    line-height: $line-height;
+  };
+}
+
+// 混用範例 -----

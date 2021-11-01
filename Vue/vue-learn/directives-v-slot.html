@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-v-slot</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <h3>Vm</h3>
+      <p>{{title}}</p>
+      <hr />
+      <!-- 這層作用域的 title 是讀取父組件的 data -->
+      <basic>Slot {{title}}</basic>
+      <hr />
+      <!-- 如果你沒有傳值, 預設會讀取子組件的 data -->
+      <basic></basic>
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <container>
+        <!-- 指定 header slot 的內容 -->
+        <!-- <template v-slot:header>Outside Header</template> -->
+        <!-- 縮寫 -->
+        <template #header>Outside Header</template>
+        <!-- 在 template 中沒有 name 的 slot, 預設放入父組件給的內容, 二選一的方式 -->
+        <p>Outside Message Outside Message Outside Message</p>
+        <template v-slot:default>Outside OOOOOOOOOOOOOOO</template>
+      </container>
+    </div>
+    <!-- ------------------------------------------------------------------- -->
+    <template id="basic-template">
+      <div>
+        <h3>Basic</h3>
+        <p>{{title}}</p>
+        <p>
+          <slot>{{title}}</slot>
+        </p>
+      </div>
+    </template>
+    <!-- ------------------------------------------------------------------- -->
+    <template id="container-template">
+      <div>
+        <header>
+          <h3>Container</h3>
+          <slot name="header">This is Header</slot>
+        </header>
+        <main>
+          <!-- 沒有 name 屬性, 會使用預設的方式放入父組件的內容, 優先放入 
+            v-slot:default, 或是其他沒有指定的內容, 兩者二選一 -->
+          <slot>This is Main</slot>
+        </main>
+        <footer>
+          <!-- 有 name 屬性, 又沒有來自父組件的內容, 就不改動 -->
+          <slot name="footer">This is Footer</slot>
+        </footer>
+      </div>
+    </template>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+      integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // slot 標籤, 可以讓父組件往子組件插入內容, 讓畫面的自由度回歸至父組件,
+
+      Vue.component("basic", {
+        template: "#basic-template",
+        data() {
+          return {
+            title: "Basic Title",
+          };
+        },
+      });
+
+      Vue.component("container", {
+        template: "#container-template",
+        data() {
+          return {};
+        },
+      });
+
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          title: "Vm Title",
+        },
+      });
+    </script>
+  </body>
+</html>

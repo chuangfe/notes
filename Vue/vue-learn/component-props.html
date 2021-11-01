@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>component-props</title>
+    <style>
+      .container {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+
+      .color-red {
+        color: #dc143c;
+        font-weight: bold;
+      }
+
+      .color-blue {
+        color: #1e90ff;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="container parent">
+        <h2>Vm Parent</h2>
+        <p>Vm Data Title: <span class="color-red">{{ title}}</span></p>
+      </div>
+      <!-- 
+        父組件傳資料(obj, arr, str, num, ...)給子組件時，使用 v-bind 指令綁定屬性
+        給子組件，並在子組件使用 props 屬性接收
+       -->
+      <!-- 
+        子組件要修改父組件的資料時，建議將父組件的 methods 使用 v-on 指令綁定假事件
+        給子組件，並在子組件的 event or methods 中使用 this.$emit 方法更新父組件的
+        資料, 將 updateHandler 函式設置為 children 的 update 假事件真函式
+       -->
+      <children :value="title" @update="updateHandler"></children>
+    </div>
+
+    <template id="children-component">
+      <!-- component 必需要有一層唯一的父元素 -->
+      <div class="container children">
+        <h2>Component Props & Data 使用方式</h2>
+        <p>Component Props Value: <span class="color-red">{{value}}</span></p>
+        <p>Component Data Parent Message: {{parentMsg}}</p>
+        <p>Component Data Message: <span class="color-blue">{{msg}}</span></p>
+        <p>
+          <input type="text" v-model="msg" />
+          <!-- children click 配合 $emit 事件設置 update 假事件真函式並傳參數, 注
+            意這裡的 update 假事件真函是字串類型  -->
+          <input type="button" value="修改" @click="$emit('update', msg)" />
+        </p>
+      </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script>
+      // 重點：父子組件的傳值
+      Vue.component("children", {
+        template: "#children-component",
+        props: ["value"],
+        // component data 必需是 function return object
+        data: function () {
+          return {
+            // 在 template 可以直接使用 props, 也可以在 data 賦值,
+            /**
+             * 在 template 可以直接使用 props, 也可以在 data 賦值使用, props 會與
+             * vm data 互動, 由於 component data 使用 return object 所以
+             * component 資料會與 vm 切割開來解除互動
+             */
+            parentMsg: this.value,
+            msg: "Component Message",
+          };
+        },
+      });
+
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          title: "Vm Message",
+        },
+        methods: {
+          updateHandler: function (msg) {
+            this.title = msg;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

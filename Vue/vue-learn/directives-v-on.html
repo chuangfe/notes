@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-on</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <button v-on:click="show">按鈕</button>
+      <!-- 簡寫 v-on === @ -->
+      <button @click="show">按鈕</button>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <button @click="start">開始</button>
+      <button @click="stop">停止</button>
+      <p>{{ msg }}</p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+
+      <!-- Alex 推薦使用這種方式, event function 如果需要傳參數, 也需要 event 
+        object 則需要傳入 $event -->
+      <input
+        type="button"
+        style="font-size: 24px; margin: 0px 10px"
+        v-for="(item, index) of contents"
+        :value="index"
+        @click="clickHandler1(index, $event)"
+      />
+      <!-- 修改內容時, 將內容和 dom 刪除, 最後新內容的 dom 新增到頁面上  -->
+      <p style="font-size: 24px; margin: 10px 10px">{{contents[count]}}</p>
+
+      <!-- 標準的 event function, 將需要傳遞的參數綁在 dom 身上, 並在 event object 
+        target dataset 獲取, 需要特別注意巢狀結構-->
+      <input
+        type="button"
+        style="font-size: 24px; margin: 0px 10px"
+        v-for="(item, index) of contents"
+        :value="index"
+        :data-index="index"
+        @click="clickHandler2"
+      />
+      <!-- 僅修改 style 來切換 dom 顯示內容 -->
+      <p
+        style="font-size: 24px; margin: 10px 10px"
+        v-for="(item, index) of contents"
+        v-show="index === count"
+      >
+        {{item}}
+      </p>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <hr />
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // v-on 用於給元素綁定事件
+
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          msg: "歡迎光臨",
+          timer: null,
+          count: 0,
+          contents: ["AAA", "BBB", "CCC"],
+        },
+        // vm 實體管理的函式
+        methods: {
+          show: function () {
+            // 使用 this 獲取實體的 data 資料
+            console.log(this.msg);
+          },
+          start: function () {
+            if (this.timer !== null) return;
+            this.timer = setInterval(this.msgInterval, 600);
+          },
+          stop: function () {
+            clearInterval(this.timer);
+            this.timer = null;
+          },
+          msgInterval: function () {
+            this.msg = this.msg.substring(1) + this.msg.substring(0, 1);
+          },
+          // -------------------------------------------------------------------
+          // -------------------------------------------------------------------
+          // -------------------------------------------------------------------
+          // event function 預設形參是 event object
+          clickHandler1: function (index, event) {
+            this.count = index;
+            console.log(index, event);
+          },
+          clickHandler2: function (event) {
+            this.count = Number(event.target.dataset.index);
+            console.log(event);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

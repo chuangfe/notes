@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+<script>
+  // 同步，每行程式按照順序，並在當前程式執行完成後，再執行下一行程式
+
+  // 異步，每行程式執行的順序不固定，某些程式會離開順序移動到最前或會最後再執行，
+  // 例如，事件函式、Ajax
+
+  let arr = [
+    { id: 0, src: "https://placem.at/things?random=0" },
+    { id: 1, src: "https://placem.at/things?random=1" },
+    { id: 2, src: "https://placem.at/things?random=2" },
+    { id: 3, src: "https://placem.at/things?random=3" },
+    { id: 4, src: "https://placem.at/things?random=4" },
+    { id: 5, src: "https://placem.at/things?random=5" },
+    { id: 6, src: "https://placem.at/things?random=6" },
+    { id: 7, src: "https://placem.at/things?random=7" },
+  ];
+
+  // Promise 是建構函式，用於強制同步
+  // resolve 解決，若程式執行成功(img 下載成功)，則執行 resolve 函式
+  // reject 拒絕，若程式執行失敗(img 下載失敗)，則執行 reject 函式
+  let pro = new Promise(function (resolve, reject) {
+    let img = new Image();
+
+    img.addEventListener("load", function () {
+      resolve(this, "111");
+    });
+
+    img.addEventListener("error", function () {
+      reject("下載失敗");
+    });
+
+    img.src = arr[0].src;
+  }).then(
+    function (data) {
+      console.log(data, "下載成功");
+    },
+    function (error) {
+      console.log(error, "222");
+    }
+  );
+</script>

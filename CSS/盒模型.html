@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>盒模型</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      div {
+        margin: 10px;
+        background-color: #eee;
+        height: 200px;
+        line-height: 200px;
+        font-size: 24px;
+        text-align: center;
+        border: 20px solid black;
+        padding: 10px;
+      }
+
+      #div2 {
+        line-height: 140px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div1">默認</div>
+
+    <div id="div2">怪異</div>
+
+    <script>
+      // 盒模型(塊級元素)
+
+      // box-sizing: ; 可以修改塊級元素的盒模型
+
+      // 元素設置寬高時不包含內邊距與邊框
+      // content-box  默認
+
+      // 與上相反
+      // border-box
+    </script>
+  </body>
+</html>

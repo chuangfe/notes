@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>標籤選擇</title>
+    <style>
+      html,
+      body,
+      div,
+      span {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 交集選擇 */
+      #div1 div.fontColor {
+        color: red;
+      }
+
+      /* 後代選擇 */
+      #div2 span {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 交集選擇 -->
+    <div id="div1">
+      <div>交集選擇</div>
+      <div class="fontColor">交集選擇</div>
+    </div>
+
+    <hr />
+
+    <!-- 後代選擇 -->
+    <div id="div2">
+      <div>
+        <span>後代選擇</span>
+      </div>
+    </div>
+
+    <hr />
+
+    <script>
+      // 標籤選擇
+
+      // ID 選擇
+
+      // class 選擇
+
+      // 命名規則
+      // 不能全部都是數字和以數字開頭
+      // 不可使用特殊符號
+      // 符號 _ 與 - 可使用
+
+      // 全部選擇
+
+      // 複合選擇
+
+      // 交集選擇，意指複合條件
+      // div.fontColor
+      // 代表必需是 div 標籤而且有 fontColor Class 的標籤
+
+      // 相鄰選擇
+      // 使用 + 符號區隔
+      // h3 + p 代表 h3 與 h3 同級的下一個 p 會選到
+      // h3 ~ p 代表 h3 與 h3 同級的所有 p 會選到
+
+      // 後代選擇
+      // 後代選擇可以隔代
+      // #div2 div span == #div2 span
+
+      // 並級選擇
+      // html, body, div, span
+      // 用逗點格開
+
+      // 子代選擇
+      // html > div
+      // 使用 > 符號獲取第一層後代的元素
+
+      // 屬性選擇
+      // input[type=text] 選取 input 中 type=text 的元素
+
+      // 偽類
+    </script>
+  </body>
+</html>

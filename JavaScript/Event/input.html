@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <input type="number" />
+  </body>
+</html>
+<script>
+  // input 事件，當輸入文本框內容時觸發事件
+  // 需要注意，中文輸入法在拼音時也會觸發
+
+  let input = document.querySelector("#input");
+
+  let inputHandler = function(e) {
+    // e.data 輸入的內容
+    // e.isComposing 是否有開啟輸入法
+    // e.inputType 輸入的方式，例如：英文輸入法、中文輸入法、貼上、刪除等等
+    console.log(e);
+  };
+
+  input.addEventListener("input", inputHandler);
+</script>

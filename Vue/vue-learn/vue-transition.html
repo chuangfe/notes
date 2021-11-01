@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>transition</title>
+  <!-- 2. 自定兩組動畫，讓 transition 標籤使用 -->
+
+  <!-- 輸入與離開的解釋 -->
+  <!-- 元素隱藏，執行離開(leave)動畫 -->
+  <!-- 元素顯示，執行輸入(enter)動畫 -->
+  <style>
+    /* 前綴 op 用於區分不同組標籤的動畫，可自訂 */
+
+    /* op-enter 輸入，時動畫時的起始樣式 */
+    .op-enter {
+      opacity: 0;
+    }
+
+    /* op-enter-to 輸入，動畫時的結束樣式 */
+    .op-enter-to {
+      opacity: 1;
+    }
+
+    /* op-leave 離開，動畫時的起始樣式 */
+    .op-leave {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+
+    /* op-leave-to 離開，動畫時的結束樣式 */
+    .op-leave-to {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    /* op-enter-active 輸入，動畫的過度效果 */
+    .op-enter-active {
+      transition: all 1s;
+    }
+
+    /* op-leave-active 離開，動畫的過度效果 */
+    .op-leave-active {
+      transition: all 1s;
+    }
+  </style>
+
+  <style>
+    #ball {
+      width: 30px;
+      height: 30px;
+      background-color: paleturquoise;
+      border-radius: 50%;
+      margin-top: 10px;
+
+      transition: all 1s;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+</head>
+
+<body>
+  <div id="app">
+    <button @click="flag = !flag">切換</button>
+
+    <hr />
+
+    <!-- 1. 想使用 vue 的預設動畫，需要讓目標在 transition 標籤內部 -->
+    <!-- transition 標籤是 Vue 提供的標籤 -->
+    <!-- 可能會需要搭配 v-bind:key 指令使用 -->
+    <transition name="op">
+      <h3 v-show="flag">這是一個 h3 標籤</h3>
+    </transition>
+
+    <hr />
+
+    <!-- animate.css 要求要使用 class 設定動畫時，需添加 animated class -->
+    <!-- bounceIn 動畫效果 -->
+    <!-- faster 動畫過度時間 -->
+    <!-- delay-2s 動畫延遲時間 -->
+    <transition enter-active-class="animated bounceIn faster" leave-active-class="animated bounceOut slow delay-2s">
+      <h3 v-show="flag">Vue transition tag 搭配 animate.css 框架使用</h3>
+    </transition>
+
+    <hr />
+
+    <!-- 以上兩種都是有來回的動畫，不能只設定半場，例如：新建元素顯示動畫，沒有刪除與消失 -->
+    <!-- transition tag 有自訂的生命週期事件 -->
+
+    <!-- v-on:before-enter="beforeEnter" -->
+    <!-- v-on:enter="enter" -->
+    <!-- v-on:after-enter="afterEnter" -->
+    <!-- v-on:enter-cancelled="enterCancelled" -->
+
+    <!-- v-on:before-leave="beforeLeave" -->
+    <!-- v-on:leave="leave" -->
+    <!-- v-on:after-leave="afterLeave" -->
+    <!-- v-on:leave-cancelled="leaveCancelled" -->
+
+    <input type="button" value="加入" v-on:click="add=!add" />
+    <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter">
+      <div id="ball" v-show="add"></div>
+    </transition>
+  </div>
+</body>
+
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script>
+  // 補充：transition tag 配合多個 component 可以參考 global-component03.html
+
+  let vm = new Vue({
+    el: "#app",
+
+    data: {
+      flag: true,
+      add: false,
+    },
+
+    methods: {
+      beforeEnter: function (el) {
+        // beforeEnter 設置動畫執行前，元素的起始樣式
+        console.log("beforeEnter");
+
+        // el 形參，是執行動畫的元素，原生的 DOM 物件
+        el.style.transform = "translate(0, 0)";
+      },
+      enter: function (el, done) {
+        // enter 設置動畫結束時，元素的樣式
+        console.log("enter");
+
+        // 無意義的代碼，但是一定要寫
+        // offset 系列都可以 offsetHeight 也可
+        el.offsetWidth;
+
+        el.style.transform = "translate(150px, 450px)";
+
+        // done 行參，函式，是 afterEnter 事件函式的引用
+        // done 需要執行，才不會延遲 afterEnter 的執行
+        done();
+      },
+      afterEnter: function (el) {
+        console.log("afterEnter");
+
+        // afterEnter 動畫結束後，觸發的事件函式
+        this.add = false;
+      },
+    },
+  });
+</script>

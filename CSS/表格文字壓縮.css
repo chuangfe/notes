@@ -1,0 +1,11 @@
+/* 文字太多換行. */
+
+table {
+  table-layout: fixed;
+}
+
+td {
+  word-wrap: break-word;
+  text-align: center;
+  vertical-align: middle;
+}

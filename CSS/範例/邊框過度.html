@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>邊框過度</title>
+  <style>
+    body {
+      background: #fefefe;
+      color: #4b507a;
+      font: 300 24px/1.5 "Lato", sans-serif;
+      margin: 1em auto;
+      max-width: 36em;
+      padding: 1em 1em 2em;
+      text-align: center;
+    }
+    
+    button {
+      /* 無背景 */
+      background: none;
+      
+      /* 無邊框 */
+      border: 0;
+      
+      /* 元素大小從邊框開始計算 */
+      box-sizing: border-box;
+      
+      margin: 1em;
+      padding: 1em 2em;
+      
+      /* 陰影 */
+      box-shadow: inset 0 0 0 2px #f45e61;
+      color: #f45e61;
+      
+      /* 繼承文字大小 */
+      font-size: inherit;
+      font-weight: 700;
+      
+      /* 相對定位 */
+      position: relative;
+      
+      /* 目前用處不明 */
+      /* vertical-align: middle; */
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    .draw {
+      transition: color 0.25s;
+    }
+    
+    .draw::before, .draw::after {
+      box-sizing: border-box;
+      
+      /* 起始透明色 */
+      border: 2px solid transparent;
+      width: 0;
+      height: 0;
+      
+      position: absolute;
+      
+      /* 必需要有 */
+      content: '';
+    }
+    
+    .draw::before {
+      top: 0;
+      left: 0;
+    }
+    
+    .draw::after {
+      right: 0;
+      bottom: 0;
+    }
+    
+    .draw:hover {
+      color: #60daaa;
+    }
+    
+    .draw:hover::before, .draw:hover::after {
+      width: 100%;
+      height: 100%;
+    }
+    
+    /**
+    * 重點解說
+    * 
+    * button 設置 box-sizing: border-box; 所以邊框即可當相對定位的起始點
+    * 
+    * ::before ::after 設置 box-sizing: border-box; 分別定位到左上與右下，邊框為透明色，寬度與高度為 0
+    * 
+    * .draw:hover::before 瞬間將上右邊框改為 #60daaa 顏色，並加上 transition width hieght 過度，高度延遲已變等寬度過度
+    * 
+    * .draw:hover::after 延遲下左邊框改為 #60daaa 顏色避免出現正方型，並加上 transition width hieght 過度，寬高延遲過度
+    * 
+    * 由於 ::before ::after 的邊框過度是設置在 :hover 時，所以結束時 ::before ::after 的寬高和顏色都會直接消失，剩下 .draw 的 color 過度
+    */
+    .draw:hover::before {
+      border-top-color: #60daaa;
+      border-right-color: #60daaa;
+      transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+    }
+    
+    .draw:hover::after {
+      border-bottom-color: #60daaa;
+      border-left-color: #60daaa;
+      
+      /**
+      * border-color 0s ease-out 0.5s;
+      * 
+      * 邊框起始樣式為 64 行，直接改顏色會有一個 4px 的正方形，所以延遲邊框變色的過度
+      */
+      transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    .meet {
+      transition: color 0.25s;
+    }
+    
+    .meet::before, .meet::after {
+      width: 0;
+      height: 0;
+      box-sizing: border-box;
+      
+      position: absolute;
+      left: 0;
+      top: 0;
+      
+      /* 起始透明色 */
+      border: 2px solid transparent;
+      
+      /* 必需要有 */
+      content: '';
+    }
+    
+    .meet:hover {
+      color: #fbca67;
+    }
+    
+    .meet:hover::before, .meet:hover::after {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .meet:hover::before {
+      border-top-color: #fbca67;
+      border-right-color: #fbca67;
+      
+      transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+    }
+    
+    .meet:hover::after {
+      border-left-color: #fbca67;
+      border-bottom-color: #fbca67;
+      
+      transition: height 0.25s ease-out, width 0.25s ease-out 0.25s;
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    /* 這套樣式再 FireFox 可能會出現問題，內容文字寬度的小數點可能導致邊框對不上 */
+    
+    .center {
+      transition: color 0.25s;
+    }
+    
+    .center::before, .center::after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      
+      width: 100%;
+      height: 100%;
+      
+      /* 對齊點在中心 */
+      /* transform-origin center 100% 依照自身寬高 */
+      transform-origin: center;
+      transition: transform 0.25s ease-out;
+    }
+    
+    .center::before {
+      border-top: 2px solid #6477b9;
+      border-bottom: 2px solid #6477b9;
+      
+      /* 寬度 0 -> 1 */
+      /* 依照自身寬高 */
+      transform: scale(0, 1);
+    }
+    
+    .center::after {
+      border-left: 2px solid #6477b9;
+      border-right: 2px solid #6477b9;
+      
+      /* 高度 0 -> 1 */
+      /* 依照自身寬高 */
+      transform: scale(1, 0);
+    }
+    
+    .center:hover {
+      color: #6477b9;
+    }
+    
+    .center:hover::before, .center:hover::after {
+      transform: scale(1, 1);
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    .spin {
+      padding: 0;
+      width: 120px;
+      height: 120px;
+      transition: color 0.25s;
+    }
+    
+    .spin::before, .spin::after {
+      width: 100%;
+      height: 100%;
+      color: transparent;
+      border: 2px solid transparent;
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .spin::after {
+      /* transform-origin: center; */
+    }
+    
+    .spin:hover {
+      color: #0eb7da;
+    }
+    
+    .spin:hover::before {
+      border-color: #0eb7da;
+      transition: border-top-color 0.1s ease-out,
+      border-right-color 0.1s ease-out 0.1s,
+      border-bottom-color 0.1s ease-out 0.2s,
+      border-left-color 0.1s ease-out 0.3s;
+    }
+    
+    .spin:hover::after {
+      border-top-color: #0eb7da;
+      transform: rotate(270deg);
+      transition: transform 0.4s ease-out;
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    .circle {
+      padding: 0;
+      width: 120px;
+      height: 120px;
+      box-shadow: none;
+      transition: color 0.25s;
+    }
+    
+    .circle::before, .circle::after {
+      width: 100%;
+      height: 100%;
+      border: 2px solid transparent;
+      border-radius: 100%;
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .circle:hover {
+      color: #ff00ff;
+    }
+    
+    .circle:hover::before {
+      border-color: #ff00ff;
+      border-left-color: transparent;
+      transition: 
+      border-top-color 0.1s ease-out,
+      border-right-color 0.1s ease-out 0.05s,
+      border-bottom-color 0.1s ease-out 0.15s;
+    }
+    
+    .circle:hover::after {
+      border-top-color: #ff00ff;
+      transform: rotate(270deg);
+      transition: transform 0.4s ease-out;
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style>
+    .thick {
+      padding: 0;
+      width: 5em;
+      height: 5em;
+      transition: color 0.25s ease-out;
+    }
+    
+    .thick::before, .thick::after {
+      width: 0;;
+      padding: 0;
+      content: '';
+      border: 2.5em solid transparent;
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+    }
+    
+    .thick:hover {
+      color: #fff;
+    }
+    
+    .thick:hover::before {
+      border-color: #f45e61;
+      border-left-color: transparent;
+      transition: 
+      border-top-color 0.1s ease-out,
+      border-right-color 0.1s ease-out 0.05s,
+      border-bottom-color 0.1s ease-out 0.15s;
+    }
+
+    .thick:hover::after {
+      border-top-color: rgba(244, 94, 97, 0.5);
+      transform: rotate(270deg);
+      transition: transform 0.4s ease-out;
+    }
+  </style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style></style>
+  
+  <!-- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ------->
+  
+  <style></style>
+</head>
+<body>
+  <h1>CSS Border Transitions</h1>
+  
+  <hr>
+  
+  <section>
+    <button class="draw">
+      Draw
+    </button>
+    
+    <button class="meet">
+      Meet
+    </button>
+    
+    <button class="center">
+      Center
+    </button>
+    
+    <button class="spin">
+      Spin
+    </button>
+    
+    <button class="circle">
+      Circle
+    </button>
+    
+    <button class="thick">
+      Thick
+    </button>
+  </section>
+</body>
+</html>

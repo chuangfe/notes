@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #div {
+        margin: 300px;
+        padding: 100px;
+        width: 5000px;
+        height: 5000px;
+        border: 5px solid red;
+        background-color: #eee;
+      }
+
+      #btn {
+        width: 50px;
+        height: 50px;
+        background-color: #ccc;
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+        cursor: pointer;
+
+        font-size: 50px;
+        text-align: center;
+        line-height: 65px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div"></div>
+
+    <div id="btn">^</div>
+  </body>
+</html>
+<script>
+  // 當發生卷軸事件時, 被移動的 dom 距離起始點的距離
+  // 通常用於 body，若要用於其他 DOM 則建議有卷軸
+  // scrollWidth
+  // scrollHeight
+
+  // 通常用於 document.documentElement
+  // scrollTop
+  // scrollLeft
+
+  let bodyJS = document.body;
+  let div = document.querySelector("#div");
+
+  // 按照字面解，應該為卷軸可滾動的寬度，待補充
+  // margin-left + padding + width + border
+  console.log("scrollWidth", bodyJS.scrollWidth); // 5510
+
+  // 按照字面解，卷軸可滾動的高度，可能相當於網頁高度
+  // margin + padding + width + border
+  console.log("scrollHeight", bodyJS.scrollHeight); // 5510
+
+  // 瀏覽器可視區頂部，距離頁面頂部，的距離
+  console.log("scrollTop", document.documentElement.scrollTop);
+
+  // 瀏覽器可視區左側，距離頁面左側，的距離
+  console.log("scrollLeft", document.documentElement.scrollLeft);
+
+  // 瀏覽器可視區高度
+  console.log(document.documentElement.clientHeight);
+
+  // ---------------------------------------------------------------------------
+
+  // 補充，控制卷軸
+
+  let btn = document.querySelector("#btn");
+  let ScrollOnOff = false;
+
+  let scrollHandler = function () {
+    window.scrollTo(0, window.scrollY - Math.ceil(window.scrollY / 10));
+
+    // 開關
+    if (window.scrollY === 0) ScrollOnOff = false;
+  };
+
+  btn.addEventListener("click", function () {
+    // 開關
+    ScrollOnOff = true;
+  });
+
+  let render = function () {
+    // 根據 Alex 解釋，即使不停止 requestAnimationFrame() 也沒問題，只要使用判斷讓內部無程式執行即可
+    if (ScrollOnOff) scrollHandler();
+
+    // requestAnimationFrame(Func)
+    // 新式的動畫版 setInterval，依據硬體效能自動調整 FPS
+    // arguments.callee === render
+    window.requestAnimationFrame(arguments.callee);
+  };
+
+  render();
+</script>

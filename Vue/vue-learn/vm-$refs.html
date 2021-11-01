@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vm-$refs</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="button" value="按鈕" v-on:click="clickHandler" />
+      <h3 ref="title">雨勢升級！北北基豪雨特報 桃宜花9縣市防大雨</h3>
+
+      <hr />
+
+      <login ref="login"></login>
+    </div>
+
+    <template id="login-template">
+      <div>
+        <input type="text" ref="input" v-model="val" />
+        <input type="button" value="登入" ref="button" />
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // this.$refs 與 ref 屬性，可以在 vm 實體中獲取 dom 元素
+      // 如果 ref 屬性，設置在組件的佔位符，那 this.$refs 獲取到的是組件，而非 dom 元素
+
+      Vue.component("login", {
+        template: "#login-template",
+        data: function () {
+          return {
+            val: "Login Component Value",
+          };
+        },
+      });
+
+      let vm = new Vue({
+        el: "#app",
+
+        data: {
+          val: "Vm Instance Value",
+        },
+
+        methods: {
+          clickHandler: function () {
+            // 父組件的 h3 dom 元素
+            console.log(this.$refs.title);
+
+            // 子組件實體，可以做各種操作
+            console.log(this.$refs.login, this.$refs.login.val);
+            // 父組件可以直接修改子組件的資料，代表可以獲取子組件的方法等等各種屬性
+            this.$refs.login.val = this.val;
+
+            // 父組件無法獲取子組件的 dom 元素
+            console.log(this.$refs.input); // undefined
+            // 這樣才能獲取子組件的 dom 元素
+            console.log(this.$refs.login.$refs.input);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

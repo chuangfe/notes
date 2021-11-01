@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #div1 {
+        width: 50px;
+        height: 50px;
+        background-color: #000;
+        position: absolute;
+
+        box-sizing: border-box;
+
+        /* 防止圖片文字拖拽 */
+        user-select: none;
+        z-index: 2;
+      }
+
+      .box {
+        display: flex;
+        background-color: #ccc;
+
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .div1 {
+        width: 400px;
+        height: 400px;
+
+        background-color: red;
+      }
+
+      .div2 {
+        width: 400px;
+        height: 600px;
+        background-color: green;
+      }
+
+      .div3 {
+        width: 400px;
+        height: 200px;
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div1"></div>
+
+    <div class="box">
+      <div class="div1"></div>
+      <div class="div2"></div>
+      <div class="div3"></div>
+    </div>
+  </body>
+</html>
+<script>
+  class Drag {
+    constructor() {}
+
+    static addDrag(el) {
+      el.style.position = "absolute";
+      el.addEventListener("mousedown", Drag.dragHandler);
+    }
+
+    static removeDrag(el) {
+      el.removeEventListener("mousedown", Drag.dragHandler);
+    }
+
+    static dragHandler(e) {
+      if (e.type === "mousedown") {
+        this.point = { x: e.offsetX, y: e.offsetY };
+        Drag.elem = this;
+        document.addEventListener("mousemove", Drag.dragHandler);
+        document.addEventListener("mouseup", Drag.dragHandler);
+      } else if (e.type === "mousemove") {
+        Drag.elem.style.left = e.x - Drag.elem.point.x + "px";
+        Drag.elem.style.top = e.y - Drag.elem.point.y + "px";
+      } else if (e.type === "mouseup") {
+        document.removeEventListener("mousemove", Drag.dragHandler);
+        document.removeEventListener("mouseup", Drag.dragHandler);
+      }
+    }
+  }
+
+  let div = document.querySelector("#div1");
+
+  Drag.addDrag(div1);
+</script>

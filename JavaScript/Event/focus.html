@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <input type="text" placeholder="預設內容" id="text" />
+      <button>按鈕</button>
+    </form>
+    <a href="javascript:;" id="tagA">超連結</a>
+  </body>
+</html>
+<script>
+  let input = document.querySelector("#text");
+  let tagA = document.querySelector("#tagA");
+
+  let focusHandler = function (e) {
+    // relatedTarget 上一個獲取焦點的元素
+    console.log(e, e.target);
+  };
+
+  input.addEventListener("focus", focusHandler);
+  tagA.addEventListener("focus", focusHandler);
+</script>

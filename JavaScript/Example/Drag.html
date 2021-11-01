@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 50px;
+        height: 50px;
+        background-color: #ccc;
+        position: absolute;
+
+        box-sizing: border-box;
+
+        /* 防止圖片文字拖拽 */
+        user-select: none;
+      }
+
+      div.active {
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body></body>
+</html>
+<script>
+  // arguments.callee 代表當前執行的函式
+
+  let mouseHandler = function (e) {
+    switch (e.type) {
+      case "mousedown":
+        if (e.target === document.documentElement) {
+          arguments.callee.el = document.createElement("div");
+
+          document.body.append(arguments.callee.el);
+
+          arguments.callee.el.style.left =
+            e.clientX - arguments.callee.el.offsetWidth / 2 + "px";
+          arguments.callee.el.style.top =
+            e.clientY - arguments.callee.el.offsetHeight / 2 + "px";
+        }
+
+        if (e.target.constructor === HTMLDivElement) {
+          window.addEventListener("mousemove", arguments.callee);
+          window.addEventListener("mouseup", arguments.callee);
+
+          arguments.callee.el = e.target;
+          arguments.callee.mousedownX = e.offsetX;
+          arguments.callee.mousedownY = e.offsetY;
+        }
+
+        e.stopPropagation();
+        break;
+      case "mousemove":
+        arguments.callee.el.style.left =
+          e.clientX - arguments.callee.mousedownX + "px";
+        arguments.callee.el.style.top =
+          e.clientY - arguments.callee.mousedownY + "px";
+        break;
+      case "mouseup":
+        window.removeEventListener("mousemove", arguments.callee);
+        window.removeEventListener("mouseup", arguments.callee);
+        break;
+    }
+  };
+
+  window.addEventListener("mousedown", mouseHandler);
+</script>

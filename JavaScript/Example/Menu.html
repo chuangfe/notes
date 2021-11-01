@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      body {
+        padding: 10px;
+      }
+
+      #menu {
+        width: 120px;
+        height: 30px;
+        border: 1px solid #000;
+
+        position: relative;
+        user-select: none;
+      }
+
+      #triangle {
+        width: 0px;
+        height: 0px;
+        border: 10px solid transparent;
+        border-top-color: #000;
+        cursor: pointer;
+
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+
+      #title {
+        width: 90px;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        display: block;
+      }
+
+      #menu ul {
+        display: none;
+      }
+
+      #menu ul.show {
+        display: block;
+      }
+
+      #menu li {
+        padding-right: 30px;
+        height: 30px;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      #menu li:hover {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="menu">
+      <span id="triangle"></span>
+      <span id="title">請選擇</span>
+      <ul>
+        <li>台北市</li>
+        <li>新北市</li>
+        <li>基隆市</li>
+        <li>桃園市</li>
+        <li>新竹市</li>
+      </ul>
+    </div>
+  </body>
+</html>
+
+<script>
+  let menu = function () {
+    let menu = document.querySelector("#menu");
+    let triangle = document.querySelector("#triangle");
+    let title = document.querySelector("#title");
+    let ul = document.querySelector("#menu").querySelector("ul");
+    let lis = Array.from(
+      document.querySelector("#menu").querySelectorAll("li")
+    );
+
+    let liClickHandler = function () {
+      title.textContent = this.textContent;
+      ul.classList.remove("show");
+    };
+
+    triangle.addEventListener("click", function () {
+      ul.classList.toggle("show");
+    });
+
+    lis.forEach(function (li) {
+      li.addEventListener("click", liClickHandler);
+    });
+
+    menu.addEventListener("mouseleave", function () {
+      ul.classList.remove("show");
+    });
+  };
+
+  menu();
+</script>

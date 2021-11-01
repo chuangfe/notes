@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-if&show</title>
+    <style>
+      .active {
+        display: block;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>v-if 示範</p>
+
+      <div>
+        <input type="button" value="toggle" v-on:click="toggle = !toggle" />
+        {{ toggle }}
+      </div>
+      <p v-if="toggle">使用 v-if 切換的元素</p>
+      <!-- v-if v-else 中間不能有其他標籤 -->
+      <p v-else>toggle = false 時, v-else 會顯示</p>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <!-- 若有多個 v-if 可以這樣使用, template 標籤不成為實際的 dom 出現 -->
+      <p>v-if template 示範</p>
+
+      <template v-if="toggle">
+        <p>多個 v-if</p>
+        <p>多個 v-if</p>
+        <p>多個 v-if</p>
+      </template>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <!-- v-else-if -->
+      <p>v-else-if 示範</p>
+
+      <input type="text" v-model="type" />
+
+      <p v-if="type === 'A'">A Content</p>
+      <p v-else-if="type === 'B'">B Content</p>
+      <p v-else-if="type === 'C'">C Content</p>
+      <p v-else>No Content</p>
+
+      <!-- Alex 不喜歡以上的寫法, 故修改成以下的方式, 但是實際上會拆 component -->
+      <p>{{content}}</p>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <!-- 補充, v-if 系列在切換 input 系列時可能會誤判, 需要加上 key 屬性, 這部分
+        在 v-for 時會提到 -->
+      <p>v-if 系列在切換 input 系列時可能會誤判</p>
+
+      <div>
+        <input type="button" value="toggle" v-on:click="toggle = !toggle" />
+        {{ toggle }}
+      </div>
+      <!-- 兩個 input 沒有 key 值, 故兩個 input 的 value 會共用, 可能 vue 將兩個
+         input 都當成同一個了 -->
+      <p v-if="toggle">v-if <input type="text" /></p>
+      <p v-else>v-else <input type="text" /></p>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <!-- key 範例, 單純的原生 html 寫法, 字串值的屬性 -->
+      <!-- <input type="text" key="aInput" /> -->
+      <!-- key 範例, 使用 vue v-bind:key 綁定屬性, 變數的值需要定義 -->
+      <!-- <input type="text" :key="aInput" /> -->
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+
+      <p>使用 v-show 切換 dom, 和類似的方式切換</p>
+
+      <!-- 補充, v-show 不推薦使用在 template tag 身上聽說會有問題 -->
+      <!-- 第一種寫法 -->
+      <p v-show="toggle">Now you can see me</p>
+      <p v-show="!toggle">Now you don't</p>
+      <!-- 第二種寫法 -->
+      <p v-bind:class="{active: toggle, hidden: !toggle}">Now you can see me</p>
+      <!-- 第三種寫法 -->
+      <p>{{toggle ? "Now you can see me" : ""}}</p>
+
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      /**
+       * v-if 使用添加與刪除元素來達到切換
+       * 元素切換次數低時才建議使用
+       * 不想給使用者
+       * 看到時使用
+       */
+      // v-show 使用樣式來達到切換，元素切換次數高時性能消耗較低
+
+      const dataMapping = {
+        A: "A Content",
+        B: "B Content",
+        C: "C Content",
+      };
+
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          toggle: true,
+          type: "A",
+        },
+        computed: {
+          content: function () {
+            return dataMapping[this.type] || "No Content";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

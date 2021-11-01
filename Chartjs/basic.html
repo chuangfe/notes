@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="myChart"></canvas>
+  </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  /**
+   * 請先確認資料適合的圖表類型.
+   *
+   * 研究方向.
+   * 框架的可選屬性, 待補充.
+   * 資料的可選屬性, 待補充.
+   * 資料的格式要求, 待補充.
+   *
+   * 注意事項, 某些屬性在 Chart 可以設置, 也可以在 datasets 內的物件也可以設置, 在繪圖時優先找 datasets 內的物件數性.
+   */
+
+  const myChart = new Chart(document.getElementById("myChart"), {
+    /**
+     * 字串, 選擇圖表類型.
+     * line, 折線圖.
+     */
+    type: "line",
+
+    // 物件.
+    data: {
+      // labels, 待補充, 需要配合的資料格式與當前的不同.
+
+      // 陣列, 資料集合.
+      datasets: [
+        {
+          label: "Ian",
+          data: [
+            {
+              month: "January",
+              value: 50,
+            },
+            {
+              month: "February",
+              value: 20,
+            },
+            {
+              month: "March",
+              value: 70,
+            },
+            {
+              month: "April",
+              value: 10,
+            },
+            {
+              month: "May",
+              value: 35,
+            },
+            {
+              month: "June",
+              value: 60,
+            },
+            {
+              month: "July",
+              value: 90,
+            },
+            {
+              month: "August",
+              value: 75,
+            },
+            {
+              month: "September",
+              value: 95,
+            },
+            {
+              month: "October",
+              value: 100,
+            },
+            {
+              month: "November",
+              value: 5,
+            },
+            {
+              month: "December",
+              value: 35,
+            },
+          ],
+          // 在折線圖中, 折線的顏色.
+          borderColor: "rgb(255, 99, 132)",
+          // 在折線圖中, 圓圈的顏色.
+          backgroundColor: "rgb(255, 99, 132)",
+        },
+
+        {
+          label: "Alex",
+          data: [
+            {
+              month: "January",
+              value: 20,
+            },
+            {
+              month: "February",
+              value: 70,
+            },
+            {
+              month: "March",
+              value: 10,
+            },
+            {
+              month: "April",
+              value: 50,
+            },
+            {
+              month: "May",
+              value: 45,
+            },
+            {
+              month: "June",
+              value: 30,
+            },
+            {
+              month: "July",
+              value: 60,
+            },
+            {
+              month: "August",
+              value: 85,
+            },
+            {
+              month: "September",
+              value: 65,
+            },
+            {
+              month: "October",
+              value: 10,
+            },
+            {
+              month: "November",
+              value: 35,
+            },
+            {
+              month: "December",
+              value: 75,
+            },
+          ],
+          borderColor: "#7FFFD4",
+          backgroundColor: "#7FFFD4",
+        },
+      ],
+    },
+
+    // 物件.
+    options: {
+      // 自動調整 canvas 寬高.
+      responsive: true,
+
+      // 針對 resize canvas 調整寬高的延遲.
+      resizeDelay: 1000,
+
+      // 在折線圖中, 圓圈半徑.
+      // radius: 1,
+
+      // 在折線圖中, 填滿折線, 感覺不適合在折線圖使用.
+      // fill: true,
+
+      // x 軸 y 軸的設定, 預設會自動抓範圍與單位, 感覺不需要特別設定.
+      scales: {
+        x: {
+          display: true,
+
+          title: {
+            display: true,
+            text: "month",
+            // font: {
+            //   size: 50,
+            // },
+          },
+
+          // ticks: {
+          //   font: {
+          //     size: 50,
+          //   },
+          // },
+        },
+
+        // y: {
+        //   display: true,
+        //   title: {
+        //     display: true,
+        //     text: "Value",
+        //   },
+        //   suggestedMin: 0,
+        //   suggestedMax: 200,
+        // },
+      },
+
+      // 對應 myChart.data.datasets.data 的單個物件.
+      parsing: {
+        // x 軸單位.
+        xAxisKey: "month",
+        // y 軸單位.
+        yAxisKey: "value",
+      },
+
+      plugins: {
+        // 在折線圖中, 折線分類的說明.
+        legend: {
+          // 是否開啟說明.
+          display: true,
+
+          // 說明放在圖表的哪個方向.
+          position: "top",
+
+          // 說明的事件.
+          onClick: function (event, legendItem, legend) {
+            console.log(event);
+            console.log(legendItem);
+            console.log(legend);
+          },
+
+          // 說明相關樣式設置.
+          labels: {
+            font: {
+              size: 100,
+            },
+          },
+        },
+
+        // 資料因事件跳出的提示相關.
+        tooltip: {
+          // 開啟或關閉 click mouseover 的資料提示.
+          enabled: true,
+
+          titleFont: {
+            size: 16,
+          },
+
+          bodyFont: {
+            size: 14,
+          },
+        },
+
+        // 圖表標題.
+        title: {
+          // 圖表標題是否顯示.
+          display: true,
+          // 圖表標題內容.
+          text: "測試折線圖",
+          // 圖表字體大小.
+          font: {
+            size: 24,
+          },
+        },
+      },
+    },
+  });
+</script>

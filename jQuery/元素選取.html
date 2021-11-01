@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>入門-DOM</title>
+</head>
+
+<body>
+
+  <ul id="ul">
+    <li>0</li>
+    <li>1</li>
+    <li class="liClass">2</li>
+    <li class="liClass">3</li>
+    <li class="liClass">4</li>
+    <li class="liClass">5</li>
+  </ul>
+
+  <script src="./jquery-3.3.1.js"></script>
+  <script>
+    (function ($) {
+      // jQuery 選取器
+      // $('#ID')
+      // $('.Class')
+      // $('tagName')
+      // $('[value=key]')
+      // $('<li></li>') 新增 li DOM
+
+      // parent() 第一層父元素
+      // parents(可加入選取器篩選) 每一層的父元素
+      // parentsUntill(終點, 選取器) 每一層的父元素，值到 body 為止
+      // parentsUntill('.nav', 'a') 獲取到 .nav 為止以內，並從 .nav 中尋找是 a 的父元素
+
+      // next() 同級下一個元素，若獲取到 0 1 2 3 的 li 則使用 next() 會獲取到 1 2 3 4 的 li
+      // prev() 同級上一個元素
+      // nextUntill(終點, 選取器) 同級上一個元素
+      // $('li').eq(0).nextUntill('li:last-child') 0 1 2 3 4 -> 1 2 3 
+
+      // siblings() // 同層其他元素
+      // $('li').eq(1).siblings() 1 -> 0 2 3 4 
+
+      // find() 所有的子元素及孫子元素
+      // children() 第一層子元素
+
+      // eq(index) 從獲取的 DOM 獲取第 index 個
+
+      // 補充：display: inline-block; 配合父元素設置 font-size: 0; 清除換行字元空白，並在 inline-block 重新設置 font-size
+
+      // jQuery 3.3.1 框架獲取 DOM 重點
+      // sizzle 2940
+      // sibling 3108
+      // dir 2770
+      // siblings 2786
+      // travel mathod 3113
+    })($);
+  </script>
+</body>
+
+</html>

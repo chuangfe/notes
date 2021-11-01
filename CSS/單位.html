@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>單位</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      .box {
+        margin: 0px auto;
+        /* 數值與運算符號中間必需要有空白 */
+        width: calc(100vw - 200px);
+        height: 100vh;
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box"></div>
+  </body>
+</html>
+
+<script>
+  // px
+
+  // em, 依照當前元素的字體大小，例如 #div1 { font - size: 12px; } #div1 的 2em = 24px;
+  // #div1 的子元素也會繼承 font-size: 12px; 除非子元素而外重新設置字體大小
+
+  // rem, 依照 body 的 font - size 字體大小
+
+  // % 百分比, 依照樣式的不同, 百分比參考對象都不同
+
+  // vw vh, 依照當前瀏覽器可視區域的寬度與高度
+
+  // inherit, 子元素繼承父元素的設定
+
+  // calc(), 可計算使用
+</script>

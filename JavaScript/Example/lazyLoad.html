@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="https://i.picsum.photos/id/1/5616/3744.jpg" />
+    <img src="https://i.picsum.photos/id/10/2500/1667.jpg" />
+    <img src="https://i.picsum.photos/id/100/2500/1656.jpg" />
+    <img src="https://i.picsum.photos/id/1000/5626/3635.jpg" />
+    <img src="https://i.picsum.photos/id/1001/5616/3744.jpg" />
+    <img src="https://i.picsum.photos/id/1002/4312/2868.jpg" />
+    <img src="https://i.picsum.photos/id/1003/1181/1772.jpg" />
+    <img src="https://i.picsum.photos/id/1004/5616/3744.jpg" />
+    <img src="https://i.picsum.photos/id/1005/5760/3840.jpg" />
+  </body>
+</html>
+<script src="./Utils.js"></script>
+<script>
+  // Img 懶加載，使用遞迴下載圖片
+
+  let imgArr = document.querySelectorAll("img");
+  let test = 0;
+
+  Utils.lazyLoad(
+    imgArr,
+    () => {
+      test++;
+      console.log(test);
+    },
+    true
+  );
+</script>

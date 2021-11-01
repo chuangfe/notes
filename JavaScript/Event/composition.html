@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+  </body>
+</html>
+<script>
+  /**
+   * input 表單事件輸入內容時可能會發生, 輸入法選字時就觸發不必要的事件, 例如 enter
+   * 或是 submit 等不應該一直發生的事件, 這時可以使用這兩個事件還確認, 使用者當前是在
+   * 選字, 還是已經要提交表單內容
+   */
+
+  // compositionstart 事件, 當輸入法拼音時觸發
+  // compositionend 事件, 當輸入法拼音結束時觸發
+  let input = document.querySelector("#input");
+  let onOff = false;
+
+  function compositionstartHandler(e) {
+    console.log("composition start", e);
+    onOff = false;
+  }
+
+  function compositionendtHandler(e) {
+    console.log("composition end", e);
+    onOff = true;
+  }
+
+  function inputEnterHandler(e) {
+    if (e.keyCode === 13 && onOff) console.log("input enter");
+    onOff = false;
+  }
+
+  input.addEventListener("compositionstart", compositionstartHandler);
+  input.addEventListener("compositionend", compositionendtHandler);
+  input.addEventListener("keyup", inputEnterHandler);
+</script>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-on-keyup</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-model="firstName" v-on:keyup="keyupHandler" /> +
+      <input type="text" v-model="listName" v-on:keyup="keyupHandler" /> =
+      <input type="text" placeholder="Methods" v-model="fullName" /> or
+      <input type="text" placeholder="Computed" v-model="computedFullName" />
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      let vm = new Vue({
+        el: "#app",
+
+        data: {
+          firstName: "",
+          listName: "",
+          fullName: "",
+        },
+
+        methods: {
+          keyupHandler: function() {
+            // this.fullName = this.listName + " " + this.firstName;
+            this.fullName = `${this.listName} ${this.firstName}`;
+          },
+        },
+
+        computed: {
+          computedFullName: function() {
+            return `${this.listName} ${this.firstName}`;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

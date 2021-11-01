@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>axios</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      #create .post-button {
+        margin-left: 10px;
+      }
+
+      #list tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="create">
+        <form class="form-inline mb-2" v-on:submit.prevent="post">
+          <div class="form-group mb-2">
+            <input
+              type="text"
+              class="form-control"
+              id="inputPassword2"
+              placeholder="Name"
+              v-model.trim="name"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary mb-2 post-button">
+            Post
+          </button>
+        </form>
+      </div>
+
+      <table id="list" class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Ctime</td>
+            <td>Operation</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(value, key, i) in users" v-bind:key="value.id">
+            <th scope="row">{{ value.id }}</th>
+            <td>{{ value.name }}</td>
+            <td></td>
+            <td>
+              <a href="javascript:;" v-on:click="remove(value.id)">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+<script>
+  // vue 原生沒有 ajax 的函式封裝，建議使用另外的框架
+  // 例如：axios
+
+  let getId = function(arr) {
+    if (!arr) return 1;
+    return Number(arr[arr.length - 1].id) + 1;
+  };
+
+  let vm = new Vue({
+    el: "#app",
+
+    data: {
+      url: "http://localhost:3000/contents",
+      name: "",
+      users: [],
+    },
+
+    methods: {
+      post: function() {
+        if (!this.name) return false;
+
+        let id = getId(this.users);
+        let user = { name: this.name, id: id };
+
+        axios.post(this.url, user).then(() => {
+          this.users.push(user);
+          this.name = "";
+        });
+      },
+      remove: function(id) {
+        axios.delete(this.url + "/" + id).then(() => {
+          // arr.findIndex 對陣列迴圈，只要函式內返回 true 就會停止迴圈，並返回目標的編號
+          let index = this.users.findIndex(user => {
+            if (user.id === id) return true;
+          });
+          this.users.splice(index, 1);
+        });
+      },
+    },
+
+    created: function() {
+      axios.get(this.url).then(response => {
+        this.users = response.data;
+      });
+    },
+  });
+</script>

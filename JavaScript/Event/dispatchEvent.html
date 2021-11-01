@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">按鈕</button>
+  </body>
+</html>
+<script>
+  let btn = document.querySelector("#btn");
+
+  let clickHandler = function(e) {
+    // console.log("aaa", "click event");
+
+    // 正常觸發事件與 dispatchEvent 的 Event 資料有差別
+    // dispatchEvent 的 Event 資料會有 32 行的屬性
+    console.log(e);
+  };
+
+  btn.addEventListener("click", clickHandler);
+
+  // dispatchEvent 用於觸發元素的事件
+  // new MouseEvent 是依照 new Event 為基礎延伸，故還有其他多種
+  // 其他:InputEvent、FocusEvent ...
+  let clickEvent = new MouseEvent("click");
+
+  // 無聊的測試
+  clickEvent.FFFFFF = "111111";
+
+  // 不需要點擊按鈕，也可以觸發事件
+  btn.dispatchEvent(clickEvent);
+
+  // ---------------------------------------------------------------------------
+
+  // 假事件綁定
+  btn.addEventListener("testEvent", () => {
+    console.log("bbb", "假事件");
+  });
+
+  // 假事件觸發
+  btn.dispatchEvent(new Event("testEvent"));
+</script>

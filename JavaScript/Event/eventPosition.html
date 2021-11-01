@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 50px;
+        height: 50px;
+        background-color: #ccc;
+        box-sizing: border-box;
+        position: absolute;
+
+        user-select: none;
+      }
+
+      div.active {
+        border: 1px solid #333;
+        z-index: 1;
+      }
+    </style>
+  </head>
+
+  <body></body>
+</html>
+<script>
+  // 事件發生時的 event 物件屬性，座標
+  // 以下使用 click 舉例
+
+  // event.clientX 螢幕可視區左上角為基準，事件 X 座標距離螢幕可視區左上角距離
+  // event.x -> 與上相同
+
+  // event.offsetX 觸發事件的元素左上角為基準，事件 X 座標距離元素的左上角距離
+
+  // event.pageX 網頁左上角為基準，事件的 X 座標
+
+  // event.screenX 螢幕左上角為基準，事件的 X 座標
+
+  // event.layerX 待補充
+
+  // event.movementX 滑鼠本次移動距離
+
+  // 在事件中控制卷軸
+  // event.scrollLeft 控制卷軸左右移動
+  // event.scrollTop 卷軸上下移動
+
+  // Window 控制卷軸
+  // window.scrollTo(X座標, Y座標) -> 需要注意網頁與捲軸的方向
+</script>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-bind</title>
+    <style>
+      span {
+        color: 000;
+      }
+
+      .font-size {
+        font-size: 2rem;
+      }
+
+      .active {
+        color: rgb(31, 189, 39);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- dom 屬性設置方式 -->
+      <p>
+        正常的 a 標籤
+        <a href="https://www.google.com.tw/" target="_blank">Google</a>
+      </p>
+      <p>
+        Vue 的 a 標籤
+        <!-- 單冒號為 bind 縮寫 -->
+        <a v-bind:href="link.href" :target="link.target">Google</a>
+      </p>
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- v-on:click, 是 vue 綁定事件使用的指令 -->
+      <!-- dom class 切換, active class 依照 activeOff 的值添加或刪除 -->
+      <button class="font-size" v-on:click="toggleActive">切換</button>
+      <!-- 兩種 bind class 方式效果相同, 但第二種方式可節省 html 空間, 若還有需求更
+      複雜的邏輯運算, 可以使用 computed return object 的方式設置 class -->
+      <!-- 不需要 vue 管理的 class 可以不用 bind 的方式直些寫在裡面 -->
+      <p class="font-size" :class="{active: inClassContent.activeOff}">
+        {{msg}}
+      </p>
+      <p class="font-size" :class="outerClassContent">{{msg}}</p>
+      <hr />
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- ----------------------------------------------------------------- -->
+      <!-- dom style 設置 -->
+      <!-- 設置值的方式 -->
+      <p
+        :style="{fontSize: styleVueContent.fontSizeValue + 'rem', color: styleVueContent.colorValue}"
+      >
+        {{msg}}
+      </p>
+      <!-- 設置物件的方式 -->
+      <p :style="styleContent">{{msg}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script>
+      // v-bind 用於給元素綁定屬性與屬性值
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+        // vm 實體管理的資料
+        data: {
+          msg: "歡迎學習 Vue.js",
+          link: {
+            href: "https://www.google.com.tw/",
+            target: "_blank",
+          },
+          inClassContent: {
+            activeOff: true,
+          },
+          outerClassContent: {
+            active: true,
+          },
+          styleVueContent: {
+            fontSizeValue: "2",
+            colorValue: "rgb(29, 156, 165)",
+          },
+          styleContent: {
+            fontSize: "2rem",
+            color: "rgb(29, 156, 165)",
+          },
+        },
+        // vm 方法
+        methods: {
+          toggleActive(e) {
+            this.inClassContent.activeOff = !this.inClassContent.activeOff;
+            this.outerClassContent.active = !this.outerClassContent.active;
+            console.log(e);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

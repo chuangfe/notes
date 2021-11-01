@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="myChart"></canvas>
+  </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  /**
+   * 該款框架已資料驅動為主, 建議先調整好資料格式再繪圖.
+   */
+
+  const ChartOne = {
+    type: "line",
+
+    data: {
+      labels: ["January", "February", "March", "April", "May", "June"],
+
+      datasets: [
+        {
+          label: "My First dataset",
+          backgroundColor: "rgb(255, 99, 132)",
+          borderColor: "rgb(255, 99, 132)",
+          data: [0, 10, 5, 2, 20, 30, 45],
+        },
+      ],
+    },
+
+    options: {},
+  };
+
+  const ChartTwo = {
+    type: "bar",
+
+    data: {
+      datasets: [
+        {
+          // 長方形填充顏色.
+          backgroundColor: "rgb(255, 99, 132)",
+
+          // 資料.
+          data: [
+            { x: "Sales", y: 20 },
+            { x: "Revenue", y: 10 },
+          ],
+        },
+      ],
+    },
+  };
+
+  const ChartThree = {
+    type: "bar",
+
+    data: {
+      datasets: [
+        {
+          // 圖表標題.
+          label: "長條圖",
+
+          // 長方形填充顏色.
+          backgroundColor: "rgb(255, 99, 132)",
+
+          // borderWidth: 100,
+
+          // 資料.
+          data: [
+            { id: "Sales", nested: { value: 1500 } },
+            { id: "Purchases", nested: { value: 500 } },
+          ],
+        },
+      ],
+    },
+
+    options: {
+      // 設定圖表的 x 軸 y 軸單位, 包含 click mouseover 時提示的內容.
+      parsing: {
+        // 對應資料的物件.
+        xAxisKey: "id",
+        yAxisKey: "nested.value",
+      },
+
+      plugins: {
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            font: {
+              size: 48,
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const data = [
+    { x: "Jan", net: 100, cogs: 50, gm: 50 },
+    { x: "Feb", net: 120, cogs: 55, gm: 75 },
+  ];
+
+  const ChartFour = {
+    type: "bar",
+    data: {
+      labels: ["Jan", "Feb"],
+      datasets: [
+        {
+          label: "Net sales",
+          data: data,
+          parsing: {
+            yAxisKey: "net",
+          },
+        },
+        {
+          label: "Cost of goods sold",
+          data: data,
+          parsing: {
+            yAxisKey: "cogs",
+          },
+        },
+        {
+          label: "Gross margin",
+          data: data,
+          parsing: {
+            yAxisKey: "gm",
+          },
+        },
+      ],
+    },
+  };
+
+  var myChart = new Chart(document.getElementById("myChart"), ChartFour);
+</script>

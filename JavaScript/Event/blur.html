@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <div
+      id="div"
+      style="margin-top: 10px; width: 100px; height: 100px; background: #ccc"
+      tabindex="1"
+    ></div>
+  </body>
+</html>
+<script>
+  /**
+   * blur 元素失去焦點時的事件, 與 focus 相對, 非表單 tag 使用 focus blur 事件, 建
+   * 議加上 tabindex 屬性
+   */
+
+  let input = document.querySelector("#input");
+  let div = document.querySelector("#div");
+
+  function blurHandler(e) {
+    console.log(e, e.target);
+  }
+
+  input.addEventListener("blur", blurHandler);
+  div.addEventListener("blur", blurHandler);
+</script>

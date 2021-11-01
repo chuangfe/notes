@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./reset.css" />
+    <style>
+      body {
+        padding: 20px;
+      }
+      .btn {
+        display: inline-block;
+        background-color: #000;
+        color: #fff;
+        width: 80px;
+        line-height: 40px;
+        text-align: center;
+
+        /* transition: 屬性 動畫時間 延遲時間 動畫時間曲線 */
+        transition: background-color 0.4s 0s ease, width 0.4s 1s ease;
+      }
+
+      .btn:hover {
+        background-color: #f00;
+        color: #ff0;
+        width: 120px;
+      }
+
+      /* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+
+      @keyframes amos {
+        0% {
+          border-radius: 50%;
+        }
+        100% {
+          border-radius: 0%;
+        }
+      }
+
+      .box {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: #f00;
+
+        /* animation: 動畫名稱 動畫時間 動畫曲線 延遲時間 播放次數或持續循環 動畫方向
+          填充模式 播放狀態; */
+        /* 播放次數或持續循環: 可以是數字或是 infinite */
+        /* 動畫方向: 正向、反向、先正再反、先反再正*/
+        /* 填充模式(動畫結束後，元素要是什麼樣子): 原始樣式、動畫結束的樣式*/
+        animation: amos 1s ease 2s 5 alternate forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="javascript:;" class="btn">送出</a>
+
+    <hr />
+
+    <div class="box"></div>
+  </body>
+</html>

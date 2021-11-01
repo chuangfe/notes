@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vm-$mount</title>
+  </head>
+  <body>
+    <div id="app">{{msg}}</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // vm.$el 用於獲取實例初始化後, 再設置 vm 綁定的 dom 目標
+      let vm = new Vue({
+        // 沒有 el
+        data: {
+          msg: "Test",
+        },
+      });
+
+      vm.$mount("#app");
+    </script>
+  </body>
+</html>

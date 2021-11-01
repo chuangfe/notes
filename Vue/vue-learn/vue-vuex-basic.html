@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      p {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{count}}</p>
+      <p>
+        <button @click="clickHandler">按鈕</button>
+      </p>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.js"></script>
+
+<script>
+  /**
+   * single source of truth 單一資料模式, 將所有的資料儲存在一個地方, 統一保管修改,
+   * 避免資料分散導致混亂, 例如無法確認哪裡的資料是新的或是舊的.
+   *
+   * 單個 component 或是單頁面 SPA 的資料, 建議存在 data 就好.
+   *
+   * 補充, api 回傳的資料未必是 json 格式, 哪怕狀態都是正確的, 也必需要確認拿回的資料
+   * 格式與內容是否符合預期的設想.
+   */
+
+  const store = new Vuex.Store({
+    // 資料, 狀態
+    state: {
+      count: 0,
+    },
+    mutations: {
+      increment() {
+        this.state.count++;
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {},
+    // computed 配合 vuex 的使用方式, 可以節省 this.$store.state 這串.
+    computed: {
+      count() {
+        return this.$store.state.count;
+      },
+    },
+    methods: {
+      clickHandler() {
+        this.$store.commit("increment");
+      },
+    },
+    // 將 vuex 實體, 註冊在 vm 實體即可, 這樣 vm 和 vm 的 component 都可以使用.
+    store,
+  });
+</script>

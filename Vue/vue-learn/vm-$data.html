@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>vm-$data</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // vm.$data 可以在實例建構後再修改, 必需要使用 $ 符號才能讓 vm 修改畫面
+
+      let data = {
+        msg: "123",
+      };
+
+      let vm = new Vue({
+        el: "#app",
+        data,
+      });
+
+      vm.$data.msg = "456";
+
+      console.log(data);
+      console.log(vm.$data);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>directives-cloak</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{ msg }}</p>
+      <p v-cloak>{{ msg }}</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script>
+      // v-cloak 可以配合 style 讓 vm 繪置頁面前，先隱藏 {{}} 表達式
+      // vm 繪置頁面完成後，會將所有的 dom 的 v-cloak 屬性刪除
+
+      let vm = new Vue({
+        // vm 實體管理的 dom
+        el: "#app",
+
+        // vm 實體管理的資料
+        data: {
+          msg: "歡迎學習 Vue.js",
+        },
+      });
+    </script>
+  </body>
+</html>

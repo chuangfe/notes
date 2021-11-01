@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>component-base</title>
+    <style>
+      .global {
+        padding: 0px 10px;
+        border: 1px solid #000;
+      }
+
+      .local {
+        margin: 10px 0px;
+        padding: 0px 10px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>{{title}}</p>
+      <p>{{count}}</p>
+      <global-component :parent-title="title" active></global-component>
+      <!-- 綁定物件的解構賦值方式 -->
+      <local-component
+        v-bind="outsideObject"
+        :inside-count="count"
+      ></local-component>
+    </div>
+
+    <template id="global-template">
+      <div class="global">
+        <p>{{parentTitle}}</p>
+        <p>{{title}}</p>
+        <!--  -->
+        <local-component></local-component>
+      </div>
+    </template>
+
+    <template id="local-template">
+      <div class="local">
+        <p>{{title}}</p>
+        <p>{{insideObject.name}}</p>
+        <p>{{insideObject.age}}</p>
+        <p>
+          {{localCount}}
+          <input type="button" value="按鈕" @click="localCount++" />
+        </p>
+      </div>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+    <script>
+      // 局部組件, 使用時需要註冊在父組件身上
+      const LocalComponent = {
+        template: "#local-template",
+        props: {
+          name: String,
+          age: Number,
+          "inside-count": Number,
+        },
+        data: function () {
+          return {
+            title: "Local Component Title",
+            localCount: this.insideCount,
+          };
+        },
+        computed: {
+          insideObject: function () {
+            return {
+              name: this.name,
+              age: this.age,
+            };
+          },
+        },
+      };
+
+      // 全局註冊 component, 需要在 new Vue 前註冊
+      Vue.component("global-component", {
+        template: "#global-template",
+        // 最簡單版本
+        // props: ["parent-title"],
+        // 基本的類型限制
+        // props: { "parent-title": String },
+        props: {
+          "parent-title": String,
+          // props 也吃正常的屬性設置, 需要注意
+          active: Boolean,
+          "is-active": Boolean,
+        },
+        data: function () {
+          return {
+            title: "Global Component Title",
+          };
+        },
+        components: {
+          LocalComponent,
+        },
+      });
+
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          title: "Vm Title",
+          count: 0,
+          outsideObject: {
+            name: "Ian",
+            age: 28,
+          },
+        },
+        components: {
+          LocalComponent,
+        },
+      });
+    </script>
+  </body>
+</html>

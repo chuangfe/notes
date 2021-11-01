@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .grid-container​ {
+        width: 600px;
+        height: 600px;
+        background-color: #ccc;
+
+        /* 將 box 設定為 grid 類型 */
+        display: grid;
+
+        /* 左上角為原點, x 軸(列)切割為 6 份, 起始點為 1 終點為 7 */
+        /* grid-template-columns: 100px 100px 100px 100px 100px 100px; */
+        /* 左上角為原點, y 軸(行)切割為 6 份, 起始點為 1 終點為 7 */
+        /* grid-template-rows: 100px 100px 100px 100px 100px 100px; */
+
+        /* 使用座標方式 */
+        grid-template-columns: [X1] 100px [X2] 100px [X3] 100px [X4] 100px [X5] 100px [X6] 100px [X7];
+        grid-template-rows: [Y1] 100px [Y2] 100px [Y3] 100px [Y4] 100px [Y5] 100px [Y6] 100px [Y7];
+      }
+
+      .container-one {
+        background-color: blue;
+        /* 寬度是, x 軸座標 1 ~ 5 範圍 */
+        /* grid-column: 1/4; */
+
+        /* 寬度是, x 軸座標 1 延伸 4 格 */
+        /* grid-column: 1 / span 4; */
+
+        /* 使用座標方式, 寬度是, x 軸座標 X3 至 X7 */
+        grid-column: X3 / X7;
+
+        /* ------------------------------------------------------------------ */
+
+        /* 高度是, y 軸座標 1 ~ 3 範圍 */
+        /* grid-row: 1/5; */
+
+        /* 使用座標方式, 高度是, y 軸座標 Y1 至 Y5 */
+        grid-row: Y1 / Y5;
+
+        /* ------------------------------------------------------------------ */
+
+        /* 簡寫方式 */
+        /* grid-area: 1 / 1 / 3 / 5; */
+      }
+
+      .container-two {
+        background-color: yellow;
+        /* 寬度是, x 軸座標 4 ~ 7 範圍 */
+        grid-column: 3/7;
+        /* 高度是, y 軸座標 3 ~ 7 範圍 */
+        grid-row: 5/7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container​">
+      <div class="container-one"></div>
+      <div class="container-two"></div>
+    </div>
+  </body>
+</html>

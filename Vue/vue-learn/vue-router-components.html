@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* 推薦使用這個 vue-router 內建的 class 切換 router-link 的樣式 */
+      .router-link-exact-active {
+        background-color: #000;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <router-link to="/page1">Page1</router-link>
+        <router-link to="/page2">Page2</router-link>
+        <router-link to="/page3">Page3</router-link>
+        <button @click="clickHandler">Page3</button>
+      </div>
+      <hr />
+      <div>
+        <!-- 兩種寫法效果是相同的, 若無指定 name 預設為 default -->
+        <router-view></router-view>
+        <!-- <router-view name="default"></router-view> -->
+
+        <!-- 如果 path 需要顯示多個 component, 應對的 router-view 也需要多個 -->
+        <router-view name="page2"></router-view>
+        <router-view name="page3"></router-view>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /**
+   * 本章簡介, 一個 path 使用多個 component 組合, 在 routes object 使用 components
+   * 屬性, 而不是在 component object 使用 components 屬性, 兩者在功能上差異不大,
+   * 前者在撰寫上較為簡略.
+   * 使用說明, router-view name 與 routes object name and components 的配合使用,
+   * 依照 routes object name and components 對應複數的 router-view 的 name 屬性,
+   * 達成 component 的共用.
+   */
+
+  const Page1 = {
+    template: "<h3>Page 1</h3>",
+  };
+
+  const Page2 = {
+    template: "<h3>Page 2</h3>",
+  };
+
+  const Page3 = {
+    template: "<h3>Page 3</h3>",
+  };
+
+  const router = new VueRouter({
+    routes: [
+      {
+        path: "/page1",
+        name: "page1",
+
+        // 兩種寫法, 效果是相同的
+        component: Page1,
+        // component: {
+        //   default: Page1,
+        // },
+      },
+      {
+        path: "/page2",
+        name: "page2",
+        // 在 path = /page2 時, 顯示 Page1 component 與 Page2 component
+        components: {
+          default: Page1,
+          page2: Page2,
+        },
+      },
+      {
+        // 在 path = /page3 時, 顯示 Page1 component 與 Page3 component
+        path: "/page3",
+        name: "page3",
+        components: {
+          default: Page1,
+          page3: Page3,
+        },
+      },
+      {
+        path: "*",
+        redirect: "/page1",
+      },
+    ],
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      id: 99,
+      name: "Ian",
+    },
+    computed: {},
+    methods: {
+      clickHandler() {
+        // 在 $router.push 配合 routes object name
+        this.$router.push({ name: "page3" });
+      },
+    },
+    router,
+  });
+</script>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>Plugin</h3>
+      <p>
+        <input type="text" v-model="value" v-focus />
+        <button @click="clickHandler">按鈕</button>
+      </p>
+
+      <div>
+        <p>依照 input value 使用 directive 修改 tag 內容</p>
+        <p>value: <span v-inner-text="value"></span></p>
+      </div>
+    </div>
+  </body>
+</html>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+<script>
+  /**
+   * vuex vue-router 都屬於 vue Plugin 的一種, 在通常頁面使用時, 只需要載入 script
+   * 標籤即可, 若在 webpack vue-cli 等 nodejs, 環境下使用, 則需要使用 use 方法, 例
+   * 如這樣
+   * import VueRouter from 'vue-router'
+   * Vue.use(VueRouter)
+   */
+
+  // 自訂 Plugin, 需要使用 use 方法
+  // 用於整合自訂功能
+  const MyPlugin = {
+    // Vue 建構函式
+    // options 設定, 外部傳入的參數
+    install: function (Vue, options) {
+      console.log("MyPlugin", Vue, options);
+
+      // 全局自訂指令
+      Vue.directive("focus", {
+        // 這個生命週期, 只有在第一次繪製 vm html 時執行.
+        inserted(el, binding, vnode, oldVnode) {
+          el.focus();
+        },
+      });
+
+      // 全局自訂指令
+      // 生命週期, 繪製畫面後執行
+      Vue.directive("inner-text", {
+        // 這個生命週期, 只有在第一次繪製 vm html 時執行.
+        inserted(el, binding, vnode, oldVnode) {
+          console.log("inserted", el, binding, vnode, oldVnode);
+          el.innerText = binding.value;
+        },
+
+        update(el, binding, vnode, oldVnode) {
+          console.log("update", el, binding, vnode, oldVnode);
+          el.innerText = binding.value;
+        },
+      });
+
+      // 全局 mixin 註冊, 因為是所有組件都可以使用, 需要特別注意覆蓋的情況
+      Vue.mixin({
+        methods: {
+          logHandlerGlobalMixin(...arg) {
+            // process.env.NODE_ENV === 'develope'
+            if (options.consoleLog) console.log(...arg);
+          },
+        },
+      });
+    },
+  };
+
+  Vue.use(MyPlugin, { test: true, consoleLog: false });
+
+  const vue = new Vue({
+    el: "#app",
+
+    data: {
+      value: "",
+    },
+
+    methods: {
+      clickHandler() {
+        this.logHandlerGlobalMixin(1, 2, 3);
+      },
+    },
+  });
+</script>

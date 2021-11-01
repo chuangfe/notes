@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="app">
+      <p>
+        <input type="text" v-model="id" />
+      </p>
+      <router-link to="/index">Index</router-link>
+      <router-link :to="getPath">About</router-link>
+      <hr />
+      <router-view></router-view>
+    </div>
+  </body>
+</html>
+
+<template id="index-template">
+  <div>
+    <h3>Index</h3>
+  </div>
+</template>
+
+<template id="about-template">
+  <div>
+    <h3>About</h3>
+    <p>Id: {{$route.params.id}}</p>
+    <p>Name: {{$route.params.name}}</p>
+  </div>
+</template>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"
+  integrity="sha512-YXLGLsQBiwHPHLCAA9npZWhADUsHECjkZ71D1uzT2Hpop82/eLnmFb6b0jo8pK4T0Au0g2FETrRJNblF/46ZzQ=="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.js"
+  integrity="sha512-mQKtM7fSv7pIQ6r4Jqe7c7K3QKEa1G+qNp0o9ohfGNeTT7pl85our+sPlSkzogl1oChZj75zhq9HGAj7Pf4Wjw=="
+  crossorigin="anonymous"
+></script>
+
+<script>
+  /**
+   * meta 屬性, 當某些頁面需要驗證是否可以進入時, 所使用的屬性.
+   * 通常配合 beforeEach 生命週期使用.
+   *
+   * 假設在路由設置 meta.abc = true;
+   * 使用 to.matched.some((record) => record.meta.requiresAuth) 判斷 meta.abc 的
+   * 值, 是 true or false.
+   *
+   * 使用該方式可以明確分別, 哪些頁面需要判斷.
+   */
+
+  const Index = {
+    template: "#index-template",
+  };
+
+  const About = {
+    template: "#about-template",
+  };
+
+  const router = new VueRouter({
+    routes: [
+      // 沒有 meta, 所以不需要判斷
+      {
+        path: "/index",
+        name: "index",
+        components: {
+          default: Index,
+        },
+      },
+      // 有 meta 需要判斷
+      {
+        path: "/about/:id/:name",
+        name: "about",
+        components: {
+          default: About,
+        },
+        meta: { abc: true },
+      },
+    ],
+  });
+
+  router.beforeEach((to, from, next) => {
+    console.log("router.beforeEach --------------------");
+    if (to.matched.some((record) => record.meta.abc)) {
+      console.log("這個頁面需要判斷 --------------------");
+      // 如果 id 不是數值, 就不給進入 about 頁面
+      if (isNaN(Number(to.params.id))) {
+        // 判斷失敗
+        console.log("判斷失敗, 跳轉至 index 頁面 --------------------");
+        next({
+          path: "/index",
+        });
+      } else {
+        console.log("判斷成功, 進入 about 頁面 --------------------");
+        next();
+      }
+    } else {
+      console.log("進入 index 頁面 --------------------");
+      next();
+    }
+  });
+
+  const vm = new Vue({
+    el: "#app",
+    data: {
+      id: 1,
+      name: "Ian",
+    },
+    computed: {
+      getPath() {
+        return `/about/${this.id}/${this.name}`;
+      },
+    },
+    methods: {},
+    // 註冊 router 的實體
+    router,
+  });
+</script>
