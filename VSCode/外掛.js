@@ -58,11 +58,5 @@
  */
 
 /**
- * cdnjs 將需要的 cdn 產生在當前的網頁, 使用方式 F1 -> cdn -> jQuery -> 選 jQuery
- * 系列中要使用的框架 -> 選版本 current version (當前最新版) -> <script> Insert
- * into document 插入 script cdn 標籤到當前網頁
- */
-
-/**
  * Vetur, 專門針對 .vue 檔的格式化.
  */

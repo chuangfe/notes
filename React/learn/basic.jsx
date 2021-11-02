@@ -22,6 +22,18 @@
  * 虛擬 DOM 的原生標籤使用全小寫, 使用 component 則是字首大寫.
  */
 
+/**
+ * jsx 特殊語法
+ *
+ * {...object} 拆解物件, 並將所有屬性傳給 component props.
+ *
+ * true && jsx tag, 會返回 jsx tag.
+ * false && jsx tag, 會返回 false.
+ *
+ * jsx tag attr, class => className.
+ * jsx tag attr,  => className.
+ */
+
 const myId = "title",
   titleContent = "Hello, React",
   data = ["Vue", "React", "Angular"];

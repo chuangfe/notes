@@ -1,5 +1,5 @@
 /**
- * 在 jsx 中的 ref 屬性可以獲取真實的 dom 元素.
+ * 在 jsx 中的 ref 是用來獲取 dom tag 使用.
  *
  * ref 不再推薦設置字串的類型, 聽說有效能的問題, 未來可能會移除.
  *
@@ -7,27 +7,18 @@
  */
 
 class InputComponent extends React.Component {
-  refStringClickHandler = () => {
-    const input = this.refs.refString;
-    console.log(input);
-    console.log(input.value);
-  };
+  constructor(props) {
+    super(props);
 
-  refFunctionClickHandler = () => {
-    const input = this.refFunction;
-    console.log(input);
-    console.log(input.value);
-  };
+    // 使用文件介紹 ref api 的獲取方式.
+    this.refApi = React.createRef();
+  }
 
-  refClassClickHandler = () => {
-    const input = this.refClass;
-    console.log(input);
-    console.log(input.value);
-  };
-
-  setInput = (el) => {
+  setClassInput = (el) => {
     this.refClass = el;
   };
+
+  // 使用文件介紹 api ref 獲取方式.
 
   render() {
     return (
@@ -35,7 +26,9 @@ class InputComponent extends React.Component {
         {/* ref 屬性, 字串方式. */}
         <div className="input-container">
           <input id="refString" type="text" ref="refString" />
-          <button onClick={this.refStringClickHandler}>點擊彈出警報</button>
+          <button onClick={() => console.log(this.refs.refString.value)}>
+            點擊彈出警報
+          </button>
         </div>
 
         <br />
@@ -47,15 +40,29 @@ class InputComponent extends React.Component {
             type="text"
             ref={(currentNode) => (this.refFunction = currentNode)}
           />
-          <button onClick={this.refFunctionClickHandler}>點擊彈出警報</button>
+          <button onClick={() => console.log(this.refFunction.value)}>
+            點擊彈出警報
+          </button>
         </div>
 
         <br />
 
-        {/* ref 屬性, class 方式. */}
+        {/* ref 屬性, 通過 class 實體的 methods 方式. */}
         <div className="input-container">
-          <input id="refClass" type="text" ref={this.setInput} />
-          <button onClick={this.refClassClickHandler}>點擊彈出警報</button>
+          <input id="refClass" type="text" ref={this.setClassInput} />
+          <button onClick={() => console.log(this.refClass.value)}>
+            點擊彈出警報
+          </button>
+        </div>
+
+        <br />
+
+        {/* ref 屬性, api 方式. */}
+        <div className="input-container">
+          <input id="refApi" type="text" ref={this.refApi} />
+          <button onClick={() => console.log(this.refApi.current.value)}>
+            點擊彈出警報
+          </button>
         </div>
       </div>
     );

@@ -18,6 +18,19 @@ class Weather extends React.Component {
     this.test();
 
     this.setState({ isRain: !this.state.isRain });
+
+    /**
+     * state props 可能是在非同步的情況下被更新, 若需要的值是計算過的, 可以使用函式返回值設置 setState.
+     *
+     * 目前遇到的狀況是, calcTodos 受到 todos hash 兩個資料的影響, 故修改 calcTodos 的 methods 中, 使用 function 返回值的 setState.
+     *
+     * 文件有提醒說, 需要計算的資料是否真的有必要掛在 state 身上, 還是直接在 render 函式內計算就好, 這需要詳細思考.
+     *
+     * 更甚之, 如果產品列表不會被修改, 只需要篩選後給頁面展示, 那產品列表也不應該掛到 state 身上.
+     */
+    // this.setState((state, props) => ({
+    //   counter: state.counter + props.increment,
+    // }));
   };
 
   test() {

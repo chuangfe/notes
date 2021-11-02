@@ -1,4 +1,9 @@
 class TodoItemComponent extends React.Component {
+  // 在 render 之後執行.
+  componentDidMount() {}
+
+  componentWillUnmount() {}
+
   render() {
     const { id, title, completed } = this.props;
     const { updateTodo, removeTodo, setEditing, isEditing } = this.props;
@@ -60,9 +65,63 @@ class TodoItemComponent extends React.Component {
             onBlur={(e) => {
               setEditing(e, { id: 0 });
             }}
+            ref="edit"
           />
         </form>
       </li>
+    );
+  }
+}
+
+class FooterComponent extends React.Component {
+  render() {
+    const { setHash, hash, itemLeft, clearTodoCompleted } = this.props;
+
+    return (
+      <footer className="footer">
+        <span className="todo-count">
+          <strong>{itemLeft}</strong> item left
+        </span>
+        <ul className="filters">
+          <li>
+            <a
+              className={hash === "all" ? "selected" : ""}
+              href="#/all"
+              onClick={(e) => {
+                setHash(e, { hash: "all" });
+              }}
+            >
+              All
+            </a>
+          </li>
+          <li>
+            <a
+              className={hash === "active" ? "selected" : ""}
+              href="#/active"
+              onClick={(e) => {
+                setHash(e, { hash: "active" });
+              }}
+            >
+              Active
+            </a>
+          </li>
+          <li>
+            <a
+              className={hash === "completed" ? "selected" : ""}
+              href="#/completed"
+              onClick={(e) => {
+                setHash(e, { hash: "completed" });
+              }}
+            >
+              Completed
+            </a>
+          </li>
+        </ul>
+
+        <button className="clear-completed" onClick={clearTodoCompleted}>
+          Clear completed
+        </button>
+      </footer>
     );
   }
 }
@@ -89,6 +148,8 @@ class TodoComponent extends React.Component {
         completed: true,
       },
     ],
+
+    hash: "all",
   };
 
   setValueHandler = (e) => {
@@ -131,11 +192,33 @@ class TodoComponent extends React.Component {
     this.setState({ todos: newTodos });
   };
 
+  clearTodoCompletedHandler = () => {
+    const todos = this.state.todos.filter((todo) => !todo.completed);
+    this.setState({ todos });
+  };
+
+  setHashHandler = (e, { hash }) => {
+    this.setState({ hash });
+  };
+
+  componentDidMount() {
+    location.hash = "/all";
+  }
+
   render() {
-    const { value, editing, todos } = this.state;
+    const { value, editing, todos, hash } = this.state;
+
+    const calcTodos = [...todos].filter((todo) => {
+        return hash === "all"
+          ? todo
+          : hash === "active"
+          ? todo.completed === false
+          : todo.completed;
+      }),
+      itemLeft = todos.filter((todo) => !todo.completed).length;
 
     return (
-      <div>
+      <React.Fragment>
         <header className="header">
           <h1>todos</h1>
 
@@ -147,13 +230,6 @@ class TodoComponent extends React.Component {
               onChange={this.setValueHandler}
             />
           </form>
-
-          {/* <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            value={value}
-            onChange={this.setValueHandler}
-          /> */}
         </header>
 
         <section className="main">
@@ -162,7 +238,7 @@ class TodoComponent extends React.Component {
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {todos.map((todo) => {
+            {calcTodos.map((todo) => {
               return (
                 <TodoItemComponent
                   key={todo.id}
@@ -176,7 +252,14 @@ class TodoComponent extends React.Component {
             })}
           </ul>
         </section>
-      </div>
+
+        <FooterComponent
+          itemLeft={itemLeft}
+          hash={hash}
+          setHash={this.setHashHandler}
+          clearTodoCompleted={this.clearTodoCompletedHandler}
+        ></FooterComponent>
+      </React.Fragment>
     );
   }
 }
