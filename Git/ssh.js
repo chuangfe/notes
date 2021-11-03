@@ -13,3 +13,5 @@
 // 將公用密碼複製到 GitHub 用戶
 // settings - SSH snd GPG keys - New SSH keys
 // New SSH keys 的 Title 可以輸入 Ian@Ian-PC
+
+// ian.chuang@miraclemobile.com.tw

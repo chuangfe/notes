@@ -1,160 +1,172 @@
-class TodoItemComponent extends React.Component {
-  // 在 render 之後執行.
-  componentDidMount() {}
+function TodoItem(props) {
+  const {
+    id,
+    title,
+    completed,
+    isEditing,
+    updateTodo,
+    removeTodo,
+    setEditing,
+  } = props;
 
-  componentWillUnmount() {}
+  return (
+    <li
+      className={[
+        completed ? "completed" : "",
+        isEditing ? "editing" : " ",
+      ].join(" ")}
+    >
+      <div className="view">
+        <input
+          className="toggle"
+          type="checkbox"
+          checked={completed}
+          onChange={(e) => {
+            updateTodo({
+              id,
+              title,
+              completed: e.target.checked,
+            });
+          }}
+        />
 
-  render() {
-    const { id, title, completed } = this.props;
-    const { updateTodo, removeTodo, setEditing, isEditing } = this.props;
-
-    return (
-      <li
-        className={[
-          completed ? "completed" : "",
-          isEditing ? "editing" : " ",
-        ].join(" ")}
-      >
-        <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={completed}
-            onChange={(e) => {
-              updateTodo({
-                id,
-                title,
-                completed: e.target.checked,
-              });
-            }}
-          />
-
-          <label
-            onDoubleClick={(e) => {
-              e.stopPropagation();
-              setEditing(e, { id });
-            }}
-          >
-            {title}
-          </label>
-
-          <button
-            className="destroy"
-            onClick={(e) => {
-              removeTodo(e, { id });
-            }}
-          ></button>
-        </div>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setEditing(e, { id: 0 });
+        <p
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            setEditing(e, { id });
           }}
         >
-          <input
-            className="edit"
-            value={title}
-            onChange={(e) => {
-              updateTodo({
-                id,
-                title: e.target.value,
-                completed,
-              });
-            }}
-            onBlur={(e) => {
-              setEditing(e, { id: 0 });
-            }}
-            ref="edit"
-          />
-        </form>
-      </li>
-    );
-  }
+          {title}
+        </p>
+
+        <button
+          type="button"
+          className="destroy"
+          onClick={(e) => {
+            removeTodo(e, { id });
+          }}
+        >
+          按鈕
+        </button>
+      </div>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setEditing(e, { id: 0 });
+        }}
+      >
+        <input
+          className="edit"
+          value={title}
+          onChange={(e) => {
+            updateTodo({
+              id,
+              title: e.target.value,
+              completed,
+            });
+          }}
+          onBlur={(e) => {
+            setEditing(e, { id: 0 });
+          }}
+        />
+      </form>
+    </li>
+  );
 }
 
-class FooterComponent extends React.Component {
-  render() {
-    const { setHash, hash, itemLeft, clearTodoCompleted } = this.props;
+function Footer(props) {
+  const { setHash, hash, itemLeft, clearTodoCompleted } = props;
 
-    return (
-      <footer className="footer">
-        <span className="todo-count">
-          <strong>{itemLeft}</strong> item left
-        </span>
-        <ul className="filters">
-          <li>
-            <a
-              className={hash === "all" ? "selected" : ""}
-              href="#/all"
-              onClick={(e) => {
-                setHash(e, { hash: "all" });
-              }}
-            >
-              All
-            </a>
-          </li>
-          <li>
-            <a
-              className={hash === "active" ? "selected" : ""}
-              href="#/active"
-              onClick={(e) => {
-                setHash(e, { hash: "active" });
-              }}
-            >
-              Active
-            </a>
-          </li>
-          <li>
-            <a
-              className={hash === "completed" ? "selected" : ""}
-              href="#/completed"
-              onClick={(e) => {
-                setHash(e, { hash: "completed" });
-              }}
-            >
-              Completed
-            </a>
-          </li>
-        </ul>
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        <strong>{itemLeft}</strong>
+        &nbsp;item left
+      </span>
+      <ul className="filters">
+        <li>
+          <button
+            type="button"
+            className={hash === "all" ? "selected" : ""}
+            onClick={(e) => {
+              setHash(e, { hash: "all" });
+            }}
+          >
+            All
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            className={hash === "active" ? "selected" : ""}
+            onClick={(e) => {
+              setHash(e, { hash: "active" });
+            }}
+          >
+            Active
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            className={hash === "completed" ? "selected" : ""}
+            onClick={(e) => {
+              console.log(1);
+              setHash(e, { hash: "completed" });
+            }}
+          >
+            Completed
+          </button>
+        </li>
+      </ul>
 
-        <button className="clear-completed" onClick={clearTodoCompleted}>
-          Clear completed
-        </button>
-      </footer>
-    );
-  }
+      <button
+        type="button"
+        className="clear-completed"
+        onClick={clearTodoCompleted}
+      >
+        Clear completed
+      </button>
+    </footer>
+  );
 }
 
 class TodoComponent extends React.Component {
-  state = {
-    // 要新增 todo 的 title.
-    value: "",
+  constructor(props) {
+    super(props);
 
-    // 正在編輯的 todo id.
-    editing: 0,
+    this.state = {
+      // 要新增 todo 的 title.
+      value: "",
 
-    todos: [
-      {
-        id: 1,
-        title: "HTML",
-        completed: false,
-      },
-      {
-        id: 2,
-        title: "CSS",
-        completed: false,
-      },
-      {
-        id: 3,
-        title: "JavaScript",
-        completed: true,
-      },
-    ],
+      // 正在編輯的 todo id.
+      editing: 0,
 
-    // 判斷篩選至畫面的 todos 的 hash 值.
-    hash: "all",
-  };
+      isChecked: false,
+
+      todos: [
+        {
+          id: 1,
+          title: "HTML",
+          completed: false,
+        },
+        {
+          id: 2,
+          title: "CSS",
+          completed: false,
+        },
+        {
+          id: 3,
+          title: "JavaScript",
+          completed: true,
+        },
+      ],
+
+      // 判斷篩選至畫面的 todos 的 hash 值.
+      hash: "all",
+    };
+  }
 
   // 要新增的 todo 的 value.
   setValueHandler = (e) => {
@@ -172,40 +184,57 @@ class TodoComponent extends React.Component {
   createTodoHandler = (e) => {
     e.preventDefault();
 
-    const todos = [...this.state.todos];
+    this.setState((state) => {
+      const todos = [...state.todos];
 
-    todos.push({
-      id: todos[todos.length - 1] ? todos[todos.length - 1].id + 1 : 1,
-      title: this.state.value,
-      completed: false,
+      todos.push({
+        id: todos[todos.length - 1] ? todos[todos.length - 1].id + 1 : 1,
+        title: state.value,
+        completed: false,
+      });
+
+      return { todos, value: "" };
     });
-
-    this.setState({ todos, value: "" });
   };
 
   // 刪除某一項 todo.
   removeTodoHandler = (e, { id }) => {
-    const todos = [...this.state.todos];
-    const index = todos.findIndex((todo) => todo.id === id);
+    this.setState((state) => {
+      const todos = [...state.todos];
+      const index = todos.findIndex((todo) => todo.id === id);
 
-    todos.splice(index, 1);
+      todos.splice(index, 1);
 
-    this.setState({ todos });
+      return { todos };
+    });
   };
 
   // 更新某一項 todo 內容.
   updateTodoHandler = ({ id, title, completed }) => {
-    const updateTodos = this.state.todos.map((todo) => {
-      return todo.id === id ? { id, title, completed } : todo;
-    });
+    this.setState((state) => {
+      const todos = [...state.todos];
+      const updateTodos = todos.map((todo) => {
+        return todo.id === id ? { id, title, completed } : todo;
+      });
+      // 找未完成的 todo 項目.
+      const imperfectTodoIndex = updateTodos.findIndex((todo) => {
+        return todo.completed === false;
+      });
+      // 如果沒有未完成的 todo, 則想當於全選.
+      const isChecked = imperfectTodoIndex === -1;
 
-    this.setState({ todos: updateTodos });
+      return { isChecked, todos: updateTodos };
+    });
   };
 
   // 刪除所有已經完成的 todo.
   clearTodoCompletedHandler = () => {
-    const filterTodos = this.state.todos.filter((todo) => !todo.completed);
-    this.setState({ todos: filterTodos });
+    this.setState((state) => {
+      const todos = [...state.todos];
+      const filterTodos = todos.filter((todo) => !todo.completed);
+
+      return { todos: filterTodos };
+    });
   };
 
   // 給 Footer component 設定 hash 值.
@@ -213,38 +242,44 @@ class TodoComponent extends React.Component {
     this.setState({ hash });
   };
 
-  // 當按下全選 checkbox 時, 對所有 todo 修改.
-  toggleAllHandler = (e) => {
-    const completed = e.target.checked;
+  toggleClickHandler = () => {
+    this.setState((state) => {
+      const isChecked = !state.isChecked;
+      const todos = [...state.todos];
+      const calcTodos = todos.map((todo) => {
+        return {
+          ...todo,
+          completed: isChecked,
+        };
+      });
 
-    this.setState({
-      todos: this.state.todos.map((todo) => {
-        todo.completed = completed;
-        return todo;
-      }),
+      return { isChecked, todos: calcTodos };
     });
   };
 
-  // 初始的 hash 值.
-  componentDidMount() {
-    location.hash = "/all";
-  }
-
   render() {
-    const { value, editing, todos, hash } = this.state;
+    const { value, editing, todos, hash, isChecked } = this.state;
 
     // 根據 hash 篩選要顯示在畫面上的 todos.
     const filterTodos = [...todos].filter((todo) => {
-        return hash === "all"
-          ? todo
-          : hash === "active"
-          ? todo.completed === false
-          : todo.completed;
-      }),
-      // 計算剩餘未完成項目.
-      itemLeft = todos.filter((todo) => !todo.completed).length,
-      // 根據未完成的數量判斷全選的值.
-      toggleAll = !itemLeft ? true : false;
+      if (hash === "all") {
+        return true;
+      }
+
+      if (hash === "acitve") {
+        return !todo.completed;
+      }
+
+      if (hash === "completed") {
+        return todo.completed;
+      }
+
+      return false;
+    });
+    // 計算剩餘未完成項目.
+    const itemLeft = todos.filter((todo) => !todo.completed).length;
+    // 根據未完成的數量判斷全選的值.
+    // const toggleAll = !itemLeft;
 
     return (
       <React.Fragment>
@@ -262,38 +297,33 @@ class TodoComponent extends React.Component {
         </header>
 
         <section className="main">
-          <input
-            id="toggle-all"
-            className="toggle-all"
-            type="checkbox"
-            checked={toggleAll}
-            onChange={this.toggleAllHandler}
+          <div
+            className={["toggle-all", isChecked ? "checked" : ""].join(" ")}
+            onClick={this.toggleClickHandler}
           />
-
-          <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
             {filterTodos.map((todo) => {
               return (
-                <TodoItemComponent
+                <TodoItem
                   key={todo.id}
                   {...todo}
                   isEditing={editing === todo.id}
                   updateTodo={this.updateTodoHandler}
                   setEditing={this.setEditingHandler}
                   removeTodo={this.removeTodoHandler}
-                ></TodoItemComponent>
+                />
               );
             })}
           </ul>
         </section>
 
-        <FooterComponent
+        <Footer
           itemLeft={itemLeft}
           hash={hash}
           setHash={this.setHashHandler}
           clearTodoCompleted={this.clearTodoCompletedHandler}
-        ></FooterComponent>
+        />
       </React.Fragment>
     );
   }
