@@ -4,13 +4,19 @@
  * ref 不再推薦設置字串的類型, 聽說有效能的問題, 未來可能會移除.
  *
  * ref 推薦使用 function 方式設值, ref 會自動執行函式屬性, 該方式在 component 的 template 更新時, 會調用兩次這個函式屬性值.
+ *
+ * ref 除了可以保存原生 dom 以外, 還能保存 jsx component.
  */
 
 class InputComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    // 使用文件介紹 ref api 的獲取方式.
+    /**
+     * React.createRef 保存 ref 的容器.
+     *
+     * 使用文件介紹 ref api 的獲取方式, 一個屬性只能保存一個 dom 目標, 如果 component 需要保存多個 dom 目標, 請多寫幾個屬性保存.
+     */
     this.refApi = React.createRef();
   }
 

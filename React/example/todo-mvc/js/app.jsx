@@ -128,7 +128,10 @@ class FooterComponent extends React.Component {
 
 class TodoComponent extends React.Component {
   state = {
+    // 要新增 todo 的 title.
     value: "",
+
+    // 正在編輯的 todo id.
     editing: 0,
 
     todos: [
@@ -149,19 +152,23 @@ class TodoComponent extends React.Component {
       },
     ],
 
+    // 判斷篩選至畫面的 todos 的 hash 值.
     hash: "all",
   };
 
+  // 要新增的 todo 的 value.
   setValueHandler = (e) => {
     this.setState({
       value: e.target.value,
     });
   };
 
+  // 設置當前正在編輯的 todo 的 id, 傳給 TodoItemComponent 使用.
   setEditingHandler = (e, { id }) => {
     this.setState({ editing: id });
   };
 
+  // 新增 todo.
   createTodoHandler = (e) => {
     e.preventDefault();
 
@@ -176,31 +183,49 @@ class TodoComponent extends React.Component {
     this.setState({ todos, value: "" });
   };
 
+  // 刪除某一項 todo.
   removeTodoHandler = (e, { id }) => {
     const todos = [...this.state.todos];
     const index = todos.findIndex((todo) => todo.id === id);
+
     todos.splice(index, 1);
+
     this.setState({ todos });
   };
 
+  // 更新某一項 todo 內容.
   updateTodoHandler = ({ id, title, completed }) => {
-    const todos = [...this.state.todos];
-    const newTodos = todos.map((todo) => {
+    const updateTodos = this.state.todos.map((todo) => {
       return todo.id === id ? { id, title, completed } : todo;
     });
 
-    this.setState({ todos: newTodos });
+    this.setState({ todos: updateTodos });
   };
 
+  // 刪除所有已經完成的 todo.
   clearTodoCompletedHandler = () => {
-    const todos = this.state.todos.filter((todo) => !todo.completed);
-    this.setState({ todos });
+    const filterTodos = this.state.todos.filter((todo) => !todo.completed);
+    this.setState({ todos: filterTodos });
   };
 
+  // 給 Footer component 設定 hash 值.
   setHashHandler = (e, { hash }) => {
     this.setState({ hash });
   };
 
+  // 當按下全選 checkbox 時, 對所有 todo 修改.
+  toggleAllHandler = (e) => {
+    const completed = e.target.checked;
+
+    this.setState({
+      todos: this.state.todos.map((todo) => {
+        todo.completed = completed;
+        return todo;
+      }),
+    });
+  };
+
+  // 初始的 hash 值.
   componentDidMount() {
     location.hash = "/all";
   }
@@ -208,14 +233,18 @@ class TodoComponent extends React.Component {
   render() {
     const { value, editing, todos, hash } = this.state;
 
-    const calcTodos = [...todos].filter((todo) => {
+    // 根據 hash 篩選要顯示在畫面上的 todos.
+    const filterTodos = [...todos].filter((todo) => {
         return hash === "all"
           ? todo
           : hash === "active"
           ? todo.completed === false
           : todo.completed;
       }),
-      itemLeft = todos.filter((todo) => !todo.completed).length;
+      // 計算剩餘未完成項目.
+      itemLeft = todos.filter((todo) => !todo.completed).length,
+      // 根據未完成的數量判斷全選的值.
+      toggleAll = !itemLeft ? true : false;
 
     return (
       <React.Fragment>
@@ -233,12 +262,18 @@ class TodoComponent extends React.Component {
         </header>
 
         <section className="main">
-          <input id="toggle-all" className="toggle-all" type="checkbox" />
+          <input
+            id="toggle-all"
+            className="toggle-all"
+            type="checkbox"
+            checked={toggleAll}
+            onChange={this.toggleAllHandler}
+          />
 
           <label htmlFor="toggle-all">Mark all as complete</label>
 
           <ul className="todo-list">
-            {calcTodos.map((todo) => {
+            {filterTodos.map((todo) => {
               return (
                 <TodoItemComponent
                   key={todo.id}
