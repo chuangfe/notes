@@ -45,7 +45,7 @@ class ListComponent extends React.Component {
 /**
  * 需要配合 prop-types 工具.
  *
- * 設定 ListComponent 元件的 props 型別規則, 看起來規則可以連續寫
+ * 設定 ListComponent 元件的 props 型別規則, 看起來規則可以連續寫.
  *
  * 限制為 String, 請寫 PropTypes.string.
  * 限制為 Number, 請寫 PropTypes.number.
@@ -55,6 +55,39 @@ class ListComponent extends React.Component {
  * 限制為 Object, 請寫 PropTypes.object.
  * 限制為 Symbol, 請寫 PropTypes.symbol.
  *
+ * 限制為 react component, 請寫 PropTypes.element.
+ * 
+ * 限制為 react component, 請寫 PropTypes.elementType, 需再測試.
+ * 
+ * 限制為是某個建構函式的實例, 請寫 PropTypes.instanceOf(建構函式), 需再測試.
+ * 
+ * 限制可能是多種型別, 請寫 
+ * PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Message)
+  ])
+ * 
+ * 限制陣列的 el 必須是某個型別, 請寫 PropTypes.arrayOf(PropTypes.number).
+ * 
+ * 限制物件的值必須是某個型別, 請寫 PropTypes.objectOf(PropTypes.number).
+ * 
+ * 限制物件的指定屬性型別, 請寫 
+ * PropTypes.shape({
+    color: PropTypes.string,
+    fontSize: PropTypes.number
+  })
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 限制必需傳入值, 請寫 PropTypes.isRequired
  *
  * 可以使用 static 寫再 class 裡面.

@@ -34,36 +34,60 @@
  * jsx tag attr,  => className.
  */
 
-const myId = "title",
-  titleContent = "Hello, React",
-  data = ["Vue", "React", "Angular"];
+/**
+ * 柯里化函式, 函式返回函示, 達到接收多個參數的目標.
+ *
+ * 高級函式, 符合條件, 則一即可.
+ * 1. 函式接收的參數是含式.
+ * 2. 函式的返回值, 還是函式.
+ */
 
-// const VDOM = <h1 id="title">Hello, React</h1>;
-const VDOM = (
-  <div>
-    <div className="title-container">
-      <h1
-        id={myId}
-        className="font-italic"
-        style={{ fontSize: "24px", "text-decoration": "underline" }}
-      >
-        {titleContent}
-      </h1>
-    </div>
+class Basic extends React.Component {
+  constructor(props) {
+    super(props);
 
-    <div className="input-container">
-      <input type="text" />
-    </div>
+    this.state = {
+      title: "React",
+      data: ["Vue", "React", "Angular"],
+    };
+  }
 
-    <div className="list-container">
-      <ul>
-        {data.map((item, index) => {
-          return <li key={index}>{item}</li>;
-        })}
-      </ul>
-    </div>
-  </div>
-);
+  // 科里化函式.
+  setData = (dataType) => {
+    return (event) => {
+      this.setState({ [dataType]: event.target.value });
+    };
+  };
+
+  render() {
+    const { title, data } = this.state;
+
+    return (
+      <div>
+        <div className="title-container">
+          <h1
+            className="font-italic"
+            style={{ fontSize: "24px", textDecoration: "underline" }}
+          >
+            {title}
+          </h1>
+        </div>
+
+        <div className="input-container">
+          <input type="text" value={title} onChange={this.setData("title")} />
+        </div>
+
+        <div className="list-container">
+          <ul>
+            {data.map((item, index) => {
+              return <li key={index}>{item}</li>;
+            })}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
 
 // 將虛擬 DOM 放到容器內.
-ReactDOM.render(VDOM, document.querySelector("#app"));
+ReactDOM.render(<Basic></Basic>, document.querySelector("#app"));
