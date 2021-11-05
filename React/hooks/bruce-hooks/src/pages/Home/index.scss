@@ -1,0 +1,72 @@
+.app {
+  padding: 20px;
+  width: 100%;
+  border: 1px solid #000;
+  box-sizing: border-box;
+}
+
+.edit {
+  .title {
+    text-align: center;
+  }
+
+  .edit-item {
+    padding: 10px 0;
+  }
+
+  .edit-item-title {
+    padding-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .edit-item-input {
+    padding: 4px 8px;
+    width: 100%;
+    font-size: 18px;
+    box-sizing: border-box;
+  }
+
+  .add {
+    background-color: #ccc;
+    color: #000;
+    border: none;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+}
+
+.list {
+  padding-top: 20px;
+
+  .list-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    border-bottom: 1px solid #000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .list-item-text {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .remove {
+    border: none;
+    background-color: rgba(212, 101, 101, 1);
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    letter-spacing: 1px;
+  }
+}
