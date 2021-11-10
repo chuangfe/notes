@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
+        padding: 4px 8px;
+        font-size: 20px;
+      }
+
+      .methods-container {
+        padding: 10px 20px;
+      }
+
+      .canvas {
+        margin: 50px auto 0px;
+        width: 800px;
+        height: 600px;
+        background-color: #eee;
+        position: relative;
+      }
+
+      .group {
+        border: 1px solid red;
+        box-sizing: border-box;
+        position: absolute;
+      }
+
+      .rect {
+        background-color: #ccc;
+      }
+
+      .rect1 {
+        width: 100px;
+        height: 200px;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+
+      .rect2 {
+        width: 200px;
+        height: 100px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+
+      .rect3 {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        left: 50px;
+        bottom: 50px;
+      }
+
+      .rect4 {
+        width: 100px;
+        height: 50px;
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+      }
+
+      .empty {
+        background-color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="methods-container">
+        <button @click="cutStartHandler">開始</button>
+      </div>
+
+      <hr class="hr" />
+
+      <div class="canvas">
+        <div class="rect rect1"></div>
+        <div class="rect rect2"></div>
+        <div class="rect rect3"></div>
+        <div class="rect rect4"></div>
+
+        <group :json="json" @set-json="setJsonHandler" v-if="json"></group>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
+  integrity="sha512-pSyYzOKCLD2xoGM1GwkeHbdXgMRVsSqQaaUoHskx/HF09POwvow2VfVEdARIYwdeFLbu+2FCOTRYuiyeGxXkEg=="
+  crossorigin="anonymous"
+></script>
+
+<template id="group-template">
+  <!-- <div
+    v-if="json.type==='group'"
+    class="group"
+    :style="{
+      width: style.width,
+      height: style.height,
+      left: style.left,
+      top: style.top
+    }"
+  >
+    <div
+      v-for="(val, key) in json.children"
+      :class="val.type"
+      :style="{
+          width: val.style.width,
+          height: val.style.height,
+          left: val.style.left,
+          top: val.style.top
+        }"
+    ></div>
+  </div> -->
+
+  <div
+    v-else
+    :class="json.type"
+    :style="{
+      width: json.style.width + 'px',
+      height: json.style.height  + 'px',
+      left: json.style.left  + 'px',
+      top: json.style.top  + 'px'
+    }"
+  >
+    <div v-get-style="json"></div>
+  </div>
+</template>
+
+<script>
+  const canvas = document.querySelector(".canvas");
+  const rectsEl = Array.from(document.querySelectorAll(".rect"));
+  const rectsStyle = rectsEl.map((el) => {
+    return getRectStyle(el, false);
+  });
+  const canvasWidth = 800;
+  const canvasHeight = 600;
+
+  console.log(rectsStyle);
+
+  // flag 要不要算 offsetParent.
+  function getRectStyle(el, flag) {
+    let left,
+      top,
+      width,
+      height,
+      parent = el.offsetParent;
+
+    width = el.offsetWidth;
+    height = el.offsetHeight;
+    left = el.offsetLeft;
+    top = el.offsetTop;
+
+    if (flag) {
+      while (parent) {
+        left += parent.offsetLeft;
+        top += parent.offsetTop;
+        parent = parent.offsetParent.classList.contains("canvas")
+          ? undefined
+          : parent.offsetParent;
+      }
+    }
+
+    return {
+      width,
+      height,
+      left,
+      top,
+      bottom: top + height,
+      right: left + width,
+    };
+  }
+
+  function getGroupStyle(rects) {
+    let width = 0,
+      height = 0,
+      left = rects[0].left,
+      top = rects[0].top,
+      right = 0,
+      bottom = 0;
+
+    rects.forEach((rects) => {
+      left = left > rects.left ? rects.left : left;
+      top = top > rects.top ? rects.top : top;
+      right = right < rects.right ? rects.right : right;
+      bottom = bottom < rects.bottom ? rects.bottom : bottom;
+    });
+
+    return {
+      left,
+      top,
+      right,
+      bottom,
+      width: right - left,
+      height: bottom - top,
+    };
+  }
+</script>
+
+<script>
+  // list 組件，需要 vm 父組件傳遞 list 資料
+  Vue.component("group", {
+    template: "#group-template",
+
+    props: ["json"],
+
+    data() {
+      return { a: 0 };
+    },
+
+    computed: {
+      // 判斷是否可以切.
+      calcChildren() {
+        const returnArr = [];
+
+        /**
+         * 由於 .group 是 position: absolute; 所以 children 的定位要先扣除當前定位父元素距離 .canvas 的距離.
+         */
+        this.json.children.forEach((rect) => {
+          const top = rect.style.top;
+        });
+
+        // return [{ type: "group" }, { type: "empty" }, { type: "group" }];
+        return returnArr;
+      },
+    },
+
+    watch: {
+      json: {
+        immediate: true,
+        handler() {
+          if (this.json) {
+            console.log(this.calcChildren);
+          }
+        },
+      },
+    },
+
+    directives: {
+      "get-style": function (el, binding, vnode) {
+        // vnode.context 應該是 data, 似乎可以改值.
+      },
+    },
+  });
+
+  const vm = new Vue({
+    el: "#app",
+
+    data: {
+      json: undefined,
+    },
+
+    methods: {
+      setJsonHandler(json) {
+        this.json = json;
+      },
+
+      cutStartHandler() {
+        if (this.json) return false;
+
+        const style = getGroupStyle(rectsStyle);
+
+        this.json = {
+          type: "group",
+          style: style,
+          children: rectsStyle,
+        };
+      },
+    },
+  });
+</script>
