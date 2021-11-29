@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #title {
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">Title</h1>
+
+    <button id="open">打開全螢幕</button>
+
+    <button id="close">關閉全螢幕</button>
+
+    <button id="set-timer">打開排程</button>
+
+    <button id="clear-timer">清除排程</button>
+
+    <div id="player">
+      <!-- <iframe
+        id="player"
+        type="text/html"
+        width="640"
+        height="390"
+        src="http://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&origin=http://example.com"
+        frameborder="0"
+      ></iframe> -->
+    </div>
+  </body>
+</html>
+
+<script src="
+    https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.2.0/screenfull.min.js
+  "></script>
+
+<script>
+  const title = document.querySelector("#title");
+  const buttonOpen = document.querySelector("#open");
+  const buttonClose = document.querySelector("#close");
+
+  function handlerOpen() {
+    if (screenfull.isEnabled) {
+      screenfull.request(title);
+    }
+  }
+
+  function handlerClose() {
+    if (screenfull.isEnabled) {
+      screenfull.exit();
+    }
+  }
+
+  function changeFull(event) {
+    console.log(screenfull.isFullscreen);
+  }
+
+  buttonOpen.addEventListener("click", handlerOpen);
+  buttonClose.addEventListener("click", handlerClose);
+
+  screenfull.on("change", changeFull);
+</script>
+
+<script id="iframe-script"></script>
+
+<script>
+  const tag = document.createElement("script");
+  const firstScriptTag = document.querySelector("#iframe-script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  let player;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+      height: "390",
+      width: "640",
+      videoId: "pYsWrAR6DdQ",
+      playerVars: {
+        // playsinline: 1,
+        // 是否自動播放, 0 = false, 1 = true;
+        // autoplay: 1,
+        // 是否開啟影片控制按鈕, 0 = false, 1 = true;
+        // controls: 0,
+      },
+      events: {
+        // 影片 onReady 事件函式.
+        onReady: onPlayerReady,
+        // 每當影片發生某事件時執行的事件函式.
+        onStateChange: onPlayerStateChange,
+      },
+    });
+  }
+
+  function onPlayerReady(event) {
+    // 靜音.
+    event.target.setVolume(0);
+    // 播放.
+    event.target.playVideo();
+  }
+
+  // let done = false;
+
+  // target 應該是 iframe tag.
+  // data 應該是影片觸發事件時的狀態.
+  /**
+   * -1, 未開始.
+   * 3, 下載中.
+   * 2, 暫停.
+   * 1, 播放.
+   * 0, 結束.
+   * 5, 影片提示, 待補充.
+   */
+  function onPlayerStateChange({ data, target }) {
+    // if (event.data == YT.PlayerState.PLAYING && !done) {
+    //   setTimeout(stopVideo, 6000);
+    //   done = true;
+    // }
+
+    console.log(data, target);
+  }
+
+  // function stopVideo() {
+  //   player.stopVideo();
+  // }
+</script>
+
+<script>
+  const setTimerButton = document.querySelector("#set-timer");
+  const clearTimerButton = document.querySelector("#clear-timer");
+  const data = {
+    timer: null,
+  };
+
+  function setTimer() {
+    data.timer = setInterval(() => {
+      console.log(1);
+    }, 1000);
+  }
+
+  function clearTimer() {
+    data.timer = clearInterval(data.timer);
+  }
+
+  setTimerButton.addEventListener("click", setTimer);
+  clearTimerButton.addEventListener("click", clearTimer);
+</script>
